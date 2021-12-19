@@ -1,0 +1,25 @@
+{
+  "name": "coscheduler",
+  "version": "1.0.0",
+  "description": "scheduler app",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lrdwhyt@gmail.com",
+  "license": "0BSD",
+  "devDependencies": {
+    "color2k": "^1.2.4",
+    "css-loader": "^6.5.1",
+    "pinia": "^2.0.6",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.4",
+    "vue": "^3.2.26",
+    "vue-loader": "^17.0.0",
+    "vue-style-loader": "^4.1.3",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1"
+  }
+}
