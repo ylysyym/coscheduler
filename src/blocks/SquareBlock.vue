@@ -1,5 +1,7 @@
 <template>
-    <div class="block" :style="style" @click="toggleBlock"></div>
+    <div>
+        <div class="block" :style="style" @click="toggleBlock"></div>
+    </div>
 </template>
 
 <script setup lang="ts">
