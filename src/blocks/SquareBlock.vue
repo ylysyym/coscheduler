@@ -5,18 +5,18 @@
 <script setup lang="ts">
 import { ref, computed, CSSProperties } from "vue";
 import { useAppStore } from "@/stores/app";
+import { AvailabilityLevel } from "@/AvailabilityLevel";
 
 const props = defineProps<{
     id: number;
-    value?: number;
-    scale?: number;
+    level: AvailabilityLevel;
     size: number;
 }>();
 const color = ref("red");
 const style = computed((): CSSProperties => {
     return {
         // @ts-ignore https://github.com/johnsoncodehk/vue-tsc/issues/19
-        "--color": color.value,
+        "--color": props.level.color(),
         "--size": props.size + "px",
     };
 });
