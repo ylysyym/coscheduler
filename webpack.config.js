@@ -1,13 +1,14 @@
 var path = require('path')
 var webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     mode: 'development',
     entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, './dist'),
-        publicPath: '/dist/',
+        publicPath: '/',
         filename: 'build.js'
     },
     module: {
@@ -56,17 +57,16 @@ module.exports = {
         },
         extensions: [".ts", ".tsx", ".js", ".json", ".vue"]
     },
-    devServer: {
-        historyApiFallback: true,
-        noInfo: true
-    },
     performance: {
         hints: false
     },
     devtool: 'eval-source-map',
     plugins: [
         // make sure to include the plugin for the magic
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            template: "./src/index.html"
+        })
     ]
 }
 
