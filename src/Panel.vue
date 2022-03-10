@@ -1,5 +1,5 @@
 <template>
-    <div v-if="hasSelectedItem">
+    <div class="container" v-if="hasSelectedItem">
         <div>{{ id }}</div>
         <div>
             <select v-model="selectedLevel">
@@ -45,4 +45,8 @@ const levels = computed((): number[] => {
 const interval = computed(() => gridState.blockData[id.value].interval);
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+    display: inline-block;
+}
+</style>

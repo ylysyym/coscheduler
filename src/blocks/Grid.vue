@@ -1,24 +1,26 @@
 <template>
     <div class="container">
-        <div class="row labels">
-            <div class="block"></div>
-            <div class="block" v-for="label in columnLabels">
-                {{ label }}
+        <div class="grid">
+            <div class="row labels">
+                <div class="block"></div>
+                <div class="block" v-for="label in columnLabels">
+                    {{ label }}
+                </div>
             </div>
-        </div>
-        <div class="row" v-for="(label, row) in rowLabels" :key="row">
-            <div class="block labels">
-                {{ label }}
+            <div class="row" v-for="(label, row) in rowLabels" :key="row">
+                <div class="block labels">
+                    {{ label }}
+                </div>
+                <SquareBlock
+                    class="block"
+                    v-for="column in columns"
+                    :id="row * columns + column - 1"
+                    :key="column"
+                    :size="blockSize"
+                    :style="style"
+                    :level="levels(row * columns + column - 1)"
+                />
             </div>
-            <SquareBlock
-                class="block"
-                v-for="column in columns"
-                :id="row * columns + column - 1"
-                :key="column"
-                :size="blockSize"
-                :style="style"
-                :level="levels(row * columns + column - 1)"
-            />
         </div>
     </div>
 </template>
@@ -79,6 +81,10 @@ const style = computed(() => {
 
 <style scoped>
 .container {
+    display: inline-block;
+}
+
+.grid {
     display: table;
 }
 
