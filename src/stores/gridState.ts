@@ -9,7 +9,7 @@ export const useGridStateStore = defineStore("gridState", {
     state: () => {
         return {
             blockData: [] as BlockData[],
-            maxLevel: 7,
+            maxLevel: 3,
         }
     },
 
