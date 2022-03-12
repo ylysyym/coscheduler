@@ -27,7 +27,7 @@ import { useAppStore } from "./stores/app";
 import { useGridStateStore } from "./stores/gridState";
 
 const store = useAppStore();
-const id = computed(() => store.selectedItem);
+const id = computed(() => store.selectedItems[0] ?? 0);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const selectedLevel = computed({
     get: () => gridState.level(id.value).level,

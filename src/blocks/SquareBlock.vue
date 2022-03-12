@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="block" :style="style" @click="toggleBlock"></div>
+        <div class="block" :style="style" @click="selectBlock"></div>
     </div>
 </template>
 
@@ -24,8 +24,8 @@ const style = computed((): CSSProperties => {
 });
 
 const store = useAppStore();
-const toggleBlock = () => {
-    store.toggleItem(props.id);
+const selectBlock = () => {
+    store.selectItem(props.id);
 };
 </script>
 

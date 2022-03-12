@@ -3,18 +3,31 @@ import { defineStore } from "pinia"
 export const useAppStore = defineStore("app", {
     state: () => {
         return {
-            hasSelectedItem: false,
-            selectedItem: 0,
+            selectedItems: [] as number[],
         }
     },
+
     actions: {
+        selectItem(id: number): void {
+            this.selectedItems = [id];
+        },
+
+        selectItems(ids: number[]): void {
+            this.selectedItems = ids;
+        },
+
         toggleItem(id: number): void {
-            if (id === this.selectedItem) {
-                this.hasSelectedItem = !this.hasSelectedItem;
+            if (this.selectedItems.includes(id)) {
+                this.selectedItems = this.selectedItems.filter((i) => i !== id);
             } else {
-                this.hasSelectedItem = true;
+                this.selectedItems.push(id);
             }
-            this.selectedItem = id;
+        }
+    },
+
+    getters: {
+        hasSelectedItem(): boolean {
+            return this.selectedItems.length > 0;
         }
     }
 });
