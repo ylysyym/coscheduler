@@ -39,6 +39,12 @@ export const useGridStateStore = defineStore("gridState", {
 
         changeLevel(blockIndex: number, level: number) {
             this.blockData[blockIndex].level.level = level;
+        },
+
+        changeMultipleLevels(blocks: number[], level: number) {
+            for (const id of blocks) {
+                this.changeLevel(id, level);
+            }
         }
     },
 });

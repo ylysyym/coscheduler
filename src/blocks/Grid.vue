@@ -35,6 +35,7 @@ import { DateTime, Duration } from "luxon";
 import SquareBlock from "@/blocks/SquareBlock.vue";
 import { useGridStateStore } from "@/stores/gridState";
 import { AvailabilityLevel } from "@/AvailabilityLevel";
+import { useAppStore } from "@/stores/app";
 
 const rows = ref(7);
 const columns = ref(24);
@@ -75,14 +76,11 @@ const onMouseDown = (index: number) => {
     currentSquare = index;
 };
 
+const appStore = useAppStore();
+
 const onMouseUp = (index: number) => {
-    //if (currentSquare === index) return;
-
-    //selectedSquares = getSquaresBetween(currentSquare, index);
     selectedSquares.value = getSquaresBetween(currentSquare, index);
-    console.log(JSON.stringify(selectedSquares));
-    // get current square
-
+    appStore.selectItems(selectedSquares.value);
     currentSquare = -1;
 };
 

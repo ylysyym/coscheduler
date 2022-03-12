@@ -1,6 +1,7 @@
 <template>
     <div class="container" v-if="hasSelectedItem">
-        <div>{{ id }}</div>
+        <div v-if="hasMultipleSelectedItems">Multiple items</div>
+        <div v-else>{{ id }}</div>
         <div>
             <select v-model="selectedLevel">
                 <option v-for="level in levels" :value="level">
@@ -28,11 +29,19 @@ import { useGridStateStore } from "./stores/gridState";
 
 const store = useAppStore();
 const id = computed(() => store.selectedItems[0] ?? 0);
+const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
+const hasMultipleSelectedItems = computed(() => store.selectedItems.length > 1);
 const selectedLevel = computed({
-    get: () => gridState.level(id.value).level,
+    get: () => {
+        if (hasMultipleSelectedItems.value) {
+            return -1; // TODO: should return the majority value
+        } else {
+            return gridState.level(id.value).level;
+        }
+    },
     set: (value: number) => {
-        gridState.changeLevel(id.value, value);
+        gridState.changeMultipleLevels(ids.value, value);
     },
 });
 
