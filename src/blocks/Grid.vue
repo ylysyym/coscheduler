@@ -1,4 +1,5 @@
 <template>
+    <GlobalEvents @mouseup="onGlobalMouseUp" @blur="onGlobalBlur" />
     <div class="container">
         <div class="grid">
             <div class="row labels">
@@ -36,6 +37,7 @@ import SquareBlock from "@/blocks/SquareBlock.vue";
 import { useGridStateStore } from "@/stores/gridState";
 import { AvailabilityLevel } from "@/AvailabilityLevel";
 import { useAppStore } from "@/stores/app";
+import { GlobalEvents } from "vue-global-events";
 
 const rows = ref(7);
 const columns = ref(24);
@@ -75,26 +77,46 @@ let startSquare = -1;
 let isCurrentlySelecting = false;
 let selectedSquares = ref([] as number[]);
 
-const onMouseDown = (index: number) => {
+const startSelecting = (index: number) => {
     isCurrentlySelecting = true;
     startSquare = index;
     selectedSquares.value = [index];
+}
+
+const stopSelecting = () => {
+    isCurrentlySelecting = false;
+}
+
+const updateSelection = (a: number, b: number) => {
+    selectedSquares.value = getSquaresBetween(a, b);
+    appStore.selectItems(selectedSquares.value);
+}
+
+const onMouseDown = (index: number) => {
+    startSelecting(index);
 };
 
 const onMouseUp = (index: number) => {
     if (!isCurrentlySelecting) return;
-    isCurrentlySelecting = false;
-    selectedSquares.value = getSquaresBetween(startSquare, index);
-    appStore.selectItems(selectedSquares.value);
+    stopSelecting();
+    updateSelection(startSquare, index);
 };
 
 const onMouseOver = (index: number) => {
     if (!isCurrentlySelecting) return;
-    selectedSquares.value = getSquaresBetween(startSquare, index);
+    updateSelection(startSquare, index);
 };
 
 const isSelected = (index: number) => {
     return selectedSquares.value.includes(index);
+};
+
+const onGlobalBlur = () => {
+    stopSelecting();
+};
+
+const onGlobalMouseUp = () => {
+    stopSelecting();
 };
 
 const currentDate = ref(DateTime.now().set({ minute: 0, second: 0, millisecond: 0 }));
