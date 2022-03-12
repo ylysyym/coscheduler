@@ -72,7 +72,6 @@ const getSquaresBetween = (a: number, b: number): number[] => {
 };
 
 const onMouseDown = (index: number) => {
-    console.log("onMouseDown: " + index);
     currentSquare = index;
 };
 
