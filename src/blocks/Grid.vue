@@ -13,12 +13,16 @@
                 </div>
                 <SquareBlock
                     class="block"
+                    :class="{ isSelected: isSelected(row * columns + column - 1) }"
                     v-for="column in columns"
                     :id="row * columns + column - 1"
                     :key="column"
                     :size="blockSize"
                     :style="style"
                     :level="levels(row * columns + column - 1)"
+                    @mousedown="onMouseDown(row * columns + column - 1)"
+                    @mouseover="onMouseOver(row * columns + column - 1)"
+                    @mouseup="onMouseUp(row * columns + column - 1)"
                 />
             </div>
         </div>
@@ -38,6 +42,58 @@ const blockCount = computed(() => rows.value * columns.value);
 
 const blockSize = ref(35);
 const gap = ref(5);
+
+let currentSquare = -1;
+let selectedSquares = ref([] as number[]);
+
+const getIndexFromCoordinates = (col: number, row: number): number => {
+    return row * columns.value + col - 1;
+};
+
+const getCoordinatesFromIndex = (index: number): [number, number] => {
+    const col = (index % columns.value) + 1;
+    const row = Math.floor(index / columns.value);
+
+    return [col, row];
+};
+
+const getSquaresBetween = (a: number, b: number): number[] => {
+    const [colA, rowA] = getCoordinatesFromIndex(a);
+    const [colB, rowB] = getCoordinatesFromIndex(b);
+    let result: number[] = [];
+    for (let x = Math.min(colA, colB); x <= Math.max(colA, colB); x++) {
+        for (let y = Math.min(rowA, rowB); y <= Math.max(rowA, rowB); y++) {
+            result.push(getIndexFromCoordinates(x, y));
+        }
+    }
+
+    return result;
+};
+
+const onMouseDown = (index: number) => {
+    console.log("onMouseDown: " + index);
+    currentSquare = index;
+};
+
+const onMouseUp = (index: number) => {
+    //if (currentSquare === index) return;
+
+    //selectedSquares = getSquaresBetween(currentSquare, index);
+    selectedSquares.value = getSquaresBetween(currentSquare, index);
+    console.log(JSON.stringify(selectedSquares));
+    // get current square
+
+    currentSquare = -1;
+};
+
+const onMouseOver = (index: number) => {
+    if (currentSquare === -1) return;
+    selectedSquares.value = getSquaresBetween(currentSquare, index);
+};
+
+const isSelected = (index: number) => {
+    return selectedSquares.value.includes(index);
+};
 
 const currentDate = ref(DateTime.now());
 const startDate = (): DateTime => {
@@ -86,6 +142,7 @@ const style = computed(() => {
 
 .grid {
     display: table;
+    user-select: none;
 }
 
 .row {
@@ -101,5 +158,10 @@ const style = computed(() => {
 .labels.row {
     line-height: normal;
     text-align: center;
+}
+
+.isSelected {
+    background: #b3b1d8;
+    margin: 0;
 }
 </style>
