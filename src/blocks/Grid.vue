@@ -44,9 +44,6 @@ const blockCount = computed(() => rows.value * columns.value);
 const blockSize = ref(35);
 const gap = ref(5);
 
-let currentSquare = -1;
-let selectedSquares = ref([] as number[]);
-
 const getIndexFromCoordinates = (col: number, row: number): number => {
     return row * columns.value + col - 1;
 };
@@ -72,21 +69,28 @@ const getSquaresBetween = (a: number, b: number): number[] => {
     return result;
 };
 
-const onMouseDown = (index: number) => {
-    currentSquare = index;
-};
-
 const appStore = useAppStore();
 
+let startSquare = -1;
+let isCurrentlySelecting = false;
+let selectedSquares = ref([] as number[]);
+
+const onMouseDown = (index: number) => {
+    isCurrentlySelecting = true;
+    startSquare = index;
+    selectedSquares.value = [index];
+};
+
 const onMouseUp = (index: number) => {
-    selectedSquares.value = getSquaresBetween(currentSquare, index);
+    if (!isCurrentlySelecting) return;
+    isCurrentlySelecting = false;
+    selectedSquares.value = getSquaresBetween(startSquare, index);
     appStore.selectItems(selectedSquares.value);
-    currentSquare = -1;
 };
 
 const onMouseOver = (index: number) => {
-    if (currentSquare === -1) return;
-    selectedSquares.value = getSquaresBetween(currentSquare, index);
+    if (!isCurrentlySelecting) return;
+    selectedSquares.value = getSquaresBetween(startSquare, index);
 };
 
 const isSelected = (index: number) => {
