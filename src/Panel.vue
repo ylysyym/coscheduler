@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { DateTime } from "luxon";
+import { DateTime, Interval } from "luxon";
 import { useAppStore } from "./stores/app";
 import { useGridStateStore } from "./stores/gridState";
 
@@ -48,10 +48,13 @@ const levels = computed((): number[] => {
 });
 
 const intervalString = computed(() => {
-    // TODO: consecutive intervals should be merged and shown as one
     let result = "";
+    let intervals = [];
     for (const id of ids.value) {
-        const interval = gridState.blockData[id].interval;
+        intervals.push(gridState.blockData[id].interval);
+    }
+    let mergedIntervals = Interval.merge(intervals);
+    for (const interval of mergedIntervals) {
         result += interval.start.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
         result += " ~ ";
         result += interval.end.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
