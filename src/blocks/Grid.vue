@@ -62,8 +62,9 @@ const getSquaresBetween = (a: number, b: number): number[] => {
     const [colA, rowA] = getCoordinatesFromIndex(a);
     const [colB, rowB] = getCoordinatesFromIndex(b);
     let result: number[] = [];
-    for (let x = Math.min(colA, colB); x <= Math.max(colA, colB); x++) {
-        for (let y = Math.min(rowA, rowB); y <= Math.max(rowA, rowB); y++) {
+
+    for (let y = Math.min(rowA, rowB); y <= Math.max(rowA, rowB); y++) {
+        for (let x = Math.min(colA, colB); x <= Math.max(colA, colB); x++) {
             result.push(getIndexFromCoordinates(x, y));
         }
     }
