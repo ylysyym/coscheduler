@@ -1,7 +1,7 @@
 <template>
     <div class="container" v-if="hasSelectedItem">
-        <div v-if="hasMultipleSelectedItems">Multiple items</div>
-        <div v-else>{{ id }}</div>
+        <div v-if="hasMultipleSelectedItems">{{ JSON.stringify(ids) }}</div>
+        <div v-else>{{ ids[0] }}</div>
         <div>
             <select v-model="selectedLevel">
                 <option v-for="level in levels" :value="level">
@@ -10,12 +10,8 @@
             </select>
         </div>
         <div>
-            <span>
-                {{ interval.start.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY) }}
-            </span>
-            <span> ~ </span>
-            <span>
-                {{ interval.end.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY) }}
+            <span class="interval-display">
+                {{ intervalString }}
             </span>
         </div>
     </div>
@@ -28,16 +24,16 @@ import { useAppStore } from "./stores/app";
 import { useGridStateStore } from "./stores/gridState";
 
 const store = useAppStore();
-const id = computed(() => store.selectedItems[0] ?? 0);
 const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
+const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 const hasMultipleSelectedItems = computed(() => store.selectedItems.length > 1);
 const selectedLevel = computed({
     get: () => {
-        if (hasMultipleSelectedItems.value) {
-            return -1; // TODO: should return the majority value
+        if (hasSingleSelectedItem.value) {
+            return gridState.level(ids.value[0]).level;
         } else {
-            return gridState.level(id.value).level;
+            return -1; // TODO: should return the majority value
         }
     },
     set: (value: number) => {
@@ -51,11 +47,27 @@ const levels = computed((): number[] => {
     return Array.from({ length: gridState.maxLevel }, (value, index) => index + 1);
 });
 
-const interval = computed(() => gridState.blockData[id.value].interval);
+const intervalString = computed(() => {
+    // TODO: consecutive intervals should be merged and shown as one
+    let result = "";
+    for (const id of ids.value) {
+        const interval = gridState.blockData[id].interval;
+        result += interval.start.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
+        result += " ~ ";
+        result += interval.end.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
+        result += "\n";
+    }
+
+    return result;
+});
 </script>
 
 <style scoped>
 .container {
     display: inline-block;
+}
+
+.interval-display {
+    white-space: pre;
 }
 </style>
