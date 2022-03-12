@@ -93,7 +93,7 @@ const isSelected = (index: number) => {
     return selectedSquares.value.includes(index);
 };
 
-const currentDate = ref(DateTime.now());
+const currentDate = ref(DateTime.now().set({ minute: 0, second: 0, millisecond: 0 }));
 const startDate = (): DateTime => {
     return currentDate.value;
 };
