@@ -1,11 +1,11 @@
 <template>
     <Grid />
-    <Panel />
+    <DetailPanel />
 </template>
 
 <script setup lang="ts">
 import Grid from '@/blocks/Grid.vue';
-import Panel from '@/Panel.vue';
+import DetailPanel from '@/Panel.vue';
 </script>
 
 <style scoped></style>
