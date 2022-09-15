@@ -4,7 +4,7 @@
         <div v-else>{{ ids[0] }}</div>
         <div>
             <select v-model="selectedLevel">
-                <option v-for="level in levels" :value="level">
+                <option v-for="level in levels" :value="level" :key="level">
                     {{ level }}
                 </option>
             </select>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
 import { useAppStore } from './stores/app';
 import { useGridStateStore } from './stores/gridState';

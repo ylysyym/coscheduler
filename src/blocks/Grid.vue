@@ -4,7 +4,7 @@
         <div class="grid">
             <div class="row labels">
                 <div class="block"></div>
-                <div class="block" v-for="label in columnLabels">
+                <div class="block" v-for="label in columnLabels" :key="label">
                     {{ label }}
                 </div>
             </div>
