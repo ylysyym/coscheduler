@@ -49,7 +49,7 @@ const levels = computed((): number[] => {
 
 const intervalString = computed(() => {
     let result = "";
-    let intervals = [];
+    let intervals: Interval[] = [];
     for (const id of ids.value) {
         intervals.push(gridState.blockData[id].interval);
     }
