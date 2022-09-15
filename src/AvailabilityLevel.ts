@@ -1,11 +1,11 @@
-import { lighten } from "color2k"
-import { NEUTRAL_COLOR, AVAILABLE_COLOR, BUSY_COLOR } from "./Colors"
+import { lighten } from 'color2k';
+import { NEUTRAL_COLOR, AVAILABLE_COLOR, BUSY_COLOR } from './Colors';
 
 export class AvailabilityLevel {
-    public level: number = 1; // one-indexed
+    public level = 1; // one-indexed
     public readonly max: number;
 
-    constructor(level: number = 1, scale: number = 3) {
+    constructor(level = 1, scale = 3) {
         this.level = level;
         this.max = scale;
     }
@@ -18,10 +18,10 @@ export class AvailabilityLevel {
 
         //const adjustment = Math.abs(midpoint - this.level) / this.max;
         if (this.level < midpoint) {
-            let adjustment = 1.5 * (this.level - 1) / this.max;
+            const adjustment = (1.5 * (this.level - 1)) / this.max;
             return lighten(BUSY_COLOR, adjustment);
         } else {
-            let adjustment = 1.5 * (this.max - this.level) / this.max;
+            const adjustment = (1.5 * (this.max - this.level)) / this.max;
             return lighten(AVAILABLE_COLOR, adjustment);
         }
     }
