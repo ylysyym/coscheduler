@@ -18,10 +18,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { DateTime, Interval } from "luxon";
-import { useAppStore } from "./stores/app";
-import { useGridStateStore } from "./stores/gridState";
+import { computed, ref } from 'vue';
+import { DateTime, Interval } from 'luxon';
+import { useAppStore } from './stores/app';
+import { useGridStateStore } from './stores/gridState';
 
 const store = useAppStore();
 const ids = computed(() => store.selectedItems);
@@ -44,21 +44,28 @@ const selectedLevel = computed({
 const gridState = useGridStateStore();
 
 const levels = computed((): number[] => {
-    return Array.from({ length: gridState.maxLevel }, (value, index) => index + 1);
+    return Array.from(
+        { length: gridState.maxLevel },
+        (value, index) => index + 1
+    );
 });
 
 const intervalString = computed(() => {
-    let result = "";
+    let result = '';
     let intervals: Interval[] = [];
     for (const id of ids.value) {
         intervals.push(gridState.blockData[id].interval);
     }
     let mergedIntervals = Interval.merge(intervals);
     for (const interval of mergedIntervals) {
-        result += interval.start.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
-        result += " ~ ";
-        result += interval.end.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY);
-        result += "\n";
+        result += interval.start.toLocaleString(
+            DateTime.DATETIME_MED_WITH_WEEKDAY
+        );
+        result += ' ~ ';
+        result += interval.end.toLocaleString(
+            DateTime.DATETIME_MED_WITH_WEEKDAY
+        );
+        result += '\n';
     }
 
     return result;

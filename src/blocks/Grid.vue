@@ -14,7 +14,9 @@
                 </div>
                 <SquareBlock
                     class="block"
-                    :class="{ isSelected: isSelected(row * columns + column - 1) }"
+                    :class="{
+                        isSelected: isSelected(row * columns + column - 1),
+                    }"
                     v-for="column in columns"
                     :id="row * columns + column - 1"
                     :key="column"
@@ -31,13 +33,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { DateTime, Duration } from "luxon";
-import SquareBlock from "@/blocks/SquareBlock.vue";
-import { useGridStateStore } from "@/stores/gridState";
-import { AvailabilityLevel } from "@/AvailabilityLevel";
-import { useAppStore } from "@/stores/app";
-import { GlobalEvents } from "vue-global-events";
+import { computed, ref } from 'vue';
+import { DateTime, Duration } from 'luxon';
+import SquareBlock from '@/blocks/SquareBlock.vue';
+import { useGridStateStore } from '@/stores/gridState';
+import { AvailabilityLevel } from '@/AvailabilityLevel';
+import { useAppStore } from '@/stores/app';
+import { GlobalEvents } from 'vue-global-events';
 
 const rows = ref(7);
 const columns = ref(24);
@@ -81,16 +83,16 @@ const startSelecting = (index: number) => {
     isCurrentlySelecting = true;
     startSquare = index;
     selectedSquares.value = [index];
-}
+};
 
 const stopSelecting = () => {
     isCurrentlySelecting = false;
-}
+};
 
 const updateSelection = (a: number, b: number) => {
     selectedSquares.value = getSquaresBetween(a, b);
     appStore.selectItems(selectedSquares.value);
-}
+};
 
 const onMouseDown = (index: number) => {
     startSelecting(index);
@@ -119,7 +121,9 @@ const onGlobalMouseUp = () => {
     stopSelecting();
 };
 
-const currentDate = ref(DateTime.now().set({ minute: 0, second: 0, millisecond: 0 }));
+const currentDate = ref(
+    DateTime.now().set({ minute: 0, second: 0, millisecond: 0 })
+);
 const startDate = (): DateTime => {
     return currentDate.value;
 };
@@ -132,10 +136,10 @@ const defaultDuration: Duration = Duration.fromObject({
 const duration = computed(() => defaultDuration);
 store.initialiseBlockData(blockCount.value, startDate(), duration.value);
 const getColumnLabel = (time: DateTime): string => {
-    return time.toFormat("HH");
+    return time.toFormat('HH');
 };
 const getRowLabel = (time: DateTime): string => {
-    return time.toFormat("EEEE MMM dd");
+    return time.toFormat('EEEE MMM dd');
 };
 const columnLabels = computed(() => {
     let labels = [];
@@ -154,7 +158,7 @@ const rowLabels = computed(() => {
 
 const style = computed(() => {
     return {
-        "--blockGap": gap.value / 2 + "px",
+        '--blockGap': gap.value / 2 + 'px',
     };
 });
 </script>

@@ -1,10 +1,10 @@
-import { defineStore } from "pinia"
+import { defineStore } from 'pinia';
 
-export const useAppStore = defineStore("app", {
+export const useAppStore = defineStore('app', {
     state: () => {
         return {
             selectedItems: [] as number[],
-        }
+        };
     },
 
     actions: {
@@ -22,12 +22,12 @@ export const useAppStore = defineStore("app", {
             } else {
                 this.selectedItems.push(id);
             }
-        }
+        },
     },
 
     getters: {
         hasSelectedItem(): boolean {
             return this.selectedItems.length > 0;
-        }
-    }
+        },
+    },
 });

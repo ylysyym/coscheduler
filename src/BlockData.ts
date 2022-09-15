@@ -1,5 +1,5 @@
-import { Interval } from "luxon"
-import { AvailabilityLevel } from "./AvailabilityLevel"
+import { Interval } from 'luxon';
+import { AvailabilityLevel } from './AvailabilityLevel';
 
 export class BlockData {
     public readonly interval: Interval;

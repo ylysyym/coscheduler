@@ -9,11 +9,11 @@
         "plugin:@typescript-eslint/recommended",
         "prettier"
     ],
-    "overrides": [
-    ],
-    "parser": "@typescript-eslint/parser",
+    "overrides": [],
+    "parser": "vue-eslint-parser",
     "parserOptions": {
         "ecmaVersion": "latest",
+        "parser": "@typescript-eslint/parser",
         "sourceType": "module"
     },
     "plugins": [
