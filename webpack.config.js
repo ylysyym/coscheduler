@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 var path = require('path')
 var webpack = require('webpack')
 const { VueLoaderPlugin } = require('vue-loader')
