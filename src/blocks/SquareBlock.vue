@@ -1,11 +1,11 @@
 <template>
     <div>
-        <div class="block" :style="style" @click="selectBlock"></div>
+        <div class="block" @click="selectBlock"></div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, CSSProperties } from 'vue';
+import { ref, computed } from 'vue';
 import { useAppStore } from '@/stores/app';
 import { AvailabilityLevel } from '@/AvailabilityLevel';
 
@@ -14,14 +14,8 @@ const props = defineProps<{
     level: AvailabilityLevel;
     size: number;
 }>();
-const color = ref('red');
-const style = computed((): CSSProperties => {
-    return {
-        // @ts-ignore https://github.com/johnsoncodehk/vue-tsc/issues/19
-        '--color': props.level.color(),
-        '--size': props.size + 'px',
-    };
-});
+const color = computed(() => props.level.color());
+const size = ref(props.size + 'px');
 
 const store = useAppStore();
 const selectBlock = () => {
@@ -31,9 +25,9 @@ const selectBlock = () => {
 
 <style scoped>
 .block {
-    background-color: var(--color);
+    background-color: v-bind(color);
     display: inline-block;
-    height: var(--size);
-    width: var(--size);
+    height: v-bind(size);
+    width: v-bind(size);
 }
 </style>

@@ -3,17 +3,21 @@
     <div class="container">
         <div class="grid">
             <div class="row labels">
-                <div class="block"></div>
-                <div class="block" v-for="label in columnLabels" :key="label">
+                <div class="block-wrapper"></div>
+                <div
+                    class="block-wrapper"
+                    v-for="label in columnLabels"
+                    :key="label"
+                >
                     {{ label }}
                 </div>
             </div>
             <div class="row" v-for="(label, row) in rowLabels" :key="row">
-                <div class="block labels">
+                <div class="block-wrapper labels">
                     {{ label }}
                 </div>
                 <SquareBlock
-                    class="block"
+                    class="block-wrapper"
                     :class="{
                         isSelected: isSelected(row * columns + column - 1),
                     }"
@@ -178,7 +182,7 @@ const style = computed(() => {
     line-height: 0;
 }
 
-.block {
+.block-wrapper {
     display: table-cell;
     padding: var(--blockGap);
 }
