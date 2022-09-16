@@ -15,6 +15,7 @@
             </span>
         </div>
     </div>
+    <div class="container" v-else>Nothing selected.</div>
 </template>
 
 <script setup lang="ts">
@@ -75,6 +76,9 @@ const intervalString = computed(() => {
 <style scoped>
 .container {
     display: inline-block;
+    height: 100%;
+    overflow: hidden;
+    width: 100%;
 }
 
 .interval-display {

@@ -1,6 +1,6 @@
 <template>
     <GlobalEvents @mouseup="onGlobalMouseUp" @blur="onGlobalBlur" />
-    <div class="container">
+    <div class="container" ref="container">
         <div class="grid">
             <div class="row labels">
                 <div class="block-wrapper"></div>
@@ -47,8 +47,7 @@ import { GlobalEvents } from 'vue-global-events';
 const rows = ref(7);
 const columns = ref(24);
 const blockCount = computed(() => rows.value * columns.value);
-
-const blockSize = ref(35);
+const blockSize = computed(() => 35);
 const gap = ref(5);
 
 const getIndexFromCoordinates = (col: number, row: number): number => {
@@ -159,12 +158,16 @@ const rowLabels = computed(() => {
     return labels;
 });
 
-const blockGap = ref(gap.value / 2 + 'px');
+const blockGap = computed(() => gap.value / 2 + 'px');
 </script>
 
 <style scoped>
 .container {
     display: inline-block;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
 }
 
 .grid {
@@ -180,6 +183,7 @@ const blockGap = ref(gap.value / 2 + 'px');
 .block-wrapper {
     display: table-cell;
     padding: v-bind(blockGap);
+    white-space: nowrap;
 }
 
 .labels.row {
