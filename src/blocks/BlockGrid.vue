@@ -25,7 +25,6 @@
                     :id="row * columns + column - 1"
                     :key="column"
                     :size="blockSize"
-                    :style="style"
                     :level="levels(row * columns + column - 1)"
                     @mousedown="onMouseDown(row * columns + column - 1)"
                     @mouseover="onMouseOver(row * columns + column - 1)"
