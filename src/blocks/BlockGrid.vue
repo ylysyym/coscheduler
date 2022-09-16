@@ -160,11 +160,7 @@ const rowLabels = computed(() => {
     return labels;
 });
 
-const style = computed(() => {
-    return {
-        '--blockGap': gap.value / 2 + 'px',
-    };
-});
+const blockGap = ref(gap.value / 2 + 'px');
 </script>
 
 <style scoped>
@@ -184,7 +180,7 @@ const style = computed(() => {
 
 .block-wrapper {
     display: table-cell;
-    padding: var(--blockGap);
+    padding: v-bind(blockGap);
 }
 
 .labels.row {
