@@ -14,7 +14,7 @@ const props = defineProps<{
     level: AvailabilityLevel;
     size: number;
 }>();
-const color = computed(() => props.level.color());
+const color = computed(() => props.level.color);
 const size = computed(() => props.size + 'px');
 
 const store = useAppStore();

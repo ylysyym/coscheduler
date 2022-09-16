@@ -2,6 +2,7 @@ import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/AvailabilityLevel';
 import { BlockData } from '@/BlockData';
+import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
@@ -26,7 +27,7 @@ export const useGridStateStore = defineStore('gridState', {
             for (let i = 0; i < blockCount; i++) {
                 const defaultLevel = new AvailabilityLevel(
                     DEFAULT_INITIAL_LEVEL,
-                    this.maxLevel
+                    defaultAvailabilityScale
                 );
                 const blockInterval: Interval = Interval.after(
                     intervalStart,
