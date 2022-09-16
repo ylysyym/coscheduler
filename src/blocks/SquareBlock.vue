@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useAppStore } from '@/stores/app';
 import { AvailabilityLevel } from '@/AvailabilityLevel';
 
@@ -15,7 +15,7 @@ const props = defineProps<{
     size: number;
 }>();
 const color = computed(() => props.level.color());
-const size = ref(props.size + 'px');
+const size = computed(() => props.size + 'px');
 
 const store = useAppStore();
 const selectBlock = () => {

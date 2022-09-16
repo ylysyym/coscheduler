@@ -43,12 +43,21 @@ import { useGridStateStore } from '@/stores/gridState';
 import { AvailabilityLevel } from '@/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
 import { GlobalEvents } from 'vue-global-events';
+import { useElementSize } from '@vueuse/core';
 
 const rows = ref(7);
 const columns = ref(24);
 const blockCount = computed(() => rows.value * columns.value);
-const blockSize = computed(() => 35);
-const gap = ref(5);
+
+const container = ref(null);
+
+const { width, height } = useElementSize(container);
+
+const blockSize = computed(() => {
+    return Math.min(width.value / 35, height.value / 9);
+});
+
+const gap = computed(() => Math.floor(blockSize.value / 6));
 
 const getIndexFromCoordinates = (col: number, row: number): number => {
     return row * columns.value + col - 1;
