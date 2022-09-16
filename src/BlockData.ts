@@ -1,11 +1,10 @@
 import { Interval } from 'luxon';
-import { AvailabilityLevel } from './AvailabilityLevel';
 
 export class BlockData {
     public readonly interval: Interval;
-    public readonly level: AvailabilityLevel;
+    public level: number;
 
-    constructor(interval: Interval, level: AvailabilityLevel) {
+    constructor(interval: Interval, level: number) {
         this.interval = interval;
         this.level = level;
     }

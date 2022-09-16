@@ -10,7 +10,7 @@ export const useGridStateStore = defineStore('gridState', {
     state: () => {
         return {
             blockData: [] as BlockData[],
-            maxLevel: 3,
+            scale: defaultAvailabilityScale,
         };
     },
 
@@ -25,17 +25,13 @@ export const useGridStateStore = defineStore('gridState', {
             let intervalStart = startTime;
 
             for (let i = 0; i < blockCount; i++) {
-                const defaultLevel = new AvailabilityLevel(
-                    DEFAULT_INITIAL_LEVEL,
-                    defaultAvailabilityScale
-                );
                 const blockInterval: Interval = Interval.after(
                     intervalStart,
                     intervalDuration
                 );
                 const blockData: BlockData = new BlockData(
                     blockInterval,
-                    defaultLevel
+                    DEFAULT_INITIAL_LEVEL
                 );
                 this.blockData.push(blockData);
 
@@ -48,11 +44,14 @@ export const useGridStateStore = defineStore('gridState', {
                 return new AvailabilityLevel();
             }
 
-            return this.blockData[index].level;
+            return new AvailabilityLevel(
+                this.blockData[index].level,
+                this.scale
+            );
         },
 
         changeLevel(blockIndex: number, level: number) {
-            this.blockData[blockIndex].level.level = level;
+            this.blockData[blockIndex].level = level;
         },
 
         changeMultipleLevels(blocks: number[], level: number) {

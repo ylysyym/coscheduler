@@ -1,9 +1,5 @@
 export interface AvailabilityScale {
     levels: number;
-    labels: {
-        [level: number]: string;
-    };
-    colors: {
-        [level: number]: string;
-    };
+    label(level: number): string;
+    color(level: number): string;
 }

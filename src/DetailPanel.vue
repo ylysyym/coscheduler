@@ -5,7 +5,7 @@
         <div>
             <select v-model="selectedLevel">
                 <option v-for="level in levels" :value="level" :key="level">
-                    {{ level }}
+                    {{ levelLabels[level - 1] }}
                 </option>
             </select>
         </div>
@@ -46,9 +46,15 @@ const gridState = useGridStateStore();
 
 const levels = computed((): number[] => {
     return Array.from(
-        { length: gridState.maxLevel },
+        { length: gridState.scale.levels },
         (value, index) => index + 1
     );
+});
+
+const levelLabels = computed((): string[] => {
+    return levels.value.map((level) => {
+        return gridState.scale.label(level);
+    });
 });
 
 const intervalString = computed(() => {
