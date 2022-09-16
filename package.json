@@ -16,6 +16,7 @@
         "@types/luxon": "^2.4.0",
         "@typescript-eslint/eslint-plugin": "^5.37.0",
         "@typescript-eslint/parser": "^5.37.0",
+        "@vueuse/core": "^9.2.0",
         "color2k": "^1.2.5",
         "css-loader": "^6.7.1",
         "eslint": "^8.23.1",
