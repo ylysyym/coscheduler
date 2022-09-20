@@ -7,7 +7,13 @@
                 v-for="level in levels"
                 :value="level.level"
                 :key="level.level"
-                :style="{ 'background-color': level.color }"
+                :style="{
+                    'background-color': level.color,
+                }"
+                :class="{
+                    'selected-level': level.level === selectedLevel,
+                }"
+                @click="changeLevel(level.level)"
             >
                 {{ level.label }}
             </button>
@@ -33,18 +39,17 @@ const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 const hasMultipleSelectedItems = computed(() => store.selectedItems.length > 1);
-const selectedLevel = computed({
-    get: () => {
-        if (hasSingleSelectedItem.value) {
-            return gridState.level(ids.value[0]).level;
-        } else {
-            return -1; // TODO: should return the majority value
-        }
-    },
-    set: (value: number) => {
-        gridState.changeMultipleLevels(ids.value, value);
-    },
+const selectedLevel = computed(() => {
+    if (hasSingleSelectedItem.value) {
+        return gridState.level(ids.value[0]).level;
+    } else {
+        return -1; // TODO: should return the majority value
+    }
 });
+
+const changeLevel = (level: number) => {
+    gridState.changeMultipleLevels(ids.value, level - 1);
+};
 
 const gridState = useGridStateStore();
 
@@ -80,6 +85,10 @@ const intervalString = computed(() => {
     height: 100%;
     overflow: hidden;
     width: 100%;
+}
+
+.selected-level {
+    border: 3px solid black;
 }
 
 .interval-display {
