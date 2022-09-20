@@ -24,6 +24,7 @@
         "eslint-plugin-vue": "^9.4.0",
         "html-webpack-plugin": "^5.5.0",
         "luxon": "^2.5.0",
+        "naive-ui": "^2.33.3",
         "pinia": "^2.0.22",
         "prettier": "^2.7.1",
         "ts-loader": "^9.3.1",
