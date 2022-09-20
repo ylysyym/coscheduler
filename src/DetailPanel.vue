@@ -3,11 +3,14 @@
         <div v-if="hasMultipleSelectedItems">{{ JSON.stringify(ids) }}</div>
         <div v-else>{{ ids[0] }}</div>
         <div>
-            <select v-model="selectedLevel">
-                <option v-for="level in levels" :value="level" :key="level">
-                    {{ levelLabels[level - 1] }}
-                </option>
-            </select>
+            <button
+                v-for="level in levels"
+                :value="level.level"
+                :key="level.level"
+                :style="{ 'background-color': level.color }"
+            >
+                {{ level.label }}
+            </button>
         </div>
         <div>
             <span class="interval-display">
@@ -23,6 +26,7 @@ import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
 import { useAppStore } from './stores/app';
 import { useGridStateStore } from './stores/gridState';
+import { AvailabilityLevel } from './AvailabilityLevel';
 
 const store = useAppStore();
 const ids = computed(() => store.selectedItems);
@@ -44,17 +48,8 @@ const selectedLevel = computed({
 
 const gridState = useGridStateStore();
 
-const levels = computed((): number[] => {
-    return Array.from(
-        { length: gridState.scale.levels },
-        (value, index) => index + 1
-    );
-});
-
-const levelLabels = computed((): string[] => {
-    return levels.value.map((level) => {
-        return gridState.scale.label(level);
-    });
+const levels = computed((): AvailabilityLevel[] => {
+    return gridState.scale.levels;
 });
 
 const intervalString = computed(() => {

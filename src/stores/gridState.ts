@@ -40,14 +40,7 @@ export const useGridStateStore = defineStore('gridState', {
         },
 
         level(index: number): AvailabilityLevel {
-            if (index >= this.blockData.length) {
-                return new AvailabilityLevel();
-            }
-
-            return new AvailabilityLevel(
-                this.blockData[index].level,
-                this.scale
-            );
+            return this.scale.levels[this.blockData[index].level];
         },
 
         changeLevel(blockIndex: number, level: number) {

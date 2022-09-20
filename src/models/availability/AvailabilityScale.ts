@@ -1,5 +1,5 @@
+import { AvailabilityLevel } from '@/AvailabilityLevel';
+
 export interface AvailabilityScale {
-    levels: number;
-    label(level: number): string;
-    color(level: number): string;
+    readonly levels: AvailabilityLevel[];
 }
