@@ -3,12 +3,16 @@ import { createPinia } from 'pinia';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import App from '@/App.vue';
 import ScheduleView from '@/ScheduleView.vue';
+import CreationView from '@/CreationView.vue';
 
 const main = function () {
     const app = createApp(App);
     app.use(createPinia());
 
-    const routes = [{ path: '/', component: ScheduleView }];
+    const routes = [
+        { path: '/', component: ScheduleView },
+        { path: '/create', component: CreationView },
+    ];
 
     app.use(
         createRouter({
