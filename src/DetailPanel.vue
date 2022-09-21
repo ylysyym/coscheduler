@@ -20,9 +20,13 @@
             </n-radio-group>
         </div>
         <div>
-            <span class="interval-display">
-                {{ intervalString }}
-            </span>
+            <div
+                class="interval-display"
+                v-for="(str, i) in selectedIntervalStrings"
+                :key="i"
+            >
+                {{ str }}
+            </div>
         </div>
     </div>
     <div class="container" v-else>Nothing selected.</div>
@@ -74,22 +78,23 @@ const levels = computed((): AvailabilityLevel[] => {
     return gridState.scale.levels;
 });
 
-const intervalString = computed(() => {
-    let result = '';
+const selectedIntervalStrings = computed(() => {
+    let result = [];
     let intervals: Interval[] = [];
     for (const id of ids.value) {
         intervals.push(gridState.blockData[id].interval);
     }
     let mergedIntervals = Interval.merge(intervals);
     for (const interval of mergedIntervals) {
-        result += interval.start.toLocaleString(
+        let intervalString = '';
+        intervalString += interval.start.toLocaleString(
             DateTime.DATETIME_MED_WITH_WEEKDAY
         );
-        result += ' ~ ';
-        result += interval.end.toLocaleString(
+        intervalString += ' ~ ';
+        intervalString += interval.end.toLocaleString(
             DateTime.DATETIME_MED_WITH_WEEKDAY
         );
-        result += '\n';
+        result.push(intervalString);
     }
 
     return result;
@@ -106,9 +111,5 @@ const intervalString = computed(() => {
 
 .selected-level {
     border: 3px solid black;
-}
-
-.interval-display {
-    white-space: pre;
 }
 </style>
