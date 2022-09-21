@@ -108,8 +108,4 @@ const selectedIntervalStrings = computed(() => {
     overflow: hidden;
     width: 100%;
 }
-
-.selected-level {
-    border: 3px solid black;
-}
 </style>
