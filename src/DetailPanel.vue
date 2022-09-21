@@ -12,6 +12,7 @@
                     :key="level.level"
                     :label="level.label"
                     :value="level.level"
+                    @click="changeLevel(level.level)"
                 >
                     {{ level.label }}
                     <span :style="{ color: level.color }">●</span>
@@ -40,11 +41,26 @@ const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 const hasMultipleSelectedItems = computed(() => store.selectedItems.length > 1);
+
+const mostSelectedLevel = computed(() => {
+    const arr = ids.value.map((id) => {
+        return gridState.level(id).level;
+    });
+    return arr
+        .sort((a, b) => {
+            return (
+                arr.filter((v) => v === a).length -
+                arr.filter((v) => v === b).length
+            );
+        })
+        .pop();
+});
+
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
         return gridState.level(ids.value[0]).level;
     } else {
-        return -1; // TODO: should return the majority value
+        return mostSelectedLevel.value;
     }
 });
 
