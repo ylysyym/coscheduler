@@ -3,20 +3,20 @@
         <div v-if="hasMultipleSelectedItems">{{ JSON.stringify(ids) }}</div>
         <div v-else>{{ ids[0] }}</div>
         <div>
-            <button
-                v-for="level in levels"
-                :value="level.level"
-                :key="level.level"
-                :style="{
-                    'background-color': level.color,
-                }"
-                :class="{
-                    'selected-level': level.level === selectedLevel,
-                }"
-                @click="changeLevel(level.level)"
+            <n-radio-group
+                :value="selectedLevel"
+                @update:value="changeLevel($event)"
             >
-                {{ level.label }}
-            </button>
+                <n-radio-button
+                    v-for="level in levels"
+                    :key="level.level"
+                    :label="level.label"
+                    :value="level.level"
+                >
+                    {{ level.label }}
+                    <span :style="{ color: level.color }">●</span>
+                </n-radio-button>
+            </n-radio-group>
         </div>
         <div>
             <span class="interval-display">
@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
+import { NRadioGroup, NRadioButton } from 'naive-ui';
 import { useAppStore } from './stores/app';
 import { useGridStateStore } from './stores/gridState';
 import { AvailabilityLevel } from './AvailabilityLevel';
