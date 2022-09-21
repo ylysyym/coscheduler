@@ -1,9 +1,21 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import App from '@/App.vue';
 
 const main = function () {
-    createApp(App).use(createPinia()).mount('#app');
+    const app = createApp(App);
+    app.use(createPinia());
+
+    const routes = [{ path: '/', component: App }];
+
+    app.use(
+        createRouter({
+            history: createWebHashHistory(),
+            routes,
+        })
+    );
+    app.mount('#app');
 };
 
 if (document.readyState === 'loading') {
