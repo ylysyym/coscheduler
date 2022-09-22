@@ -1,5 +1,9 @@
-import { BUSY_COLOR, NEUTRAL_COLOR, AVAILABLE_COLOR } from '@/Colors';
-import { AvailabilityScale } from './AvailabilityScale';
+import {
+    BUSY_COLOR,
+    NEUTRAL_COLOR,
+    AVAILABLE_COLOR,
+} from '@/models/availability/Colors';
+import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
 
 export const defaultAvailabilityScale: AvailabilityScale = {
     levels: [

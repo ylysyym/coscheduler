@@ -36,9 +36,9 @@
 import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
 import { NRadioGroup, NRadioButton } from 'naive-ui';
-import { useAppStore } from './stores/app';
-import { useGridStateStore } from './stores/gridState';
-import { AvailabilityLevel } from './AvailabilityLevel';
+import { useAppStore } from '@/stores/app';
+import { useGridStateStore } from '@/stores/gridState';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 
 const store = useAppStore();
 const ids = computed(() => store.selectedItems);

@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import NavigationMenu from '@/NavigationMenu.vue';
+import NavigationMenu from '@/components/NavigationMenu.vue';
 </script>
 
 <style scoped>

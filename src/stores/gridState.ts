@@ -1,7 +1,7 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
-import { AvailabilityLevel } from '@/AvailabilityLevel';
-import { BlockData } from '@/BlockData';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
 
 const DEFAULT_INITIAL_LEVEL = 1;

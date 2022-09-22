@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import BlockGrid from '@/blocks/BlockGrid.vue';
-import DetailPanel from '@/DetailPanel.vue';
+import BlockGrid from '@/components/BlockGrid.vue';
+import DetailPanel from '@/components/DetailPanel.vue';
 </script>
 
 <style scoped>

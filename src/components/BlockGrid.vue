@@ -38,9 +38,9 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { DateTime, Duration } from 'luxon';
-import SquareBlock from '@/blocks/SquareBlock.vue';
+import SquareBlock from '@/components/SquareBlock.vue';
 import { useGridStateStore } from '@/stores/gridState';
-import { AvailabilityLevel } from '@/AvailabilityLevel';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
 import { GlobalEvents } from 'vue-global-events';
 import { useElementSize } from '@vueuse/core';

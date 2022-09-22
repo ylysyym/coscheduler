@@ -7,7 +7,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAppStore } from '@/stores/app';
-import { AvailabilityLevel } from '@/AvailabilityLevel';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 
 const props = defineProps<{
     id: number;
