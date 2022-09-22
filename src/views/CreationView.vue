@@ -12,16 +12,17 @@
 
 <script setup lang="ts">
 import { NSelect, NDatePicker } from 'naive-ui';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
-const schemas = ref([
-    { label: '5 minutes', value: 0 },
-    { label: '10 minutes', value: 1 },
-    { label: '15 minutes', value: 2 },
-    { label: '30 minutes', value: 3 },
-    { label: '1 hour', value: 4 },
-    { label: '1 day', value: 5 },
-]);
+const schemas = computed(() => {
+    return defaultTimeUnits.map((unit) => {
+        return {
+            label: unit.longDesc,
+            value: unit.minutes,
+        };
+    });
+});
 
 let timeRange = ref();
 </script>
