@@ -6,7 +6,7 @@
     <n-date-picker
         type="datetimerange"
         v-model:value="timeRange"
-        :time-picker-props="{ format: 'hh:mm' }"
+        :time-picker-props="{ format: 'HH:mm' }"
     />
 </template>
 
