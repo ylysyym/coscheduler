@@ -45,10 +45,6 @@ import { useAppStore } from '@/stores/app';
 import { GlobalEvents } from 'vue-global-events';
 import { useElementSize } from '@vueuse/core';
 
-const rows = ref(7);
-const columns = ref(24);
-const blockCount = computed(() => rows.value * columns.value);
-
 const container = ref(null);
 
 const { width, height } = useElementSize(container);
@@ -58,6 +54,30 @@ const blockSize = computed(() => {
 });
 
 const gap = computed(() => Math.floor(blockSize.value / 6));
+
+const appStore = useAppStore();
+
+let startSquare = -1;
+let isCurrentlySelecting = false;
+let selectedSquares = ref([] as number[]);
+
+const startSelecting = (index: number) => {
+    isCurrentlySelecting = true;
+    startSquare = index;
+    selectedSquares.value = [index];
+};
+
+const stopSelecting = () => {
+    isCurrentlySelecting = false;
+};
+
+const store = useGridStateStore();
+
+const rows = ref(7);
+const columns = computed(() => {
+    return store.display / store.units;
+});
+const blockCount = computed(() => rows.value * columns.value);
 
 const getIndexFromCoordinates = (col: number, row: number): number => {
     return row * columns.value + col - 1;
@@ -82,22 +102,6 @@ const getSquaresBetween = (a: number, b: number): number[] => {
     }
 
     return result;
-};
-
-const appStore = useAppStore();
-
-let startSquare = -1;
-let isCurrentlySelecting = false;
-let selectedSquares = ref([] as number[]);
-
-const startSelecting = (index: number) => {
-    isCurrentlySelecting = true;
-    startSquare = index;
-    selectedSquares.value = [index];
-};
-
-const stopSelecting = () => {
-    isCurrentlySelecting = false;
 };
 
 const updateSelection = (a: number, b: number) => {
@@ -138,7 +142,7 @@ const currentDate = ref(
 const startDate = (): DateTime => {
     return currentDate.value;
 };
-const store = useGridStateStore();
+
 const levels = (index: number): AvailabilityLevel => store.level(index);
 const defaultDuration: Duration = Duration.fromObject({
     hours: 1,

@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
+import { DisplaySchema } from '@/models/DisplaySchema';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
@@ -11,6 +12,8 @@ export const useGridStateStore = defineStore('gridState', {
         return {
             blockData: [] as BlockData[],
             scale: defaultAvailabilityScale,
+            display: DisplaySchema.Day,
+            units: 60,
         };
     },
 
