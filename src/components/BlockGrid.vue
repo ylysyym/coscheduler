@@ -12,24 +12,26 @@
                     {{ label }}
                 </div>
             </div>
-            <div class="row" v-for="(label, row) in rowLabels" :key="row">
+            <div class="row" v-for="(arr, row) in grid" :key="row">
                 <div class="block-wrapper labels">
-                    {{ label }}
+                    {{ rowLabels[row] }}
                 </div>
-                <SquareBlock
-                    class="block-wrapper"
-                    :class="{
-                        isSelected: isSelected(row * columns + column - 1),
-                    }"
-                    v-for="column in columns"
-                    :id="row * columns + column - 1"
-                    :key="column"
-                    :size="blockSize"
-                    :level="levels(row * columns + column - 1)"
-                    @mousedown="onMouseDown(row * columns + column - 1)"
-                    @mouseover="onMouseOver(row * columns + column - 1)"
-                    @mouseup="onMouseUp(row * columns + column - 1)"
-                />
+                <template v-for="index in arr" :key="index">
+                    <SquareBlock
+                        v-if="index !== -1"
+                        class="block-wrapper"
+                        :class="{
+                            isSelected: isSelected(index),
+                        }"
+                        :id="index"
+                        :size="blockSize"
+                        :level="levels(index)"
+                        @mousedown="onMouseDown(index)"
+                        @mouseover="onMouseOver(index)"
+                        @mouseup="onMouseUp(index)"
+                    />
+                    <div class="block-wrapper" v-else></div>
+                </template>
             </div>
         </div>
     </div>
@@ -37,13 +39,19 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DateTime, Duration } from 'luxon';
+import { DateTime } from 'luxon';
+import { GlobalEvents } from 'vue-global-events';
+import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
 import { useGridStateStore } from '@/stores/gridState';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
-import { GlobalEvents } from 'vue-global-events';
-import { useElementSize } from '@vueuse/core';
+import {
+    generateGrid,
+    getColumnLabels,
+    getRowLabels,
+    TimeBreakpoint,
+} from '@/utilities/GridGenerator';
 
 const container = ref(null);
 
@@ -73,11 +81,21 @@ const stopSelecting = () => {
 
 const store = useGridStateStore();
 
-const rows = ref(7);
 const columns = computed(() => {
     return store.display / store.units;
 });
-const blockCount = computed(() => rows.value * columns.value);
+const grid = computed(() => {
+    const start = store.blockData[0].interval.start;
+    const end = store.blockData[store.blockData.length - 1].interval.end;
+
+    return generateGrid(
+        start,
+        end,
+        store.units,
+        TimeBreakpoint.Day,
+        columns.value
+    );
+});
 
 const getIndexFromCoordinates = (col: number, row: number): number => {
     return row * columns.value + col - 1;
@@ -136,39 +154,20 @@ const onGlobalMouseUp = () => {
     stopSelecting();
 };
 
-const currentDate = ref(
-    DateTime.now().set({ minute: 0, second: 0, millisecond: 0 })
-);
-const startDate = (): DateTime => {
-    return currentDate.value;
-};
-
 const levels = (index: number): AvailabilityLevel => store.level(index);
-const defaultDuration: Duration = Duration.fromObject({
-    hours: 1,
+
+const columnLabels = computed(() => {
+    return getColumnLabels(TimeBreakpoint.Day, columns.value, store.units);
 });
 
-const duration = computed(() => defaultDuration);
-store.initialiseBlockData(blockCount.value, startDate(), duration.value);
-const getColumnLabel = (time: DateTime): string => {
-    return time.toFormat('HH');
-};
-const getRowLabel = (time: DateTime): string => {
-    return time.toFormat('EEEE MMM dd');
-};
-const columnLabels = computed(() => {
-    let labels = [];
-    for (let i = 0; i < columns.value; i++) {
-        labels.push(getColumnLabel(store.blockData[i].interval.start));
-    }
-    return labels;
-});
 const rowLabels = computed(() => {
-    let labels = [];
-    for (let i = 0; i < blockCount.value; i += columns.value) {
-        labels.push(getRowLabel(store.blockData[i].interval.start));
-    }
-    return labels;
+    return getRowLabels(
+        TimeBreakpoint.Day,
+        store.blockData[0].interval.start,
+        columns.value,
+        store.units,
+        grid.value.length * grid.value[0].length
+    );
 });
 
 const blockGap = computed(() => gap.value / 2 + 'px');

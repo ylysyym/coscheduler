@@ -10,6 +10,24 @@
 <script setup lang="ts">
 import BlockGrid from '@/components/BlockGrid.vue';
 import DetailPanel from '@/components/DetailPanel.vue';
+import { useGridStateStore } from '@/stores/gridState';
+import { DateTime, Duration } from 'luxon';
+
+const store = useGridStateStore();
+
+const initialiseSchedule = () => {
+    const currentDate = DateTime.now().set({
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+    });
+    const defaultDuration: Duration = Duration.fromObject({
+        minutes: store.units,
+    });
+    store.initialiseBlockData(100, currentDate, defaultDuration);
+};
+
+initialiseSchedule();
 </script>
 
 <style scoped>
