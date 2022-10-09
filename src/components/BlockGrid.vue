@@ -18,7 +18,7 @@
                 </div>
                 <template v-for="index in arr" :key="index">
                     <SquareBlock
-                        v-if="index !== -1"
+                        v-if="index >= 0"
                         class="block-wrapper"
                         :class="{
                             isSelected: isSelected(index),
@@ -39,7 +39,6 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { DateTime } from 'luxon';
 import { GlobalEvents } from 'vue-global-events';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
@@ -98,14 +97,18 @@ const grid = computed(() => {
 });
 
 const getIndexFromCoordinates = (col: number, row: number): number => {
-    return row * columns.value + col - 1;
+    return grid.value[row][col];
 };
 
 const getCoordinatesFromIndex = (index: number): [number, number] => {
-    const col = (index % columns.value) + 1;
-    const row = Math.floor(index / columns.value);
+    for (let i = 0; i < grid.value.length; i++) {
+        let colIndex = grid.value[i].indexOf(index);
+        if (colIndex > -1) {
+            return [colIndex, i];
+        }
+    }
 
-    return [col, row];
+    return [-1, -1];
 };
 
 const getSquaresBetween = (a: number, b: number): number[] => {
@@ -115,7 +118,10 @@ const getSquaresBetween = (a: number, b: number): number[] => {
 
     for (let y = Math.min(rowA, rowB); y <= Math.max(rowA, rowB); y++) {
         for (let x = Math.min(colA, colB); x <= Math.max(colA, colB); x++) {
-            result.push(getIndexFromCoordinates(x, y));
+            const index = getIndexFromCoordinates(x, y);
+            if (index >= 0) {
+                result.push(index);
+            }
         }
     }
 
