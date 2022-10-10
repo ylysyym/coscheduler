@@ -2,11 +2,17 @@ import {
     BUSY_COLOR,
     NEUTRAL_COLOR,
     AVAILABLE_COLOR,
+    UNKNOWN_COLOR,
 } from '@/models/availability/Colors';
 import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
 
 export const defaultAvailabilityScale: AvailabilityScale = {
     levels: [
+        {
+            level: 0,
+            color: UNKNOWN_COLOR,
+            label: 'Unknown',
+        },
         {
             level: 1,
             color: BUSY_COLOR,

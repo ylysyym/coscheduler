@@ -3,10 +3,7 @@
         <div v-if="hasMultipleSelectedItems">{{ JSON.stringify(ids) }}</div>
         <div v-else>{{ ids[0] }}</div>
         <div>
-            <n-radio-group
-                :value="selectedLevel"
-                @update:value="changeLevel($event)"
-            >
+            <n-radio-group :value="selectedLevel" @update:value="changeLevel">
                 <n-radio-button
                     v-for="level in levels"
                     :key="level.level"
@@ -69,7 +66,7 @@ const selectedLevel = computed(() => {
 });
 
 const changeLevel = (level: number) => {
-    gridState.changeMultipleLevels(ids.value, level - 1);
+    gridState.changeMultipleLevels(ids.value, level);
 };
 
 const gridState = useGridStateStore();

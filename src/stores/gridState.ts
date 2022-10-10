@@ -5,7 +5,7 @@ import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
 import { DisplaySchema } from '@/models/DisplaySchema';
 
-const DEFAULT_INITIAL_LEVEL = 1;
+const DEFAULT_INITIAL_LEVEL = 0;
 
 export const useGridStateStore = defineStore('gridState', {
     state: () => {
@@ -43,7 +43,11 @@ export const useGridStateStore = defineStore('gridState', {
         },
 
         level(index: number): AvailabilityLevel {
-            return this.scale.levels[this.blockData[index].level];
+            const availabilityLevel = this.scale.levels.find((lvl) => {
+                return lvl.level === this.blockData[index].level;
+            });
+
+            return availabilityLevel || this.scale.levels[0];
         },
 
         changeLevel(blockIndex: number, level: number) {
