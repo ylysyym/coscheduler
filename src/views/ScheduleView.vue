@@ -5,7 +5,7 @@
     <div class="block-grid">
         <BlockGrid />
     </div>
-    <div class="detail-panel">
+    <div class="detail-panel" v-if="isEditMode">
         <DetailPanel />
     </div>
 </template>
@@ -16,8 +16,11 @@ import DetailPanel from '@/components/DetailPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import { useGridStateStore } from '@/stores/gridState';
 import { DateTime, Duration } from 'luxon';
+import { computed } from 'vue';
+import { useAppStore } from '@/stores/app';
 
 const store = useGridStateStore();
+const appStore = useAppStore();
 
 const initialiseSchedule = () => {
     const currentDate = DateTime.now().set({
@@ -32,6 +35,10 @@ const initialiseSchedule = () => {
 };
 
 initialiseSchedule();
+
+let isEditMode = computed(() => appStore.isEditing);
+
+let detailPanelWidth = computed(() => (isEditMode.value ? 300 : 0) + 'px');
 </script>
 
 <style scoped>
@@ -49,7 +56,7 @@ initialiseSchedule();
         height: calc(100% - 40px);
     }
     .block-grid {
-        width: calc(100% - 450px);
+        width: calc(100% - 150px - v-bind(detailPanelWidth));
     }
     .detail-panel {
         width: 300px;

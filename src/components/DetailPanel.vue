@@ -1,7 +1,5 @@
 <template>
     <div class="container" v-if="hasSelectedItem">
-        <div v-if="hasMultipleSelectedItems">{{ JSON.stringify(ids) }}</div>
-        <div v-else>{{ ids[0] }}</div>
         <div>
             <n-radio-group :value="selectedLevel" @update:value="changeLevel">
                 <n-radio-button
@@ -41,7 +39,6 @@ const store = useAppStore();
 const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
-const hasMultipleSelectedItems = computed(() => store.selectedItems.length > 1);
 
 const mostSelectedLevel = computed(() => {
     const arr = ids.value.map((id) => {

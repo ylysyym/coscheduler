@@ -4,6 +4,9 @@ export const useAppStore = defineStore('app', {
     state: () => {
         return {
             selectedItems: [] as number[],
+            isEditMode: false,
+            currentName: '',
+            isJoining: false,
         };
     },
 
@@ -23,11 +26,34 @@ export const useAppStore = defineStore('app', {
                 this.selectedItems.push(id);
             }
         },
+
+        startJoin(name: string) {
+            this.isEditMode = true;
+            this.isJoining = true;
+            this.currentName = name;
+        },
+
+        stopEditing() {
+            this.isEditMode = false;
+            this.isJoining = false;
+        },
     },
 
     getters: {
         hasSelectedItem(): boolean {
             return this.selectedItems.length > 0;
+        },
+
+        isEditing(): boolean {
+            return this.isEditMode;
+        },
+
+        isJoin(): boolean {
+            return this.isJoining;
+        },
+
+        name(): string {
+            return this.currentName;
         },
     },
 });
