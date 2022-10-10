@@ -1,24 +1,29 @@
 <template>
-    <h1>Create Schedule</h1>
-    <h4>Unit of time</h4>
-    <n-select
-        :options="schemas"
-        v-model:value="selectedSchema"
-        :on-update:value="onUnitSelected"
-    />
-    <h4>Time range</h4>
-    <n-date-picker
-        :type="datePickerType"
-        v-model:value="timeRange"
-        :time-picker-props="timePickerProps"
-        update-value-on-close
-        :actions="null"
-        :format="pickerFormat"
-    />
+    <div class="container">
+        <h1>Create Schedule</h1>
+        <h4>Unit of time</h4>
+        <n-select
+            :options="schemas"
+            v-model:value="selectedSchema"
+            :on-update:value="onUnitSelected"
+            :consistent-menu-width="false"
+        />
+        <h4>Time range</h4>
+        <n-date-picker
+            :type="datePickerType"
+            v-model:value="timeRange"
+            :time-picker-props="timePickerProps"
+            update-value-on-close
+            :actions="null"
+            :format="pickerFormat"
+        />
+        <br />
+        <n-button type="primary">Create</n-button>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { NSelect, NDatePicker } from 'naive-ui';
+import { NSelect, NDatePicker, NButton } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
@@ -55,7 +60,15 @@ const schemas = computed(() => {
 let timeRange = ref();
 
 const onUnitSelected = (value: number) => {
+    if (selectedSchema.value === value) return;
     selectedSchema.value = value;
     timeRange.value = null;
 };
 </script>
+
+<style scoped>
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+</style>
