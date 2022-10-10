@@ -102,5 +102,16 @@ export const useGridStateStore = defineStore('gridState', {
                 this.changeLevel(id, level);
             }
         },
+
+        saveNew(name: string) {
+            this.blockData[name] = this.currentBlockData;
+            this.currentBlockData = [];
+        },
+    },
+
+    getters: {
+        people(): string[] {
+            return Object.keys(this.blockData);
+        },
     },
 });

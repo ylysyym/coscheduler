@@ -13,6 +13,9 @@
             >
                 Join
             </n-button>
+            <n-button type="primary" @click="stopEditing()" v-else
+                >Save</n-button
+            >
         </n-space>
     </div>
     <n-modal
@@ -37,7 +40,7 @@ import { useGridStateStore } from '@/stores/gridState';
 const appStore = useAppStore();
 const gridStateStore = useGridStateStore();
 
-let existingPeople = ref([] as string[]);
+let existingPeople = computed(() => gridStateStore.people);
 let people = computed(() => {
     if (!appStore.isJoining) {
         return existingPeople.value;
@@ -50,7 +53,13 @@ let joinName = ref();
 
 const joinSchedule = () => {
     appStore.startJoin(joinName.value);
+    joinName.value = '';
     gridStateStore.initialiseBlockData();
+};
+
+const stopEditing = () => {
+    gridStateStore.saveNew(appStore.currentName);
+    appStore.stopEditing();
 };
 
 let isEditing = computed(() => appStore.isEditing);
