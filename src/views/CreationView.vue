@@ -6,7 +6,6 @@
             :options="schemas"
             v-model:value="selectedSchema"
             :on-update:value="onUnitSelected"
-            :consistent-menu-width="false"
         />
         <h4>Time range</h4>
         <n-date-picker
