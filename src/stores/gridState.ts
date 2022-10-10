@@ -5,7 +5,7 @@ import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
 import { DisplaySchema } from '@/models/DisplaySchema';
 
-const DEFAULT_INITIAL_LEVEL = 0;
+const DEFAULT_INITIAL_LEVEL = 1;
 
 export const useGridStateStore = defineStore('gridState', {
     state: () => {
@@ -23,17 +23,27 @@ export const useGridStateStore = defineStore('gridState', {
     },
 
     actions: {
-        initialiseBlockData(
-            blockCount: number,
-            startTime: DateTime,
-            intervalDuration: Duration
-        ) {
+        initialiseEndpoints() {
+            const currentDate = DateTime.now().set({
+                minute: 0,
+                second: 0,
+                millisecond: 0,
+            });
+            this.startTime = currentDate;
+            const endDate = currentDate.plus({
+                days: 8,
+            });
+            this.endTime = endDate;
+        },
+
+        initialiseBlockData() {
+            const intervalDuration = Duration.fromObject({
+                minutes: this.units,
+            });
             this.currentBlockData = [];
 
-            let intervalStart = startTime;
-            this.startTime = startTime;
-
-            for (let i = 0; i < blockCount; i++) {
+            let intervalStart = this.startTime;
+            while (intervalStart < this.endTime) {
                 const blockInterval: Interval = Interval.after(
                     intervalStart,
                     intervalDuration
@@ -46,7 +56,6 @@ export const useGridStateStore = defineStore('gridState', {
 
                 intervalStart = blockInterval.end;
             }
-            this.endTime = intervalStart;
         },
 
         currentLevel(index: number): AvailabilityLevel {
@@ -67,13 +76,14 @@ export const useGridStateStore = defineStore('gridState', {
                     result.push(availabilityLevel);
                 }
             }
+            if (this.currentBlockData.length > index) {
+                const availabilityLevel = this.scale.levels.find((lvl) => {
+                    return lvl.level === this.currentBlockData[index].level;
+                });
 
-            const availabilityLevel = this.scale.levels.find((lvl) => {
-                return lvl.level === this.currentBlockData[index].level;
-            });
-
-            if (availabilityLevel !== undefined) {
-                result.push(availabilityLevel);
+                if (availabilityLevel !== undefined) {
+                    result.push(availabilityLevel);
+                }
             }
 
             if (result.length === 0) {

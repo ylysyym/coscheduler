@@ -16,7 +16,7 @@
                 <div class="block-wrapper labels">
                     {{ rowLabels[row] }}
                 </div>
-                <template v-for="index in arr" :key="index">
+                <template v-for="(index, col) in arr" :key="col">
                     <SquareBlock
                         v-if="index >= 0"
                         class="block-wrapper"

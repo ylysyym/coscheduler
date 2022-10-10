@@ -32,8 +32,10 @@ import { NButton, NSpace, NInput, NModal } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { useAppStore } from '@/stores/app';
+import { useGridStateStore } from '@/stores/gridState';
 
 const appStore = useAppStore();
+const gridStateStore = useGridStateStore();
 
 let existingPeople = ref([] as string[]);
 let people = computed(() => {
@@ -48,7 +50,7 @@ let joinName = ref();
 
 const joinSchedule = () => {
     appStore.startJoin(joinName.value);
-    // TODO: set name
+    gridStateStore.initialiseBlockData();
 };
 
 let isEditing = computed(() => appStore.isEditing);
