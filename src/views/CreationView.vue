@@ -4,7 +4,7 @@
     <n-select
         :options="schemas"
         v-model:value="selectedSchema"
-        :on-update:value="resetPicker"
+        :on-update:value="onUnitSelected"
     />
     <h4>Time range</h4>
     <n-date-picker
@@ -54,5 +54,8 @@ const schemas = computed(() => {
 
 let timeRange = ref();
 
-const resetPicker = () => (timeRange.value = null);
+const onUnitSelected = (value: number) => {
+    selectedSchema.value = value;
+    timeRange.value = null;
+};
 </script>
