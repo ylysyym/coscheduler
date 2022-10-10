@@ -37,11 +37,11 @@ const appStore = useAppStore();
 
 let existingPeople = ref([] as string[]);
 let people = computed(() => {
-    if (!appStore.isJoin) {
+    if (!appStore.isJoining) {
         return existingPeople.value;
     }
 
-    return [...existingPeople.value, appStore.name];
+    return [...existingPeople.value, appStore.currentName];
 });
 let showJoinDialog = ref(false);
 let joinName = ref();
