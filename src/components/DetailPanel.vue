@@ -42,7 +42,7 @@ const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 
 const mostSelectedLevel = computed(() => {
     const arr = ids.value.map((id) => {
-        return gridState.level(id).level;
+        return gridState.currentLevel(id).level;
     });
     return arr
         .sort((a, b) => {
@@ -56,7 +56,7 @@ const mostSelectedLevel = computed(() => {
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return gridState.level(ids.value[0]).level;
+        return gridState.currentLevel(ids.value[0]).level;
     } else {
         return mostSelectedLevel.value;
     }
@@ -76,7 +76,7 @@ const selectedIntervalStrings = computed(() => {
     let result = [];
     let intervals: Interval[] = [];
     for (const id of ids.value) {
-        intervals.push(gridState.blockData[id].interval);
+        intervals.push(gridState.currentBlockData[id].interval);
     }
     let mergedIntervals = Interval.merge(intervals);
     for (const interval of mergedIntervals) {

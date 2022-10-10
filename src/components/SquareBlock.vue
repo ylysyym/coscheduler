@@ -11,10 +11,10 @@ import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 
 const props = defineProps<{
     id: number;
-    level: AvailabilityLevel;
+    levels: AvailabilityLevel[];
     size: number;
 }>();
-const color = computed(() => props.level.color);
+const color = computed(() => props.levels[0].color);
 const size = computed(() => props.size + 'px');
 
 const store = useAppStore();

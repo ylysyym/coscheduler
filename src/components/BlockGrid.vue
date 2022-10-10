@@ -25,7 +25,7 @@
                         }"
                         :id="index"
                         :size="blockSize"
-                        :level="levels(index)"
+                        :levels="levels(index)"
                         @mousedown="onMouseDown(index)"
                         @mouseover="onMouseOver(index)"
                         @mouseup="onMouseUp(index)"
@@ -84,12 +84,9 @@ const columns = computed(() => {
     return store.display / store.units;
 });
 const grid = computed(() => {
-    const start = store.blockData[0].interval.start;
-    const end = store.blockData[store.blockData.length - 1].interval.end;
-
     return generateGrid(
-        start,
-        end,
+        store.startTime,
+        store.endTime,
         store.units,
         TimeBreakpoint.Day,
         columns.value
@@ -160,7 +157,7 @@ const onGlobalMouseUp = () => {
     stopSelecting();
 };
 
-const levels = (index: number): AvailabilityLevel => store.level(index);
+const levels = (index: number): AvailabilityLevel[] => store.levels(index);
 
 const columnLabels = computed(() => {
     return getColumnLabels(TimeBreakpoint.Day, columns.value, store.units);
@@ -169,7 +166,7 @@ const columnLabels = computed(() => {
 const rowLabels = computed(() => {
     return getRowLabels(
         TimeBreakpoint.Day,
-        store.blockData[0].interval.start,
+        store.startTime,
         columns.value,
         store.units,
         grid.value.length * grid.value[0].length

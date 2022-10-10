@@ -10,10 +10,15 @@ const DEFAULT_INITIAL_LEVEL = 0;
 export const useGridStateStore = defineStore('gridState', {
     state: () => {
         return {
-            blockData: [] as BlockData[],
+            blockData: {} as {
+                [name: string]: BlockData[];
+            },
             scale: defaultAvailabilityScale,
             display: DisplaySchema.Day,
             units: 60,
+            currentBlockData: [] as BlockData[],
+            startTime: {} as DateTime,
+            endTime: {} as DateTime,
         };
     },
 
@@ -23,9 +28,10 @@ export const useGridStateStore = defineStore('gridState', {
             startTime: DateTime,
             intervalDuration: Duration
         ) {
-            this.blockData = [];
+            this.currentBlockData = [];
 
             let intervalStart = startTime;
+            this.startTime = startTime;
 
             for (let i = 0; i < blockCount; i++) {
                 const blockInterval: Interval = Interval.after(
@@ -36,22 +42,49 @@ export const useGridStateStore = defineStore('gridState', {
                     blockInterval,
                     DEFAULT_INITIAL_LEVEL
                 );
-                this.blockData.push(blockData);
+                this.currentBlockData.push(blockData);
 
                 intervalStart = blockInterval.end;
             }
+            this.endTime = intervalStart;
         },
 
-        level(index: number): AvailabilityLevel {
+        currentLevel(index: number): AvailabilityLevel {
             const availabilityLevel = this.scale.levels.find((lvl) => {
-                return lvl.level === this.blockData[index].level;
+                return lvl.level === this.currentBlockData[index].level;
             });
 
             return availabilityLevel || this.scale.levels[0];
         },
 
+        levels(index: number): AvailabilityLevel[] {
+            const result = [];
+            for (const key of Object.keys(this.blockData)) {
+                const availabilityLevel = this.scale.levels.find((lvl) => {
+                    return lvl.level === this.blockData[key][index].level;
+                });
+                if (availabilityLevel !== undefined) {
+                    result.push(availabilityLevel);
+                }
+            }
+
+            const availabilityLevel = this.scale.levels.find((lvl) => {
+                return lvl.level === this.currentBlockData[index].level;
+            });
+
+            if (availabilityLevel !== undefined) {
+                result.push(availabilityLevel);
+            }
+
+            if (result.length === 0) {
+                return [this.scale.levels[0]];
+            }
+
+            return result;
+        },
+
         changeLevel(blockIndex: number, level: number) {
-            this.blockData[blockIndex].level = level;
+            this.currentBlockData[blockIndex].level = level;
         },
 
         changeMultipleLevels(blocks: number[], level: number) {
