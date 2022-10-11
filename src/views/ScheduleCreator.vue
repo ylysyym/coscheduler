@@ -48,12 +48,14 @@ let dateFormat = computed(() =>
 );
 
 const schemas = computed(() => {
-    return defaultTimeUnits.map((unit) => {
-        return {
-            label: unit.longDesc,
-            value: unit.minutes,
-        };
-    });
+    return Object.values(defaultTimeUnits)
+        .filter((unit) => unit.blockUnit)
+        .map((unit) => {
+            return {
+                label: unit.description,
+                value: unit.minutes,
+            };
+        });
 });
 
 let timeRange = ref();

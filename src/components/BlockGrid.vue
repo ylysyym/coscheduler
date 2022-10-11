@@ -80,7 +80,7 @@ const stopSelecting = () => {
 const store = useScheduleStore();
 
 const columns = computed(() => {
-    return store.rowUnit / store.blockUnit.minutes;
+    return store.rowUnit.minutes / store.blockUnit.minutes;
 });
 const grid = computed(() => {
     return generateGrid(

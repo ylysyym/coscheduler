@@ -1,5 +1,5 @@
 export interface TimeUnit {
-    shortDesc: string;
-    longDesc: string;
+    description: string;
     minutes: number;
+    blockUnit: boolean;
 }

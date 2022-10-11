@@ -1,7 +1,6 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
 import { BlockData } from '@/models/BlockData';
-import { DisplaySchema } from '@/models/DisplaySchema';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
@@ -16,8 +15,8 @@ export const useScheduleStore = defineStore('schedule', {
             },
             currentEntry: [] as BlockData[],
             scale: defaultAvailabilityScale,
-            rowUnit: DisplaySchema.Day,
-            blockUnit: defaultTimeUnits[3],
+            rowUnit: defaultTimeUnits['1d'],
+            blockUnit: defaultTimeUnits['1h'],
             startTime: {} as DateTime,
             endTime: {} as DateTime,
         };

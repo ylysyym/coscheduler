@@ -1,29 +1,39 @@
 import { TimeUnit } from './TimeUnit';
 
-export const defaultTimeUnits: TimeUnit[] = [
-    {
-        shortDesc: '5m',
-        longDesc: '5 minutes',
+export const defaultTimeUnits: { [key: string]: TimeUnit } = {
+    '5m': {
+        description: '5 minutes',
         minutes: 5,
+        blockUnit: true,
     },
-    {
-        shortDesc: '15m',
-        longDesc: '15 minutes',
+    '15m': {
+        description: '15 minutes',
         minutes: 15,
+        blockUnit: true,
     },
-    {
-        shortDesc: '30m',
-        longDesc: '30 minutes',
+    '30m': {
+        description: '30 minutes',
         minutes: 30,
+        blockUnit: true,
     },
-    {
-        shortDesc: '1h',
-        longDesc: '1 hour',
+    '1h': {
+        description: '1 hour',
         minutes: 60,
+        blockUnit: true,
     },
-    {
-        shortDesc: '1d',
-        longDesc: '1 day',
+    '1d': {
+        description: '1 day',
         minutes: 24 * 60,
+        blockUnit: true,
     },
-];
+    '1w': {
+        description: '1 week',
+        minutes: 7 * 24 * 60,
+        blockUnit: false,
+    },
+    '1M': {
+        description: '1 month',
+        minutes: 31 * 24 * 60,
+        blockUnit: false,
+    },
+};
