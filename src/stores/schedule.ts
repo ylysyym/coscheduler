@@ -64,12 +64,11 @@ export const useScheduleStore = defineStore('schedule', {
             return this.scale.levels[0];
         },
 
-        blockAtIndex(index: number): BlockData {
+        blockAtIndex(names: string[], index: number): BlockData {
             const entries = Object.fromEntries(
-                Object.entries(this.entries).map(([key, val]) => [
-                    key,
-                    this.scale.levels[val[index]],
-                ])
+                Object.entries(this.entries)
+                    .filter(([key, val]) => names.includes(key))
+                    .map(([key, val]) => [key, this.scale.levels[val[index]]])
             );
             return new BlockData(this.intervals[index], entries);
         },

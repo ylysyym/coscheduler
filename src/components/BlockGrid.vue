@@ -160,7 +160,7 @@ const blockData = (index: number) => {
         return store.currentBlockAtIndex(appStore.selectedNames, index);
     }
 
-    return store.blockAtIndex(index);
+    return store.blockAtIndex(appStore.selectedNames, index);
 };
 
 const columnLabels = computed(() => {

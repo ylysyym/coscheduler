@@ -3,9 +3,24 @@
         <h3 v-if="people.length > 0">People</h3>
         <span v-else>There's no one here!</span>
         <n-space :vertical="!isSmallScreen">
-            <n-button v-for="person in people" :key="person">{{
-                person
-            }}</n-button>
+            <n-checkbox-group v-model:value="appStore.selectedNames">
+                <n-space :vertical="!isSmallScreen">
+                    <n-tag
+                        v-for="person in people"
+                        :key="person"
+                        :type="isChecked[person] ? 'primary' : 'default'"
+                        :bordered="false"
+                    >
+                        <n-checkbox
+                            :focusable="false"
+                            :disabled="isEditing"
+                            :value="person"
+                        >
+                            {{ person }}
+                        </n-checkbox>
+                    </n-tag>
+                </n-space>
+            </n-checkbox-group>
             <n-button
                 type="primary"
                 @click="showJoinDialog = true"
@@ -37,7 +52,15 @@
 </template>
 
 <script setup lang="ts">
-import { NButton, NSpace, NInput, NModal } from 'naive-ui';
+import {
+    NButton,
+    NCheckbox,
+    NCheckboxGroup,
+    NInput,
+    NModal,
+    NSpace,
+    NTag,
+} from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { useAppStore } from '@/stores/app';
@@ -59,10 +82,26 @@ const joinSchedule = () => {
     showJoinDialog.value = false;
 };
 
+const selectAllNames = () => {
+    appStore.selectedNames = Object.keys(scheduleStore.entries);
+};
+
 const stopEditing = () => {
     // TODO: save changes remotely at this point
     appStore.stopEditing();
+    selectAllNames();
 };
+
+type CheckedNameMap = { [name: string]: boolean };
+let isChecked = computed(() => {
+    return appStore.selectedNames.reduce(
+        (result: CheckedNameMap, name: string) => {
+            result[name] = true;
+            return result;
+        },
+        {}
+    );
+});
 
 let isEditing = computed(() => appStore.isEditing);
 </script>
