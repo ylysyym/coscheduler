@@ -35,7 +35,7 @@
 import { computed } from 'vue';
 import { readableColor } from 'color2k';
 import { Interval } from 'luxon';
-import { NList, NListItem, NPopover, NSpace, NTag } from 'naive-ui';
+import { NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';

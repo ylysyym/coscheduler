@@ -25,8 +25,14 @@
         title="Join as"
         :show-icon="false"
         @positive-click="joinSchedule"
+        :on-after-enter="nameInput?.focus()"
     >
-        <n-input placeholder="Name" v-model:value="joinName" />
+        <n-input
+            placeholder="Name"
+            v-model:value="joinName"
+            ref="nameInput"
+            @keyup.enter="joinSchedule"
+        />
     </n-modal>
 </template>
 
@@ -44,10 +50,13 @@ let people = computed(() => scheduleStore.people);
 let showJoinDialog = ref(false);
 let joinName = ref();
 
+let nameInput = ref<typeof NInput>();
+
 const joinSchedule = () => {
     appStore.joinAs(joinName.value);
     scheduleStore.initialiseBlockData(joinName.value);
     joinName.value = '';
+    showJoinDialog.value = false;
 };
 
 const stopEditing = () => {
