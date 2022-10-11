@@ -157,7 +157,7 @@ const onGlobalMouseUp = () => {
 
 const blockData = (index: number) => {
     if (appStore.isEditing) {
-        return store.currentBlockAtIndex(appStore.currentName, index);
+        return store.currentBlockAtIndex(appStore.selectedNames, index);
     }
 
     return store.blockAtIndex(index);

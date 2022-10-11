@@ -74,10 +74,11 @@ export const useScheduleStore = defineStore('schedule', {
             return new BlockData(this.intervals[index], entries);
         },
 
-        currentBlockAtIndex(name: string, index: number): BlockData {
-            const entries = {
-                [name]: this.scale.levels[this.entries[name][index]],
-            };
+        currentBlockAtIndex(names: string[], index: number): BlockData {
+            const entries: { [name: string]: AvailabilityLevel } = {};
+            for (const name of names) {
+                entries[name] = this.scale.levels[this.entries[name][index]];
+            }
             return new BlockData(this.intervals[index], entries);
         },
     },
