@@ -42,7 +42,6 @@ import { computed, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
-import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import {

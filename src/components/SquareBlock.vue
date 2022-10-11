@@ -4,9 +4,26 @@
             <template #trigger>
                 <div class="block" @click="selectBlock"></div>
             </template>
-            <div v-for="(level, i) in Object.values(data.entries)" :key="i">
-                {{ level.label }}
-            </div>
+            <n-space vertical>
+                <strong>{{ formatInterval(data.interval) }}</strong>
+
+                <n-space
+                    v-for="person in Object.keys(data.entries)"
+                    :key="person"
+                >
+                    {{ person }}
+                    <n-tag
+                        size="small"
+                        :color="{
+                            color: data.entries[person].color,
+                            textColor: readableColor(
+                                data.entries[person].color
+                            ),
+                        }"
+                        >{{ data.entries[person].label }}</n-tag
+                    >
+                </n-space>
+            </n-space>
         </n-popover>
     </div>
     <div v-else>
@@ -16,7 +33,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { NPopover } from 'naive-ui';
+import { readableColor } from 'color2k';
+import { Interval } from 'luxon';
+import { NList, NListItem, NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
@@ -27,8 +46,13 @@ const props = defineProps<{
     size: number;
 }>();
 
+const formatInterval = (interval: Interval) => {
+    return interval.toFormat('yyyy-MM-dd HH:mm');
+};
+
 const background = computed(() => {
     if (Object.keys(props.data.entries).length === 0) {
+        // TODO: better way of referencing default color
         return defaultAvailabilityScale.levels[0].color;
     }
 
