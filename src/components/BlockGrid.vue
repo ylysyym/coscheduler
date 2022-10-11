@@ -69,6 +69,7 @@ let isCurrentlySelecting = false;
 let selectedSquares = ref([] as number[]);
 
 const startSelecting = (index: number) => {
+    if (!appStore.isEditing) return;
     isCurrentlySelecting = true;
     startSquare = index;
     selectedSquares.value = [index];
