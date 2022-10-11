@@ -1,32 +1,63 @@
 <template>
     <div class="container">
         <h1>Create Schedule</h1>
-        <h4>Unit of time</h4>
-        <n-select
-            :options="schemas"
-            v-model:value="selectedSchema"
-            :on-update:value="onSchemaSelected"
-        />
-        <h4>Time range</h4>
-        <n-date-picker
-            :type="datePickerType"
-            v-model:value="timeRange"
-            :time-picker-props="timePickerProps"
-            update-value-on-close
-            :actions="null"
-            :format="dateFormat"
-        />
-        <br />
-        <n-button type="primary">Create</n-button>
+        <n-form :rules="rules">
+            <n-form-item label="Title" path="title">
+                <n-input placeholder="Title" />
+            </n-form-item>
+            <n-form-item label="Description">
+                <n-input type="textarea" placeholder="Description" />
+            </n-form-item>
+            <n-form-item label="Unit of time" path="timeUnit">
+                <n-select
+                    :options="schemas"
+                    v-model:value="selectedSchema"
+                    :on-update:value="onSchemaSelected"
+                />
+            </n-form-item>
+            <n-form-item label="Time range" path="timeRange">
+                <n-date-picker
+                    :type="datePickerType"
+                    v-model:value="timeRange"
+                    :time-picker-props="timePickerProps"
+                    update-value-on-close
+                    :actions="null"
+                    :format="dateFormat"
+                />
+            </n-form-item>
+            <n-form-item label="Availability options">
+                <n-select />
+            </n-form-item>
+            <n-button type="primary">Create</n-button>
+        </n-form>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { NButton, NDatePicker, NSelect } from 'naive-ui';
+import {
+    NButton,
+    NDatePicker,
+    NForm,
+    NFormItem,
+    NInput,
+    NSelect,
+} from 'naive-ui';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
 let selectedSchema = ref(60);
+
+const rules = {
+    title: {
+        required: true,
+    },
+    timeUnit: {
+        required: true,
+    },
+    timeRange: {
+        required: true,
+    },
+};
 
 let timePickerProps = computed(() => {
     let minutes = [];
@@ -69,7 +100,7 @@ const onSchemaSelected = (value: number) => {
 
 <style scoped>
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
 }
 </style>
