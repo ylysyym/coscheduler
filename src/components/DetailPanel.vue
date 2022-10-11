@@ -11,20 +11,19 @@
                 </div>
             </div>
             <div>
-                <n-radio-group
-                    :value="selectedLevel"
-                    @update:value="changeLevel"
-                >
-                    <n-radio-button
+                <n-space :vertical="!isSmallScreen" size="small">
+                    <n-button
                         v-for="level in levels"
                         :key="level.level"
                         :value="level.level"
                         @click="changeLevel(level.level)"
+                        :tertiary="level.level === selectedLevel"
+                        :strong="level.level === selectedLevel"
                     >
                         <span :style="{ color: level.color }">●</span>
                         {{ level.label }}
-                    </n-radio-button>
-                </n-radio-group>
+                    </n-button>
+                </n-space>
             </div>
         </n-space>
     </div>
@@ -33,10 +32,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { Interval } from 'luxon';
-import { NRadioButton, NRadioGroup, NSpace } from 'naive-ui';
+import { NButton, NSpace } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { isSmallScreen } from '@/utilities/breakpoints';
 
 const store = useAppStore();
 const scheduleStore = useScheduleStore();
