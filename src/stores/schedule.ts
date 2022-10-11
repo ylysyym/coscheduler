@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
+import { BlockData } from '@/models/BlockData';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
@@ -12,7 +13,6 @@ export const useScheduleStore = defineStore('schedule', {
             entries: {} as {
                 [name: string]: number[];
             },
-            currentEntry: [] as number[],
             scale: defaultAvailabilityScale,
             rowUnit: defaultTimeUnits['1d'],
             blockUnit: defaultTimeUnits['1h'],
@@ -31,34 +31,34 @@ export const useScheduleStore = defineStore('schedule', {
             this.startTime = currentDate;
         },
 
-        initialiseBlockData() {
-            this.currentEntry = [];
+        initialiseBlockData(name: string) {
+            this.entries[name] = [];
             for (let i = 0; i < this.blockCount; i++) {
-                this.currentEntry.push(DEFAULT_INITIAL_LEVEL);
+                this.entries[name].push(DEFAULT_INITIAL_LEVEL);
             }
         },
 
-        changeLevel(blockIndex: number, level: number) {
-            this.currentEntry[blockIndex] = level;
+        changeLevel(name: string, blockIndex: number, level: number) {
+            this.entries[name][blockIndex] = level;
         },
 
-        changeMultipleLevels(blocks: number[], level: number) {
+        changeMultipleLevels(name: string, blocks: number[], level: number) {
             for (const id of blocks) {
-                this.changeLevel(id, level);
+                this.changeLevel(name, id, level);
             }
         },
 
-        saveNew(name: string) {
-            this.entries[name] = this.currentEntry;
-            this.currentEntry = [];
-        },
+        level(name: string, index: number): AvailabilityLevel {
+            for (const key of Object.keys(this.entries)) {
+                const availabilityLevel = this.scale.levels.find((lvl) => {
+                    return lvl.level === this.entries[key][index];
+                });
+                if (availabilityLevel !== undefined) {
+                    return availabilityLevel;
+                }
+            }
 
-        currentLevel(index: number): AvailabilityLevel {
-            const availabilityLevel = this.scale.levels.find((lvl) => {
-                return lvl.level === this.currentEntry[index];
-            });
-
-            return availabilityLevel || this.scale.levels[0];
+            return this.scale.levels[0];
         },
 
         levels(index: number): AvailabilityLevel[] {
@@ -71,21 +71,22 @@ export const useScheduleStore = defineStore('schedule', {
                     result.push(availabilityLevel);
                 }
             }
-            if (this.currentEntry.length > index) {
-                const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.currentEntry[index];
-                });
-
-                if (availabilityLevel !== undefined) {
-                    result.push(availabilityLevel);
-                }
-            }
 
             if (result.length === 0) {
                 return [this.scale.levels[0]];
             }
 
             return result;
+        },
+
+        blockAtIndex(index: number): BlockData {
+            const entries = Object.fromEntries(
+                Object.entries(this.entries).map(([key, val]) => [
+                    key,
+                    this.scale.levels[val[index]],
+                ])
+            );
+            return new BlockData(this.intervals[index], entries);
         },
     },
 

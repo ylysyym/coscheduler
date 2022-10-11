@@ -40,25 +40,18 @@ import { useScheduleStore } from '@/stores/schedule';
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
-let existingPeople = computed(() => scheduleStore.people);
-let people = computed(() => {
-    if (!appStore.isJoining) {
-        return existingPeople.value;
-    }
-
-    return [...existingPeople.value, appStore.currentName];
-});
+let people = computed(() => scheduleStore.people);
 let showJoinDialog = ref(false);
 let joinName = ref();
 
 const joinSchedule = () => {
     appStore.joinAs(joinName.value);
+    scheduleStore.initialiseBlockData(joinName.value);
     joinName.value = '';
-    scheduleStore.initialiseBlockData();
 };
 
 const stopEditing = () => {
-    scheduleStore.saveNew(appStore.currentName);
+    // TODO: save changes remotely at this point
     appStore.stopEditing();
 };
 

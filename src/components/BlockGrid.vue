@@ -25,7 +25,7 @@
                         }"
                         :id="index"
                         :size="blockSize"
-                        :levels="levels(index)"
+                        :data="blockData(index)"
                         @mousedown="onMouseDown(index)"
                         @mouseover="onMouseOver(index)"
                         @mouseup="onMouseUp(index)"
@@ -156,7 +156,7 @@ const onGlobalMouseUp = () => {
     stopSelecting();
 };
 
-const levels = (index: number): AvailabilityLevel[] => store.levels(index);
+const blockData = (index: number) => store.blockAtIndex(index);
 
 const columnLabels = computed(() => {
     return getColumnLabels(
