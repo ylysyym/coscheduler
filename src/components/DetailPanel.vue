@@ -18,23 +18,21 @@
                     <n-radio-button
                         v-for="level in levels"
                         :key="level.level"
-                        :label="level.label"
                         :value="level.level"
                         @click="changeLevel(level.level)"
                     >
-                        {{ level.label }}
                         <span :style="{ color: level.color }">●</span>
+                        {{ level.label }}
                     </n-radio-button>
                 </n-radio-group>
             </div>
         </n-space>
     </div>
-    <div class="container" v-else></div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { DateTime, Interval } from 'luxon';
+import { Interval } from 'luxon';
 import { NRadioButton, NRadioGroup, NSpace } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
@@ -42,19 +40,20 @@ import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 
 const store = useAppStore();
 const scheduleStore = useScheduleStore();
+
 const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 
 const mostSelectedLevel = computed(() => {
-    const arr = ids.value.map((id) => {
+    const selectedLevels = ids.value.map((id) => {
         return scheduleStore.level(store.currentName, id).level;
     });
-    return arr
+    return selectedLevels
         .sort((a, b) => {
             return (
-                arr.filter((v) => v === a).length -
-                arr.filter((v) => v === b).length
+                selectedLevels.filter((v) => v === a).length -
+                selectedLevels.filter((v) => v === b).length
             );
         })
         .pop();
@@ -72,16 +71,13 @@ const changeLevel = (level: number) => {
     scheduleStore.changeMultipleLevels(store.currentName, ids.value, level);
 };
 
-const levels = computed((): AvailabilityLevel[] => {
-    return scheduleStore.scale.levels;
-});
+const levels = computed((): AvailabilityLevel[] => scheduleStore.scale.levels);
 
 const selectedIntervalStrings = computed(() => {
-    let intervals: Interval[] = [];
-    for (const id of ids.value) {
-        intervals.push(scheduleStore.intervals[id]);
-    }
-    return Interval.merge(intervals).map((interval) =>
+    const selectedIntervals = ids.value.map(
+        (id) => scheduleStore.intervals[id]
+    );
+    return Interval.merge(selectedIntervals).map((interval) =>
         interval.toFormat('yyyy-MM-dd HH:mm')
     );
 });
