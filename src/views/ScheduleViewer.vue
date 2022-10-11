@@ -5,27 +5,25 @@
     <div class="block-grid">
         <BlockGrid />
     </div>
-    <div class="detail-panel" v-if="isEditMode">
+    <div class="detail-panel" v-if="appStore.isEditing">
         <DetailPanel />
     </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import BlockGrid from '@/components/BlockGrid.vue';
 import DetailPanel from '@/components/DetailPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
-import { useGridStateStore } from '@/stores/gridState';
-import { computed } from 'vue';
 import { useAppStore } from '@/stores/app';
+import { useGridStateStore } from '@/stores/gridState';
 
-const store = useGridStateStore();
 const appStore = useAppStore();
+const gridStateStore = useGridStateStore();
 
-store.initialiseEndpoints();
+gridStateStore.initialiseEndpoints();
 
-let isEditMode = computed(() => appStore.isEditing);
-
-let detailPanelWidth = computed(() => (isEditMode.value ? 300 : 0) + 'px');
+let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 </script>
 
 <style scoped>

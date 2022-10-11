@@ -27,7 +27,7 @@ export const useAppStore = defineStore('app', {
             }
         },
 
-        startJoin(name: string) {
+        joinAs(name: string) {
             this.isEditing = true;
             this.isJoining = true;
             this.currentName = name;

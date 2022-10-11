@@ -3,7 +3,7 @@ import {
     NEUTRAL_COLOR,
     AVAILABLE_COLOR,
     UNKNOWN_COLOR,
-} from '@/models/availability/Colors';
+} from '@/models/availability/colors';
 import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
 
 export const defaultAvailabilityScale: AvailabilityScale = {

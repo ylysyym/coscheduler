@@ -1,9 +1,9 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
-import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { BlockData } from '@/models/BlockData';
-import { defaultAvailabilityScale } from '@/models/availability/DefaultAvailabilityScale';
 import { DisplaySchema } from '@/models/DisplaySchema';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
@@ -13,10 +13,10 @@ export const useGridStateStore = defineStore('gridState', {
             blockData: {} as {
                 [name: string]: BlockData[];
             },
+            currentBlockData: [] as BlockData[],
             scale: defaultAvailabilityScale,
             display: DisplaySchema.Day,
             units: 60,
-            currentBlockData: [] as BlockData[],
             startTime: {} as DateTime,
             endTime: {} as DateTime,
         };
@@ -30,10 +30,9 @@ export const useGridStateStore = defineStore('gridState', {
                 millisecond: 0,
             });
             this.startTime = currentDate;
-            const endDate = currentDate.plus({
+            this.endTime = currentDate.plus({
                 days: 8,
             });
-            this.endTime = endDate;
         },
 
         initialiseBlockData() {

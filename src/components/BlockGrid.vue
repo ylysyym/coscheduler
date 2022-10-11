@@ -42,15 +42,15 @@ import { computed, ref } from 'vue';
 import { GlobalEvents } from 'vue-global-events';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
-import { useGridStateStore } from '@/stores/gridState';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
+import { useGridStateStore } from '@/stores/gridState';
 import {
     generateGrid,
     getColumnLabels,
     getRowLabels,
     TimeBreakpoint,
-} from '@/utilities/GridGenerator';
+} from '@/utilities/generateGrid';
 
 const container = ref(null);
 
@@ -59,8 +59,6 @@ const { width, height } = useElementSize(container);
 const blockSize = computed(() => {
     return Math.min(width.value / 35, height.value / 9);
 });
-
-const gap = computed(() => Math.floor(blockSize.value / 6));
 
 const appStore = useAppStore();
 
@@ -174,6 +172,7 @@ const rowLabels = computed(() => {
     );
 });
 
+const gap = computed(() => Math.floor(blockSize.value / 6));
 const blockGap = computed(() => gap.value / 2 + 'px');
 </script>
 

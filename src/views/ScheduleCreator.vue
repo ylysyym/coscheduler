@@ -5,7 +5,7 @@
         <n-select
             :options="schemas"
             v-model:value="selectedSchema"
-            :on-update:value="onUnitSelected"
+            :on-update:value="onSchemaSelected"
         />
         <h4>Time range</h4>
         <n-date-picker
@@ -14,7 +14,7 @@
             :time-picker-props="timePickerProps"
             update-value-on-close
             :actions="null"
-            :format="pickerFormat"
+            :format="dateFormat"
         />
         <br />
         <n-button type="primary">Create</n-button>
@@ -22,8 +22,8 @@
 </template>
 
 <script setup lang="ts">
-import { NSelect, NDatePicker, NButton } from 'naive-ui';
 import { computed, ref } from 'vue';
+import { NButton, NDatePicker, NSelect } from 'naive-ui';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
 let selectedSchema = ref(60);
@@ -43,7 +43,7 @@ let datePickerType = computed(() =>
     selectedSchema.value >= 24 * 60 ? 'daterange' : 'datetimerange'
 );
 
-let pickerFormat = computed(() =>
+let dateFormat = computed(() =>
     selectedSchema.value >= 24 * 60 ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm'
 );
 
@@ -58,7 +58,7 @@ const schemas = computed(() => {
 
 let timeRange = ref();
 
-const onUnitSelected = (value: number) => {
+const onSchemaSelected = (value: number) => {
     if (selectedSchema.value === value) return;
     selectedSchema.value = value;
     timeRange.value = null;

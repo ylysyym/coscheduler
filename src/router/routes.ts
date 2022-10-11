@@ -1,7 +1,7 @@
-import ScheduleView from '@/views/ScheduleView.vue';
-import CreationView from '@/views/CreationView.vue';
+import ScheduleViewer from '@/views/ScheduleViewer.vue';
+import ScheduleCreator from '@/views/ScheduleCreator.vue';
 
 export const routes = [
-    { path: '/', component: ScheduleView },
-    { path: '/create', component: CreationView },
+    { path: '/', component: ScheduleViewer },
+    { path: '/create', component: ScheduleCreator },
 ];

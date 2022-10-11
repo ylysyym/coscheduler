@@ -52,7 +52,7 @@ let showJoinDialog = ref(false);
 let joinName = ref();
 
 const joinSchedule = () => {
-    appStore.startJoin(joinName.value);
+    appStore.joinAs(joinName.value);
     joinName.value = '';
     gridStateStore.initialiseBlockData();
 };
