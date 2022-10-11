@@ -4,19 +4,20 @@ import { BlockData } from '@/models/BlockData';
 import { DisplaySchema } from '@/models/DisplaySchema';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
+import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
-export const useGridStateStore = defineStore('gridState', {
+export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
-            blockData: {} as {
+            entries: {} as {
                 [name: string]: BlockData[];
             },
-            currentBlockData: [] as BlockData[],
+            currentEntry: [] as BlockData[],
             scale: defaultAvailabilityScale,
-            display: DisplaySchema.Day,
-            units: 60,
+            rowUnit: DisplaySchema.Day,
+            blockUnit: defaultTimeUnits[3],
             startTime: {} as DateTime,
             endTime: {} as DateTime,
         };
@@ -37,9 +38,9 @@ export const useGridStateStore = defineStore('gridState', {
 
         initialiseBlockData() {
             const intervalDuration = Duration.fromObject({
-                minutes: this.units,
+                minutes: this.blockUnit.minutes,
             });
-            this.currentBlockData = [];
+            this.currentEntry = [];
 
             let intervalStart = this.startTime;
             while (intervalStart < this.endTime) {
@@ -51,15 +52,30 @@ export const useGridStateStore = defineStore('gridState', {
                     blockInterval,
                     DEFAULT_INITIAL_LEVEL
                 );
-                this.currentBlockData.push(blockData);
+                this.currentEntry.push(blockData);
 
                 intervalStart = blockInterval.end;
             }
         },
 
+        changeLevel(blockIndex: number, level: number) {
+            this.currentEntry[blockIndex].level = level;
+        },
+
+        changeMultipleLevels(blocks: number[], level: number) {
+            for (const id of blocks) {
+                this.changeLevel(id, level);
+            }
+        },
+
+        saveNew(name: string) {
+            this.entries[name] = this.currentEntry;
+            this.currentEntry = [];
+        },
+
         currentLevel(index: number): AvailabilityLevel {
             const availabilityLevel = this.scale.levels.find((lvl) => {
-                return lvl.level === this.currentBlockData[index].level;
+                return lvl.level === this.currentEntry[index].level;
             });
 
             return availabilityLevel || this.scale.levels[0];
@@ -67,17 +83,17 @@ export const useGridStateStore = defineStore('gridState', {
 
         levels(index: number): AvailabilityLevel[] {
             const result = [];
-            for (const key of Object.keys(this.blockData)) {
+            for (const key of Object.keys(this.entries)) {
                 const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.blockData[key][index].level;
+                    return lvl.level === this.entries[key][index].level;
                 });
                 if (availabilityLevel !== undefined) {
                     result.push(availabilityLevel);
                 }
             }
-            if (this.currentBlockData.length > index) {
+            if (this.currentEntry.length > index) {
                 const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.currentBlockData[index].level;
+                    return lvl.level === this.currentEntry[index].level;
                 });
 
                 if (availabilityLevel !== undefined) {
@@ -91,26 +107,11 @@ export const useGridStateStore = defineStore('gridState', {
 
             return result;
         },
-
-        changeLevel(blockIndex: number, level: number) {
-            this.currentBlockData[blockIndex].level = level;
-        },
-
-        changeMultipleLevels(blocks: number[], level: number) {
-            for (const id of blocks) {
-                this.changeLevel(id, level);
-            }
-        },
-
-        saveNew(name: string) {
-            this.blockData[name] = this.currentBlockData;
-            this.currentBlockData = [];
-        },
     },
 
     getters: {
         people(): string[] {
-            return Object.keys(this.blockData);
+            return Object.keys(this.entries);
         },
     },
 });

@@ -44,7 +44,7 @@ import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { useAppStore } from '@/stores/app';
-import { useGridStateStore } from '@/stores/gridState';
+import { useScheduleStore } from '@/stores/schedule';
 import {
     generateGrid,
     getColumnLabels,
@@ -77,16 +77,16 @@ const stopSelecting = () => {
     isCurrentlySelecting = false;
 };
 
-const store = useGridStateStore();
+const store = useScheduleStore();
 
 const columns = computed(() => {
-    return store.display / store.units;
+    return store.rowUnit / store.blockUnit.minutes;
 });
 const grid = computed(() => {
     return generateGrid(
         store.startTime,
         store.endTime,
-        store.units,
+        store.blockUnit.minutes,
         TimeBreakpoint.Day,
         columns.value
     );
@@ -159,7 +159,11 @@ const onGlobalMouseUp = () => {
 const levels = (index: number): AvailabilityLevel[] => store.levels(index);
 
 const columnLabels = computed(() => {
-    return getColumnLabels(TimeBreakpoint.Day, columns.value, store.units);
+    return getColumnLabels(
+        TimeBreakpoint.Day,
+        columns.value,
+        store.blockUnit.minutes
+    );
 });
 
 const rowLabels = computed(() => {
@@ -167,7 +171,7 @@ const rowLabels = computed(() => {
         TimeBreakpoint.Day,
         store.startTime,
         columns.value,
-        store.units,
+        store.blockUnit.minutes,
         grid.value.length * grid.value[0].length
     );
 });

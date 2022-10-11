@@ -32,17 +32,18 @@ import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
 import { NRadioGroup, NRadioButton } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
-import { useGridStateStore } from '@/stores/gridState';
+import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 
 const store = useAppStore();
+const scheduleStore = useScheduleStore();
 const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 
 const mostSelectedLevel = computed(() => {
     const arr = ids.value.map((id) => {
-        return gridState.currentLevel(id).level;
+        return scheduleStore.currentLevel(id).level;
     });
     return arr
         .sort((a, b) => {
@@ -56,27 +57,25 @@ const mostSelectedLevel = computed(() => {
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return gridState.currentLevel(ids.value[0]).level;
+        return scheduleStore.currentLevel(ids.value[0]).level;
     } else {
         return mostSelectedLevel.value;
     }
 });
 
 const changeLevel = (level: number) => {
-    gridState.changeMultipleLevels(ids.value, level);
+    scheduleStore.changeMultipleLevels(ids.value, level);
 };
 
-const gridState = useGridStateStore();
-
 const levels = computed((): AvailabilityLevel[] => {
-    return gridState.scale.levels;
+    return scheduleStore.scale.levels;
 });
 
 const selectedIntervalStrings = computed(() => {
     let result = [];
     let intervals: Interval[] = [];
     for (const id of ids.value) {
-        intervals.push(gridState.currentBlockData[id].interval);
+        intervals.push(scheduleStore.currentEntry[id].interval);
     }
     let mergedIntervals = Interval.merge(intervals);
     for (const interval of mergedIntervals) {

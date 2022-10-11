@@ -35,12 +35,12 @@ import { NButton, NSpace, NInput, NModal } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { useAppStore } from '@/stores/app';
-import { useGridStateStore } from '@/stores/gridState';
+import { useScheduleStore } from '@/stores/schedule';
 
 const appStore = useAppStore();
-const gridStateStore = useGridStateStore();
+const scheduleStore = useScheduleStore();
 
-let existingPeople = computed(() => gridStateStore.people);
+let existingPeople = computed(() => scheduleStore.people);
 let people = computed(() => {
     if (!appStore.isJoining) {
         return existingPeople.value;
@@ -54,11 +54,11 @@ let joinName = ref();
 const joinSchedule = () => {
     appStore.joinAs(joinName.value);
     joinName.value = '';
-    gridStateStore.initialiseBlockData();
+    scheduleStore.initialiseBlockData();
 };
 
 const stopEditing = () => {
-    gridStateStore.saveNew(appStore.currentName);
+    scheduleStore.saveNew(appStore.currentName);
     appStore.stopEditing();
 };
 

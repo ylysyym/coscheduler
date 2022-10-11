@@ -16,12 +16,12 @@ import BlockGrid from '@/components/BlockGrid.vue';
 import DetailPanel from '@/components/DetailPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import { useAppStore } from '@/stores/app';
-import { useGridStateStore } from '@/stores/gridState';
+import { useScheduleStore } from '@/stores/schedule';
 
 const appStore = useAppStore();
-const gridStateStore = useGridStateStore();
+const scheduleStore = useScheduleStore();
 
-gridStateStore.initialiseEndpoints();
+scheduleStore.initialiseEndpoints();
 
 let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 </script>
