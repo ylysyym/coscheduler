@@ -17,7 +17,9 @@ export const useScheduleStore = defineStore('schedule', {
             rowUnit: defaultTimeUnits['1d'],
             blockUnit: defaultTimeUnits['1h'],
             startTime: {} as DateTime,
-            blockCount: 7 * 24,
+            blockCount: 0,
+            title: '',
+            description: '',
         };
     },
 
@@ -29,6 +31,9 @@ export const useScheduleStore = defineStore('schedule', {
                 millisecond: 0,
             });
             this.startTime = currentDate;
+            this.blockCount = 7 * 24;
+            this.title = 'Basic schedule';
+            this.description = 'This schedule is used for testing purposes.';
         },
 
         initialiseBlockData(name: string) {
@@ -57,24 +62,6 @@ export const useScheduleStore = defineStore('schedule', {
             }
 
             return this.scale.levels[0];
-        },
-
-        levels(index: number): AvailabilityLevel[] {
-            const result = [];
-            for (const key of Object.keys(this.entries)) {
-                const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.entries[key][index];
-                });
-                if (availabilityLevel !== undefined) {
-                    result.push(availabilityLevel);
-                }
-            }
-
-            if (result.length === 0) {
-                return [this.scale.levels[0]];
-            }
-
-            return result;
         },
 
         blockAtIndex(index: number): BlockData {
