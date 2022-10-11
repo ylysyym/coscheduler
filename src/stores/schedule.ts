@@ -1,7 +1,7 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
-import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
+import { light5RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 import { BlockData } from '@/models/BlockData';
 
@@ -13,7 +13,7 @@ export const useScheduleStore = defineStore('schedule', {
             entries: {} as {
                 [name: string]: number[];
             },
-            scale: defaultAvailabilityScale,
+            scale: light5RedGreenScale,
             rowUnit: defaultTimeUnits['1d'],
             blockUnit: defaultTimeUnits['1h'],
             startTime: {} as DateTime,

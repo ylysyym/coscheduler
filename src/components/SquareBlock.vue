@@ -39,7 +39,7 @@ import { NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useSettingsStore } from '@/stores/settings';
 import { BlockData } from '@/models/BlockData';
-import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
+import { light3RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
 
 const props = defineProps<{
     id: number;
@@ -57,7 +57,7 @@ const formatInterval = (interval: Interval) => {
 const background = computed(() => {
     if (Object.keys(props.data.entries).length === 0) {
         // TODO: better way of referencing default color
-        return defaultAvailabilityScale.levels[0].color;
+        return light3RedGreenScale.levels[0].color;
     }
 
     let result = 'linear-gradient(to ' + settingsStore.orientation;
