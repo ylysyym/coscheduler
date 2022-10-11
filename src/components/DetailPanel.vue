@@ -1,36 +1,41 @@
 <template>
     <div class="container" v-if="hasSelectedItem">
-        <div>
-            <n-radio-group :value="selectedLevel" @update:value="changeLevel">
-                <n-radio-button
-                    v-for="level in levels"
-                    :key="level.level"
-                    :label="level.label"
-                    :value="level.level"
-                    @click="changeLevel(level.level)"
+        <n-space vertical>
+            <div>
+                <div
+                    class="interval-display"
+                    v-for="(str, i) in selectedIntervalStrings"
+                    :key="i"
                 >
-                    {{ level.label }}
-                    <span :style="{ color: level.color }">●</span>
-                </n-radio-button>
-            </n-radio-group>
-        </div>
-        <div>
-            <div
-                class="interval-display"
-                v-for="(str, i) in selectedIntervalStrings"
-                :key="i"
-            >
-                {{ str }}
+                    {{ str }}
+                </div>
             </div>
-        </div>
+            <div>
+                <n-radio-group
+                    :value="selectedLevel"
+                    @update:value="changeLevel"
+                >
+                    <n-radio-button
+                        v-for="level in levels"
+                        :key="level.level"
+                        :label="level.label"
+                        :value="level.level"
+                        @click="changeLevel(level.level)"
+                    >
+                        {{ level.label }}
+                        <span :style="{ color: level.color }">●</span>
+                    </n-radio-button>
+                </n-radio-group>
+            </div>
+        </n-space>
     </div>
-    <div class="container" v-else>Nothing selected.</div>
+    <div class="container" v-else></div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { DateTime, Interval } from 'luxon';
-import { NRadioGroup, NRadioButton } from 'naive-ui';
+import { NRadioButton, NRadioGroup, NSpace } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
@@ -72,25 +77,13 @@ const levels = computed((): AvailabilityLevel[] => {
 });
 
 const selectedIntervalStrings = computed(() => {
-    let result = [];
     let intervals: Interval[] = [];
     for (const id of ids.value) {
         intervals.push(scheduleStore.intervals[id]);
     }
-    let mergedIntervals = Interval.merge(intervals);
-    for (const interval of mergedIntervals) {
-        let intervalString = '';
-        intervalString += interval.start.toLocaleString(
-            DateTime.DATETIME_MED_WITH_WEEKDAY
-        );
-        intervalString += ' ~ ';
-        intervalString += interval.end.toLocaleString(
-            DateTime.DATETIME_MED_WITH_WEEKDAY
-        );
-        result.push(intervalString);
-    }
-
-    return result;
+    return Interval.merge(intervals).map((interval) =>
+        interval.toFormat('yyyy-MM-dd HH:mm')
+    );
 });
 </script>
 
