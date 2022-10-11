@@ -1,6 +1,5 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
-import { BlockData } from '@/models/BlockData';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
@@ -11,54 +10,36 @@ export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
             entries: {} as {
-                [name: string]: BlockData[];
+                [name: string]: number[];
             },
-            currentEntry: [] as BlockData[],
+            currentEntry: [] as number[],
             scale: defaultAvailabilityScale,
             rowUnit: defaultTimeUnits['1d'],
             blockUnit: defaultTimeUnits['1h'],
             startTime: {} as DateTime,
-            endTime: {} as DateTime,
+            blockCount: 7 * 24,
         };
     },
 
     actions: {
-        initialiseEndpoints() {
+        initialiseSchedule() {
             const currentDate = DateTime.now().set({
                 minute: 0,
                 second: 0,
                 millisecond: 0,
             });
             this.startTime = currentDate;
-            this.endTime = currentDate.plus({
-                days: 8,
-            });
         },
 
         initialiseBlockData() {
-            const intervalDuration = Duration.fromObject({
-                minutes: this.blockUnit.minutes,
-            });
             this.currentEntry = [];
-
-            let intervalStart = this.startTime;
-            while (intervalStart < this.endTime) {
-                const blockInterval: Interval = Interval.after(
-                    intervalStart,
-                    intervalDuration
-                );
-                const blockData: BlockData = new BlockData(
-                    blockInterval,
-                    DEFAULT_INITIAL_LEVEL
-                );
-                this.currentEntry.push(blockData);
-
-                intervalStart = blockInterval.end;
+            for (let i = 0; i < this.blockCount; i++) {
+                this.currentEntry.push(DEFAULT_INITIAL_LEVEL);
             }
         },
 
         changeLevel(blockIndex: number, level: number) {
-            this.currentEntry[blockIndex].level = level;
+            this.currentEntry[blockIndex] = level;
         },
 
         changeMultipleLevels(blocks: number[], level: number) {
@@ -74,7 +55,7 @@ export const useScheduleStore = defineStore('schedule', {
 
         currentLevel(index: number): AvailabilityLevel {
             const availabilityLevel = this.scale.levels.find((lvl) => {
-                return lvl.level === this.currentEntry[index].level;
+                return lvl.level === this.currentEntry[index];
             });
 
             return availabilityLevel || this.scale.levels[0];
@@ -84,7 +65,7 @@ export const useScheduleStore = defineStore('schedule', {
             const result = [];
             for (const key of Object.keys(this.entries)) {
                 const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.entries[key][index].level;
+                    return lvl.level === this.entries[key][index];
                 });
                 if (availabilityLevel !== undefined) {
                     result.push(availabilityLevel);
@@ -92,7 +73,7 @@ export const useScheduleStore = defineStore('schedule', {
             }
             if (this.currentEntry.length > index) {
                 const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.currentEntry[index].level;
+                    return lvl.level === this.currentEntry[index];
                 });
 
                 if (availabilityLevel !== undefined) {
@@ -111,6 +92,32 @@ export const useScheduleStore = defineStore('schedule', {
     getters: {
         people(): string[] {
             return Object.keys(this.entries);
+        },
+
+        intervals(): Interval[] {
+            const result = [];
+            const intervalDuration = Duration.fromObject({
+                minutes: this.blockUnit.minutes,
+            });
+
+            let intervalStart = this.startTime;
+            for (let i = 0; i < this.blockCount; i++) {
+                const blockInterval: Interval = Interval.after(
+                    intervalStart,
+                    intervalDuration
+                );
+                result.push(blockInterval);
+
+                intervalStart = blockInterval.end;
+            }
+
+            return result;
+        },
+
+        endTime(): DateTime {
+            return this.startTime.plus({
+                minutes: this.blockUnit.minutes * this.blockCount,
+            });
         },
     },
 });

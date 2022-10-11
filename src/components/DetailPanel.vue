@@ -75,7 +75,7 @@ const selectedIntervalStrings = computed(() => {
     let result = [];
     let intervals: Interval[] = [];
     for (const id of ids.value) {
-        intervals.push(scheduleStore.currentEntry[id].interval);
+        intervals.push(scheduleStore.intervals[id]);
     }
     let mergedIntervals = Interval.merge(intervals);
     for (const interval of mergedIntervals) {

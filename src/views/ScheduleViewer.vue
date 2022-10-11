@@ -21,7 +21,7 @@ import { useScheduleStore } from '@/stores/schedule';
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
-scheduleStore.initialiseEndpoints();
+scheduleStore.initialiseSchedule();
 
 let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 </script>
