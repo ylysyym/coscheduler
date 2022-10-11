@@ -37,6 +37,7 @@ import { readableColor } from 'color2k';
 import { Interval } from 'luxon';
 import { NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
+import { useSettingsStore } from '@/stores/settings';
 import { BlockData } from '@/models/BlockData';
 import { defaultAvailabilityScale } from '@/models/availability/defaultAvailabilityScale';
 
@@ -45,6 +46,9 @@ const props = defineProps<{
     data: BlockData;
     size: number;
 }>();
+
+const store = useAppStore();
+const settingsStore = useSettingsStore();
 
 const formatInterval = (interval: Interval) => {
     return interval.toFormat('yyyy-MM-dd HH:mm');
@@ -56,7 +60,7 @@ const background = computed(() => {
         return defaultAvailabilityScale.levels[0].color;
     }
 
-    let result = 'linear-gradient(to bottom right';
+    let result = 'linear-gradient(to ' + settingsStore.orientation;
     let n = 100 / Object.keys(props.data.entries).length;
     let sorted = Object.values(props.data.entries);
     sorted.sort((a, b) => b.level - a.level);
@@ -69,8 +73,6 @@ const background = computed(() => {
     return result;
 });
 const size = computed(() => props.size + 'px');
-
-const store = useAppStore();
 
 const selectBlock = () => {
     store.selectItem(props.id);
