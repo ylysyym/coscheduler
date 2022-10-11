@@ -155,7 +155,13 @@ const onGlobalMouseUp = () => {
     stopSelecting();
 };
 
-const blockData = (index: number) => store.blockAtIndex(index);
+const blockData = (index: number) => {
+    if (appStore.isEditing) {
+        return store.currentBlockAtIndex(appStore.currentName, index);
+    }
+
+    return store.blockAtIndex(index);
+};
 
 const columnLabels = computed(() => {
     return getColumnLabels(

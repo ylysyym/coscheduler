@@ -49,13 +49,11 @@ export const useScheduleStore = defineStore('schedule', {
         },
 
         level(name: string, index: number): AvailabilityLevel {
-            for (const key of Object.keys(this.entries)) {
-                const availabilityLevel = this.scale.levels.find((lvl) => {
-                    return lvl.level === this.entries[key][index];
-                });
-                if (availabilityLevel !== undefined) {
-                    return availabilityLevel;
-                }
+            const availabilityLevel = this.scale.levels.find((lvl) => {
+                return lvl.level === this.entries[name][index];
+            });
+            if (availabilityLevel !== undefined) {
+                return availabilityLevel;
             }
 
             return this.scale.levels[0];
@@ -86,6 +84,13 @@ export const useScheduleStore = defineStore('schedule', {
                     this.scale.levels[val[index]],
                 ])
             );
+            return new BlockData(this.intervals[index], entries);
+        },
+
+        currentBlockAtIndex(name: string, index: number): BlockData {
+            const entries = {
+                [name]: this.scale.levels[this.entries[name][index]],
+            };
             return new BlockData(this.intervals[index], entries);
         },
     },
