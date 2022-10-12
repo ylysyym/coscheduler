@@ -37,6 +37,7 @@ import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { isSmallScreen } from '@/utilities/breakpoints';
+import { formatInterval } from '@/utilities/formatTimes';
 
 const store = useAppStore();
 const scheduleStore = useScheduleStore();
@@ -82,7 +83,7 @@ const selectedIntervalStrings = computed(() => {
         (id) => scheduleStore.intervals[id]
     );
     return Interval.merge(selectedIntervals).map((interval) =>
-        interval.toFormat('yyyy-MM-dd HH:mm')
+        formatInterval(interval)
     );
 });
 </script>

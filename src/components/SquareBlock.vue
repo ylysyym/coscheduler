@@ -34,12 +34,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { readableColor } from 'color2k';
-import { Interval } from 'luxon';
 import { NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useSettingsStore } from '@/stores/settings';
 import { BlockData } from '@/models/BlockData';
 import { light3RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
+import { formatInterval } from '@/utilities/formatTimes';
 
 const props = defineProps<{
     id: number;
@@ -49,10 +49,6 @@ const props = defineProps<{
 
 const store = useAppStore();
 const settingsStore = useSettingsStore();
-
-const formatInterval = (interval: Interval) => {
-    return interval.toFormat('yyyy-MM-dd HH:mm');
-};
 
 const background = computed(() => {
     if (Object.keys(props.data.entries).length === 0) {
