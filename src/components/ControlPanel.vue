@@ -5,20 +5,31 @@
         <n-space :vertical="!isSmallScreen">
             <n-checkbox-group v-model:value="appStore.selectedNames">
                 <n-space :vertical="!isSmallScreen">
-                    <n-tag
-                        v-for="person in people"
-                        :key="person"
-                        :type="isChecked[person] ? 'primary' : 'default'"
-                        :bordered="false"
-                    >
-                        <n-checkbox
-                            :focusable="false"
-                            :disabled="isEditing"
-                            :value="person"
-                        >
-                            {{ person }}
-                        </n-checkbox>
-                    </n-tag>
+                    <template v-for="person in people" :key="person">
+                        <n-popover trigger="click">
+                            <template #trigger>
+                                <n-button
+                                    tertiary
+                                    :class="{ struckout: !isChecked[person] }"
+                                >
+                                    {{ person }}
+                                </n-button>
+                            </template>
+                            <n-space vertical>
+                                <div class="person-header">
+                                    <strong>
+                                        {{ person }}
+                                    </strong>
+                                    &nbsp;
+                                    <n-checkbox :value="person">
+                                        Show
+                                    </n-checkbox>
+                                </div>
+                                <PersonStats :person="person" />
+                                <n-button type="primary">Edit</n-button>
+                            </n-space>
+                        </n-popover>
+                    </template>
                 </n-space>
             </n-checkbox-group>
             <n-button
@@ -28,9 +39,9 @@
             >
                 Join
             </n-button>
-            <n-button type="primary" @click="stopEditing()" v-else
-                >Save</n-button
-            >
+            <n-button type="primary" @click="stopEditing()" v-else>
+                Save
+            </n-button>
         </n-space>
     </div>
     <n-modal
@@ -58,13 +69,14 @@ import {
     NCheckboxGroup,
     NInput,
     NModal,
+    NPopover,
     NSpace,
-    NTag,
 } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
+import PersonStats from '@/components/PersonStats.vue';
 
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
@@ -109,5 +121,14 @@ let isEditing = computed(() => appStore.isEditing);
 <style scoped>
 .container {
     padding: 5px;
+}
+
+.struckout {
+    text-decoration: line-through;
+}
+
+.person-header {
+    display: flex;
+    justify-content: space-between;
 }
 </style>
