@@ -36,9 +36,9 @@ import { computed } from 'vue';
 import { readableColor } from 'color2k';
 import { NPopover, NSpace, NTag } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
+import { useScheduleStore } from '@/stores/schedule';
 import { useSettingsStore } from '@/stores/settings';
 import { BlockData } from '@/models/BlockData';
-import { light3RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
 import { formatInterval } from '@/utilities/formatTimes';
 
 const props = defineProps<{
@@ -49,11 +49,11 @@ const props = defineProps<{
 
 const store = useAppStore();
 const settingsStore = useSettingsStore();
+const scheduleStore = useScheduleStore();
 
 const background = computed(() => {
     if (Object.keys(props.data.entries).length === 0) {
-        // TODO: better way of referencing default color
-        return light3RedGreenScale.levels[0].color;
+        return scheduleStore.scale.levels[0].color;
     }
 
     let result = 'linear-gradient(to ' + settingsStore.orientation;
