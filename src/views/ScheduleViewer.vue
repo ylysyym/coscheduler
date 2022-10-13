@@ -1,13 +1,9 @@
 <template>
     <div class="title-bar">
-        <n-page-header :subtitle="scheduleStore.description">
-            <template #title>
-                <strong>{{ scheduleStore.title }}</strong>
-            </template>
-        </n-page-header>
+        <TitleBar @showJoinDialog="showJoinDialog" />
     </div>
     <div class="control-panel">
-        <ControlPanel />
+        <ControlPanel @showJoinDialog="showJoinDialog" />
     </div>
     <div class="block-grid">
         <BlockGrid />
@@ -15,14 +11,16 @@
     <div class="detail-panel" v-if="appStore.isEditing">
         <DetailPanel />
     </div>
+    <JoinModal ref="joinModal" />
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { NPageHeader } from 'naive-ui';
+import { computed, ref } from 'vue';
+import TitleBar from '@/components/TitleBar.vue';
 import BlockGrid from '@/components/BlockGrid.vue';
 import DetailPanel from '@/components/DetailPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
+import JoinModal from '@/components/JoinModal.vue';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 
@@ -30,6 +28,12 @@ const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
 scheduleStore.initialiseSchedule();
+
+let joinModal = ref<typeof JoinModal>();
+
+const showJoinDialog = () => {
+    joinModal.value?.show();
+};
 
 let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 </script>
@@ -45,7 +49,7 @@ let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 }
 
 .title-bar {
-    height: 40px;
+    height: 80px;
     padding: 0;
 }
 
@@ -53,7 +57,7 @@ let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
     .block-grid,
     .detail-panel,
     .control-panel {
-        height: calc(100% - 80px);
+        height: calc(100% - 120px);
     }
     .block-grid {
         width: calc(100% - 160px - v-bind(detailPanelWidth));

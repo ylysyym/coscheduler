@@ -48,44 +48,17 @@
             </n-checkbox-group>
             <n-button
                 type="primary"
-                @click="showJoinDialog = true"
-                v-if="!isEditing"
+                @click="$emit('showJoinDialog')"
+                v-if="!appStore.isEditing"
             >
                 Join
             </n-button>
-            <n-button type="primary" @click="stopEditing()" v-else>
-                Save
-            </n-button>
         </n-space>
     </div>
-    <n-modal
-        v-model:show="showJoinDialog"
-        preset="dialog"
-        positive-text="Join"
-        title="Join as"
-        :show-icon="false"
-        @positive-click="joinSchedule"
-        :on-after-enter="nameInput?.focus()"
-    >
-        <n-input
-            placeholder="Name"
-            v-model:value="joinName"
-            ref="nameInput"
-            @keyup.enter="joinSchedule"
-        />
-    </n-modal>
 </template>
 
 <script setup lang="ts">
-import {
-    NButton,
-    NCheckbox,
-    NCheckboxGroup,
-    NInput,
-    NModal,
-    NPopover,
-    NSpace,
-} from 'naive-ui';
+import { NButton, NCheckbox, NCheckboxGroup, NPopover, NSpace } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { useAppStore } from '@/stores/app';
@@ -96,18 +69,7 @@ const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
 let people = computed(() => scheduleStore.people);
-let showJoinDialog = ref(false);
 let showPersonPopover = ref<{ [person: string]: boolean }>({});
-let joinName = ref();
-
-let nameInput = ref<typeof NInput>();
-
-const joinSchedule = () => {
-    appStore.joinAs(joinName.value);
-    scheduleStore.initialiseBlockData(joinName.value);
-    joinName.value = '';
-    showJoinDialog.value = false;
-};
 
 const startEditing = (person: string) => {
     if (appStore.isEditing) return;
@@ -115,16 +77,6 @@ const startEditing = (person: string) => {
     appStore.isJoining = false;
     appStore.selectedNames = [person];
     showPersonPopover.value[person] = false;
-};
-
-const selectAllNames = () => {
-    appStore.selectedNames = Object.keys(scheduleStore.entries);
-};
-
-const stopEditing = () => {
-    // TODO: save changes remotely at this point
-    appStore.stopEditing();
-    selectAllNames();
 };
 
 type CheckedNameMap = { [name: string]: boolean };
@@ -138,7 +90,7 @@ let isChecked = computed(() => {
     );
 });
 
-let isEditing = computed(() => appStore.isEditing);
+defineEmits(['showJoinDialog']);
 </script>
 
 <style scoped>
