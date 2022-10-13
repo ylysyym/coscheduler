@@ -6,9 +6,14 @@
             <n-checkbox-group v-model:value="appStore.selectedNames">
                 <n-space :vertical="!isSmallScreen">
                     <template v-for="person in people" :key="person">
-                        <n-popover trigger="click">
+                        <n-popover
+                            trigger="click"
+                            :show="showPersonPopover[person]"
+                            @clickoutside="showPersonPopover[person] = false"
+                        >
                             <template #trigger>
                                 <n-button
+                                    @click="showPersonPopover[person] = true"
                                     tertiary
                                     :class="{ struckout: !isChecked[person] }"
                                 >
@@ -21,12 +26,21 @@
                                         {{ person }}
                                     </strong>
                                     &nbsp;
-                                    <n-checkbox :value="person">
+                                    <n-checkbox
+                                        :value="person"
+                                        :disabled="appStore.isEditing"
+                                    >
                                         Show
                                     </n-checkbox>
                                 </div>
                                 <PersonStats :person="person" />
-                                <n-button type="primary">Edit</n-button>
+                                <n-button
+                                    :disabled="appStore.isEditing"
+                                    type="primary"
+                                    @click="startEditing(person)"
+                                >
+                                    Edit
+                                </n-button>
                             </n-space>
                         </n-popover>
                     </template>
@@ -83,6 +97,7 @@ const scheduleStore = useScheduleStore();
 
 let people = computed(() => scheduleStore.people);
 let showJoinDialog = ref(false);
+let showPersonPopover = ref<{ [person: string]: boolean }>({});
 let joinName = ref();
 
 let nameInput = ref<typeof NInput>();
@@ -92,6 +107,14 @@ const joinSchedule = () => {
     scheduleStore.initialiseBlockData(joinName.value);
     joinName.value = '';
     showJoinDialog.value = false;
+};
+
+const startEditing = (person: string) => {
+    if (appStore.isEditing) return;
+    appStore.isEditing = true;
+    appStore.isJoining = false;
+    appStore.selectedNames = [person];
+    showPersonPopover.value[person] = false;
 };
 
 const selectAllNames = () => {
