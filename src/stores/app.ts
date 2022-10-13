@@ -7,6 +7,7 @@ export const useAppStore = defineStore('app', {
             isEditing: false,
             isJoining: false,
             selectedNames: [] as string[],
+            userName: '',
         };
     },
 
@@ -30,6 +31,7 @@ export const useAppStore = defineStore('app', {
         joinAs(name: string) {
             this.isEditing = true;
             this.isJoining = true;
+            this.userName = name;
             this.selectedNames = [name];
         },
 

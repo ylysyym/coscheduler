@@ -36,7 +36,8 @@ const selectAllNames = () => {
 
 const cancelEdit = () => {
     if (appStore.isJoining) {
-        delete scheduleStore.entries[appStore.selectedNames[0]];
+        delete scheduleStore.entries[appStore.userName];
+        appStore.userName = '';
     } else {
         // TODO: some way to restore pre-edit state
     }
@@ -52,10 +53,10 @@ const stopEditing = () => {
 
 let editingMessage = computed(() => {
     if (appStore.isJoining) {
-        return `Joining as ${appStore.selectedNames[0]}`;
+        return `Joining as ${appStore.userName}`;
     }
 
-    return `Editing ${appStore.selectedNames[0]}'s schedule`;
+    return `Editing ${appStore.userName}'s schedule`;
 });
 
 defineEmits(['showJoinDialog']);

@@ -75,6 +75,7 @@ const startEditing = (person: string) => {
     if (appStore.isEditing) return;
     appStore.isEditing = true;
     appStore.isJoining = false;
+    appStore.userName = person;
     appStore.selectedNames = [person];
     showPersonPopover.value[person] = false;
 };

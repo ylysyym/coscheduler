@@ -48,7 +48,7 @@ const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
 
 const mostSelectedLevel = computed(() => {
     const selectedLevels = ids.value.map((id) => {
-        return scheduleStore.level(store.selectedNames[0], id).level;
+        return scheduleStore.level(store.userName, id).level;
     });
     return selectedLevels
         .sort((a, b) => {
@@ -62,18 +62,14 @@ const mostSelectedLevel = computed(() => {
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return scheduleStore.level(store.selectedNames[0], ids.value[0]).level;
+        return scheduleStore.level(store.userName, ids.value[0]).level;
     } else {
         return mostSelectedLevel.value;
     }
 });
 
 const changeLevel = (level: number) => {
-    scheduleStore.changeMultipleLevels(
-        store.selectedNames[0],
-        ids.value,
-        level
-    );
+    scheduleStore.changeMultipleLevels(store.userName, ids.value, level);
 };
 
 const levels = computed((): AvailabilityLevel[] => scheduleStore.scale.levels);
