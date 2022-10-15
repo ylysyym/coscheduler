@@ -1,4 +1,3 @@
-import { mix } from 'color2k';
 import {
     BUSY_COLOR,
     NEUTRAL_COLOR,

@@ -76,11 +76,12 @@ const levels = computed((): AvailabilityLevel[] => {
     return scheduleStore.scale.levels.filter((level) => level.hidden !== true);
 });
 
+const selectedIntervals = computed(() => {
+    return ids.value.map((id) => scheduleStore.intervals[id]);
+});
+
 const selectedIntervalStrings = computed(() => {
-    const selectedIntervals = ids.value.map(
-        (id) => scheduleStore.intervals[id]
-    );
-    return Interval.merge(selectedIntervals).map((interval) =>
+    return Interval.merge(selectedIntervals.value).map((interval) =>
         formatInterval(interval)
     );
 });

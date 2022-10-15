@@ -8,8 +8,8 @@
     <div class="block-grid">
         <BlockGrid />
     </div>
-    <div class="detail-panel" v-if="appStore.isEditing">
-        <DetailPanel />
+    <div class="edit-panel" v-if="appStore.isEditing">
+        <EditPanel />
     </div>
     <JoinModal ref="joinModal" />
 </template>
@@ -18,7 +18,7 @@
 import { computed, ref } from 'vue';
 import TitleBar from '@/components/TitleBar.vue';
 import BlockGrid from '@/components/BlockGrid.vue';
-import DetailPanel from '@/components/DetailPanel.vue';
+import EditPanel from '@/components/EditPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import JoinModal from '@/components/JoinModal.vue';
 import { useAppStore } from '@/stores/app';
@@ -41,7 +41,7 @@ let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 <style scoped>
 .title-bar,
 .block-grid,
-.detail-panel,
+.edit-panel,
 .control-panel {
     display: inline-block;
     vertical-align: top;
@@ -55,14 +55,14 @@ let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 
 @media (min-width: 900px) {
     .block-grid,
-    .detail-panel,
+    .edit-panel,
     .control-panel {
         height: calc(100% - 120px);
     }
     .block-grid {
         width: calc(100% - 160px - v-bind(detailPanelWidth));
     }
-    .detail-panel {
+    .edit-panel {
         width: 300px;
     }
 

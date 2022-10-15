@@ -10,9 +10,17 @@
         "target": "es5",
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"]
+            "@/*": [
+                "src/*"
+            ]
         }
     },
-    "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
-    "exclude": ["node_modules"]
+    "include": [
+        "**/*.ts",
+        "**/*.tsx",
+        "**/*.vue"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
 }

@@ -5,9 +5,10 @@ import App from '@/components/App.vue';
 
 const main = function () {
     const app = createApp(App);
-    app.use(createPinia());
 
+    app.use(createPinia());
     app.use(Router);
+
     app.mount('#app');
 };
 
