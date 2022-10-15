@@ -72,7 +72,9 @@ const changeLevel = (level: number) => {
     scheduleStore.changeMultipleLevels(store.userName, ids.value, level);
 };
 
-const levels = computed((): AvailabilityLevel[] => scheduleStore.scale.levels);
+const levels = computed((): AvailabilityLevel[] => {
+    return scheduleStore.scale.levels.filter((level) => level.hidden !== true);
+});
 
 const selectedIntervalStrings = computed(() => {
     const selectedIntervals = ids.value.map(

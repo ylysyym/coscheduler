@@ -13,6 +13,7 @@ export const light3RedGreenScale: AvailabilityScale = {
             level: 0,
             color: UNKNOWN_COLOR,
             label: 'Unknown',
+            hidden: true,
         },
         {
             level: 1,
@@ -38,6 +39,7 @@ export const light5RedGreenScale: AvailabilityScale = {
             level: 0,
             color: UNKNOWN_COLOR,
             label: 'Unknown',
+            hidden: true,
         },
         {
             level: 1,
