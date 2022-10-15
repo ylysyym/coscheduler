@@ -59,13 +59,16 @@ const validateName = (name: string) => {
 };
 
 const joinSchedule = () => {
-    const result = validateName(userName.value);
+    if (!validateName(userName.value)) {
+        return false;
+    }
 
-    if (!result) return;
     appStore.joinAs(userName.value);
     scheduleStore.initialiseBlockData(userName.value);
     userName.value = '';
     hide();
+
+    return true;
 };
 
 const show = () => {
