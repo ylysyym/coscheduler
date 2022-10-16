@@ -39,7 +39,7 @@ const cancelEdit = () => {
         delete scheduleStore.entries[appStore.userName];
         appStore.userName = '';
     } else {
-        // TODO: some way to restore pre-edit state
+        scheduleStore.entries[appStore.userName] = appStore.originalEntry;
     }
     appStore.stopEditing();
     selectAllNames();

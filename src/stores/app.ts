@@ -8,6 +8,7 @@ export const useAppStore = defineStore('app', {
             isJoining: false,
             selectedNames: [] as string[],
             userName: '',
+            originalEntry: [] as number[],
         };
     },
 
