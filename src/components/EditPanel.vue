@@ -44,10 +44,10 @@ const scheduleStore = useScheduleStore();
 
 const ids = computed(() => store.selectedItems);
 const hasSelectedItem = computed(() => store.hasSelectedItem);
-const hasSingleSelectedItem = computed(() => store.selectedItems.length === 1);
+const hasSingleSelectedItem = computed(() => store.selectedItems.size === 1);
 
 const mostSelectedLevel = computed(() => {
-    const selectedLevels = ids.value.map((id) => {
+    const selectedLevels = Array.from(ids.value).map((id) => {
         return scheduleStore.level(store.userName, id).level;
     });
     return selectedLevels
@@ -62,7 +62,10 @@ const mostSelectedLevel = computed(() => {
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return scheduleStore.level(store.userName, ids.value[0]).level;
+        return scheduleStore.level(
+            store.userName,
+            ids.value.values().next().value
+        ).level;
     } else {
         return mostSelectedLevel.value;
     }
@@ -77,7 +80,7 @@ const levels = computed((): AvailabilityLevel[] => {
 });
 
 const selectedIntervals = computed(() => {
-    return ids.value.map((id) => scheduleStore.intervals[id]);
+    return Array.from(ids.value).map((id) => scheduleStore.intervals[id]);
 });
 
 const selectedIntervalStrings = computed(() => {

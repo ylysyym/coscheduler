@@ -31,7 +31,7 @@ export const useScheduleStore = defineStore('schedule', {
                 millisecond: 0,
             });
             this.startTime = currentDate;
-            this.blockCount = 7 * 24;
+            this.blockCount = 49 * 24;
             this.title = 'Basic schedule';
             this.description = 'This schedule is used for testing purposes.';
         },
@@ -47,7 +47,7 @@ export const useScheduleStore = defineStore('schedule', {
             this.entries[name][blockIndex] = level;
         },
 
-        changeMultipleLevels(name: string, blocks: number[], level: number) {
+        changeMultipleLevels(name: string, blocks: Set<number>, level: number) {
             for (const id of blocks) {
                 this.changeLevel(name, id, level);
             }

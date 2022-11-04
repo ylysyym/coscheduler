@@ -1,45 +1,50 @@
 <template>
-    <GlobalEvents @mouseup="onGlobalMouseUp" @blur="onGlobalBlur" />
     <div class="container" ref="container">
-        <div class="grid">
-            <div class="row labels">
-                <div class="block-wrapper"></div>
-                <div
-                    class="block-wrapper"
-                    v-for="label in columnLabels"
-                    :key="label"
-                >
-                    {{ label }}
-                </div>
-            </div>
-            <div class="row" v-for="(arr, row) in grid" :key="row">
-                <div class="block-wrapper labels">
-                    {{ rowLabels[row] }}
-                </div>
-                <template v-for="(index, col) in arr" :key="col">
-                    <SquareBlock
-                        v-if="index >= 0"
+        <component
+            :is="appStore.isEditing ? SelectionArea : 'div'"
+            :on-move="onMove"
+            :on-start="onStart"
+            :options="{
+                selectables: '.selectable',
+            }"
+        >
+            <div class="grid">
+                <div class="row labels">
+                    <div class="block-wrapper"></div>
+                    <div
                         class="block-wrapper"
-                        :class="{
-                            isSelected: isSelected(index),
-                        }"
-                        :id="index"
-                        :size="blockSize"
-                        :data="blockData(index)"
-                        @mousedown="onMouseDown(index)"
-                        @mouseover="onMouseOver(index)"
-                        @mouseup="onMouseUp(index)"
-                    />
-                    <div class="block-wrapper" v-else></div>
-                </template>
+                        v-for="label in columnLabels"
+                        :key="label"
+                    >
+                        {{ label }}
+                    </div>
+                </div>
+                <div class="row" v-for="(arr, row) in grid" :key="row">
+                    <div class="block-wrapper labels">
+                        {{ rowLabels[row] }}
+                    </div>
+                    <template v-for="(index, col) in arr" :key="col">
+                        <SquareBlock
+                            v-if="index >= 0"
+                            class="block-wrapper selectable"
+                            :class="{
+                                isSelected: appStore.selectedItems.has(index),
+                            }"
+                            :size="blockSize"
+                            :data-key="index"
+                            :data="blockData(index)"
+                        />
+                        <div class="block-wrapper" v-else></div>
+                    </template>
+                </div>
             </div>
-        </div>
+        </component>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { GlobalEvents } from 'vue-global-events';
+import { SelectionArea, SelectionEvent } from '@viselect/vue';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
 import { useAppStore } from '@/stores/app';
@@ -56,25 +61,10 @@ const container = ref(null);
 const { width, height } = useElementSize(container);
 
 const blockSize = computed(() => {
-    return Math.min(width.value / 35, height.value / 9);
+    return Math.floor(Math.min(width.value / 35, height.value / 9));
 });
 
 const appStore = useAppStore();
-
-let startSquare = -1;
-let isCurrentlySelecting = false;
-let selectedSquares = ref([] as number[]);
-
-const startSelecting = (index: number) => {
-    if (!appStore.isEditing) return;
-    isCurrentlySelecting = true;
-    startSquare = index;
-    selectedSquares.value = [index];
-};
-
-const stopSelecting = () => {
-    isCurrentlySelecting = false;
-};
 
 const store = useScheduleStore();
 
@@ -91,68 +81,24 @@ const grid = computed(() => {
     );
 });
 
-const getIndexFromCoordinates = (col: number, row: number): number => {
-    return grid.value[row][col];
+const blockIds = (els: Element[]): number[] => {
+    return els.map((el) => el.getAttribute('data-key')).map(Number);
 };
 
-const getCoordinatesFromIndex = (index: number): [number, number] => {
-    for (let i = 0; i < grid.value.length; i++) {
-        let colIndex = grid.value[i].indexOf(index);
-        if (colIndex > -1) {
-            return [colIndex, i];
-        }
+const onStart = ({ event, selection }: SelectionEvent) => {
+    if (!event?.ctrlKey && !event?.metaKey) {
+        selection.clearSelection();
+        appStore.clearSelection();
     }
-
-    return [-1, -1];
 };
 
-const getSquaresBetween = (a: number, b: number): number[] => {
-    const [colA, rowA] = getCoordinatesFromIndex(a);
-    const [colB, rowB] = getCoordinatesFromIndex(b);
-    let result: number[] = [];
-
-    for (let y = Math.min(rowA, rowB); y <= Math.max(rowA, rowB); y++) {
-        for (let x = Math.min(colA, colB); x <= Math.max(colA, colB); x++) {
-            const index = getIndexFromCoordinates(x, y);
-            if (index >= 0) {
-                result.push(index);
-            }
-        }
-    }
-
-    return result;
-};
-
-const updateSelection = (a: number, b: number) => {
-    selectedSquares.value = getSquaresBetween(a, b);
-    appStore.selectItems(selectedSquares.value);
-};
-
-const onMouseDown = (index: number) => {
-    startSelecting(index);
-};
-
-const onMouseUp = (index: number) => {
-    if (!isCurrentlySelecting) return;
-    stopSelecting();
-    updateSelection(startSquare, index);
-};
-
-const onMouseOver = (index: number) => {
-    if (!isCurrentlySelecting) return;
-    updateSelection(startSquare, index);
-};
-
-const isSelected = (index: number) => {
-    return selectedSquares.value.includes(index);
-};
-
-const onGlobalBlur = () => {
-    stopSelecting();
-};
-
-const onGlobalMouseUp = () => {
-    stopSelecting();
+const onMove = ({
+    store: {
+        changed: { added, removed },
+    },
+}: SelectionEvent) => {
+    blockIds(added).forEach((id) => appStore.addSelection(id));
+    blockIds(removed).forEach((id) => appStore.removeSelection(id));
 };
 
 const blockData = (index: number) => {
@@ -181,7 +127,7 @@ const rowLabels = computed(() => {
     );
 });
 
-const gap = computed(() => Math.floor(blockSize.value / 6));
+const gap = computed(() => Math.floor(blockSize.value / 8));
 const blockGap = computed(() => gap.value / 2 + 'px');
 </script>
 
@@ -216,7 +162,7 @@ const blockGap = computed(() => gap.value / 2 + 'px');
 }
 
 .isSelected {
-    background: #b3b1d8;
+    background: #a28fee;
     margin: 0;
 }
 </style>

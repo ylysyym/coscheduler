@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 export const useAppStore = defineStore('app', {
     state: () => {
         return {
-            selectedItems: [] as number[],
+            selectedItems: new Set() as Set<number>,
             isEditing: false,
             isJoining: false,
             selectedNames: [] as string[],
@@ -13,22 +13,6 @@ export const useAppStore = defineStore('app', {
     },
 
     actions: {
-        selectItem(id: number): void {
-            this.selectedItems = [id];
-        },
-
-        selectItems(ids: number[]): void {
-            this.selectedItems = ids;
-        },
-
-        toggleItem(id: number): void {
-            if (this.selectedItems.includes(id)) {
-                this.selectedItems = this.selectedItems.filter((i) => i !== id);
-            } else {
-                this.selectedItems.push(id);
-            }
-        },
-
         joinAs(name: string) {
             this.isEditing = true;
             this.isJoining = true;
@@ -37,14 +21,27 @@ export const useAppStore = defineStore('app', {
         },
 
         stopEditing() {
+            this.selectedItems.clear();
             this.isEditing = false;
             this.isJoining = false;
+        },
+
+        clearSelection() {
+            this.selectedItems.clear();
+        },
+
+        addSelection(id: number) {
+            this.selectedItems.add(id);
+        },
+
+        removeSelection(id: number) {
+            this.selectedItems.delete(id);
         },
     },
 
     getters: {
         hasSelectedItem(): boolean {
-            return this.selectedItems.length > 0;
+            return this.selectedItems.size > 0;
         },
     },
 });

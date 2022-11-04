@@ -2,11 +2,10 @@
     <div v-if="!store.isEditing">
         <n-popover trigger="click">
             <template #trigger>
-                <div class="block" @click="selectBlock"></div>
+                <div class="block"></div>
             </template>
             <n-space vertical>
                 <strong>{{ formatInterval(data.interval) }}</strong>
-
                 <n-space
                     v-for="person in Object.keys(data.entries)"
                     :key="person"
@@ -20,14 +19,15 @@
                                 data.entries[person].color
                             ),
                         }"
-                        >{{ data.entries[person].label }}</n-tag
                     >
+                        {{ data.entries[person].label }}
+                    </n-tag>
                 </n-space>
             </n-space>
         </n-popover>
     </div>
     <div v-else>
-        <div class="block" @click="selectBlock"></div>
+        <div class="block"></div>
     </div>
 </template>
 
@@ -42,7 +42,6 @@ import { BlockData } from '@/models/BlockData';
 import { formatInterval } from '@/utilities/formatTimes';
 
 const props = defineProps<{
-    id: number;
     data: BlockData;
     size: number;
 }>();
@@ -69,10 +68,6 @@ const background = computed(() => {
     return result;
 });
 const size = computed(() => props.size + 'px');
-
-const selectBlock = () => {
-    store.selectItem(props.id);
-};
 </script>
 
 <style scoped>

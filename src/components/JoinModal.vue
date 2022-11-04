@@ -6,8 +6,8 @@
         title="Join as"
         :show-icon="false"
         @positive-click="joinSchedule"
-        :on-after-enter="nameInput?.focus()"
-        @after-hide="hide"
+        @after-enter="nameInput?.focus()"
+        @after-leave="hide"
     >
         <n-space vertical>
             <n-alert type="error" v-if="hasError">{{ alertMessage }}</n-alert>

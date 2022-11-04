@@ -5,8 +5,11 @@
     <div class="control-panel">
         <ControlPanel @showJoinDialog="showJoinDialog" />
     </div>
+
     <div class="block-grid">
-        <BlockGrid />
+        <n-scrollbar>
+            <BlockGrid />
+        </n-scrollbar>
     </div>
     <div class="edit-panel" v-if="appStore.isEditing">
         <EditPanel />
@@ -16,6 +19,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { NScrollbar } from 'naive-ui';
 import TitleBar from '@/components/TitleBar.vue';
 import BlockGrid from '@/components/BlockGrid.vue';
 import EditPanel from '@/components/EditPanel.vue';
