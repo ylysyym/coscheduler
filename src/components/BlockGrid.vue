@@ -9,17 +9,15 @@
             }"
         >
             <div class="grid">
-                <div class="row labels">
-                    <div class="block-wrapper"></div>
-                    <div
-                        class="block-wrapper"
-                        v-for="label in columnLabels"
-                        :key="label"
-                    >
-                        {{ label }}
-                    </div>
+                <div class="block-wrapper"></div>
+                <div
+                    class="block-wrapper labels"
+                    v-for="label in columnLabels"
+                    :key="label"
+                >
+                    {{ label }}
                 </div>
-                <div class="row" v-for="(arr, row) in grid" :key="row">
+                <template v-for="(arr, row) in grid" :key="row">
                     <div class="block-wrapper labels">
                         {{ rowLabels[row] }}
                     </div>
@@ -36,7 +34,7 @@
                         />
                         <div class="block-wrapper" v-else></div>
                     </template>
-                </div>
+                </template>
             </div>
         </component>
     </div>
@@ -71,6 +69,7 @@ const store = useScheduleStore();
 const columns = computed(() => {
     return store.rowUnit.minutes / store.blockUnit.minutes;
 });
+
 const grid = computed(() => {
     return generateGrid(
         store.startTime,
@@ -127,42 +126,42 @@ const rowLabels = computed(() => {
     );
 });
 
-const gap = computed(() => Math.floor(blockSize.value / 8));
-const blockGap = computed(() => gap.value / 2 + 'px');
+const gap = computed(() => Math.max(blockSize.value / 8, 2));
+const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 </script>
 
 <style scoped>
 .container {
     display: inline-block;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
     width: 100%;
 }
 
 .grid {
-    display: table;
+    display: grid;
     user-select: none;
-}
-
-.row {
-    display: table-row;
-    line-height: 0;
+    grid-template-columns: min-content repeat(
+            v-bind(columns),
+            v-bind(blockSize + 'px')
+        );
+    grid-auto-rows: v-bind(blockSize + 'px');
+    gap: v-bind(blockGap);
 }
 
 .block-wrapper {
-    display: table-cell;
-    padding: v-bind(blockGap);
     white-space: nowrap;
 }
 
-.labels.row {
-    line-height: normal;
+.labels {
     text-align: center;
+    align-self: center;
+    padding: 8px;
 }
 
 .isSelected {
-    background: #a28fee;
+    background: rgb(121, 83, 235);
     margin: 0;
+    filter: brightness(0.85);
+    outline: v-bind(blockGap + ' solid rgb(121, 83, 230)');
 }
 </style>
