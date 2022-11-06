@@ -1,7 +1,6 @@
 <template>
     <div class="container" ref="container">
-        <component
-            :is="appStore.isEditing ? SelectionArea : 'div'"
+        <SelectionArea
             :on-move="onMove"
             :on-start="onStart"
             :options="{
@@ -37,7 +36,7 @@
                     </template>
                 </template>
             </div>
-        </component>
+        </SelectionArea>
     </div>
     <BlockDetailPopover ref="popover" />
 </template>
@@ -94,6 +93,7 @@ const blockIds = (els: Element[]): number[] => {
 };
 
 const onStart = ({ event, selection }: SelectionEvent) => {
+    if (!appStore.isEditing) return;
     if (!event?.ctrlKey && !event?.metaKey) {
         selection.clearSelection();
         appStore.clearSelection();
@@ -105,6 +105,7 @@ const onMove = ({
         changed: { added, removed },
     },
 }: SelectionEvent) => {
+    if (!appStore.isEditing) return;
     blockIds(added).forEach((id) => appStore.addSelection(id));
     blockIds(removed).forEach((id) => appStore.removeSelection(id));
 };
