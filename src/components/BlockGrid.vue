@@ -28,6 +28,7 @@
                             :class="{
                                 isSelected: appStore.selectedItems.has(index),
                             }"
+                            @click="selectBlock(index, $event)"
                             :size="blockSize"
                             :data-key="index"
                             :data="blockData(index)"
@@ -38,6 +39,7 @@
             </div>
         </component>
     </div>
+    <BlockDetailPopover ref="popover" />
 </template>
 
 <script setup lang="ts">
@@ -53,13 +55,20 @@ import {
     getRowLabels,
     TimeBreakpoint,
 } from '@/utilities/generateGrid';
+import BlockDetailPopover from './BlockDetailPopover.vue';
 
 const container = ref(null);
+const popover = ref<typeof BlockDetailPopover>();
 
 const { width, height } = useElementSize(container);
 
 const blockSize = computed(() => {
-    return Math.floor(Math.min(width.value / 35, height.value / 9));
+    return Math.max(
+        Math.floor(
+            Math.min(width.value / (columns.value + 5), height.value / 3)
+        ),
+        15
+    );
 });
 
 const appStore = useAppStore();
@@ -128,6 +137,12 @@ const rowLabels = computed(() => {
 
 const gap = computed(() => Math.max(blockSize.value / 8, 2));
 const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
+
+const selectBlock = (id: number, e: MouseEvent) => {
+    if (appStore.isEditing) return;
+
+    popover.value?.show(id, { x: e.x, y: e.y });
+};
 </script>
 
 <style scoped>
@@ -159,8 +174,6 @@ const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 }
 
 .isSelected {
-    background: rgb(121, 83, 235);
-    margin: 0;
     filter: brightness(0.85);
     outline: v-bind(blockGap + ' solid rgb(121, 83, 230)');
 }

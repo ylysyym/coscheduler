@@ -31,7 +31,7 @@ export const useScheduleStore = defineStore('schedule', {
                 millisecond: 0,
             });
             this.startTime = currentDate;
-            this.blockCount = 49 * 24;
+            this.blockCount = 10 * 7 * 24;
             this.title = 'Basic schedule';
             this.description = 'This schedule is used for testing purposes.';
         },

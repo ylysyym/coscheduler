@@ -1,52 +1,18 @@
 <template>
-    <div v-if="!store.isEditing">
-        <n-popover trigger="click">
-            <template #trigger>
-                <div class="block"></div>
-            </template>
-            <n-space vertical>
-                <strong>{{ formatInterval(data.interval) }}</strong>
-                <n-space
-                    v-for="person in Object.keys(data.entries)"
-                    :key="person"
-                >
-                    {{ person }}
-                    <n-tag
-                        size="small"
-                        :color="{
-                            color: data.entries[person].color,
-                            textColor: readableColor(
-                                data.entries[person].color
-                            ),
-                        }"
-                    >
-                        {{ data.entries[person].label }}
-                    </n-tag>
-                </n-space>
-            </n-space>
-        </n-popover>
-    </div>
-    <div v-else>
-        <div class="block"></div>
-    </div>
+    <div class="block"></div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { readableColor } from 'color2k';
-import { NPopover, NSpace, NTag } from 'naive-ui';
-import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { useSettingsStore } from '@/stores/settings';
 import { BlockData } from '@/models/BlockData';
-import { formatInterval } from '@/utilities/formatTimes';
 
 const props = defineProps<{
     data: BlockData;
     size: number;
 }>();
 
-const store = useAppStore();
 const settingsStore = useSettingsStore();
 const scheduleStore = useScheduleStore();
 
