@@ -65,11 +65,15 @@ export const useScheduleStore = defineStore('schedule', {
         },
 
         blockAtIndex(names: string[], index: number): BlockData {
-            const entries = Object.fromEntries(
-                Object.entries(this.entries)
-                    .filter(([key, val]) => names.includes(key))
-                    .map(([key, val]) => [key, this.scale.levels[val[index]]])
-            );
+            const entries = Object.keys(this.entries)
+                .filter((key) => names.includes(key))
+                .reduce((obj, key) => {
+                    return {
+                        ...obj,
+                        [key]: this.scale.levels[this.entries[key][index]],
+                    };
+                }, {});
+
             return new BlockData(this.intervals[index], entries);
         },
     },
