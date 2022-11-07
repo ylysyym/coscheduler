@@ -4,26 +4,32 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { BlockData } from '@/models/BlockData';
+import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { useSettingsStore } from '@/stores/settings';
-import { BlockData } from '@/models/BlockData';
 
 const props = defineProps<{
-    data: BlockData;
+    id: number;
     size: number;
 }>();
 
+const appStore = useAppStore();
 const settingsStore = useSettingsStore();
 const scheduleStore = useScheduleStore();
 
+const data = computed<BlockData>(() => {
+    return scheduleStore.blockAtIndex(appStore.selectedNames, props.id);
+});
+
 const background = computed(() => {
-    if (Object.keys(props.data.entries).length === 0) {
+    if (Object.keys(data.value.entries).length === 0) {
         return scheduleStore.scale.levels[0].color;
     }
 
     let result = 'linear-gradient(to ' + settingsStore.orientation;
-    let n = 100 / Object.keys(props.data.entries).length;
-    let sorted = Object.values(props.data.entries);
+    let n = 100 / Object.keys(data.value.entries).length;
+    let sorted = Object.values(data.value.entries);
     sorted.sort((a, b) => b.level - a.level);
     for (let i = 0; i < sorted.length; i++) {
         result += `, ${sorted[i].color} ${i * n}%, ${sorted[i].color} ${

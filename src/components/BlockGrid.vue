@@ -30,7 +30,7 @@
                             @click="selectBlock(index, $event)"
                             :size="blockSize"
                             :data-key="index"
-                            :data="blockData(index)"
+                            :id="index"
                         />
                         <div class="block-wrapper" v-else></div>
                     </template>
@@ -108,14 +108,6 @@ const onMove = ({
     if (!appStore.isEditing) return;
     blockIds(added).forEach((id) => appStore.addSelection(id));
     blockIds(removed).forEach((id) => appStore.removeSelection(id));
-};
-
-const blockData = (index: number) => {
-    if (appStore.isEditing) {
-        return store.currentBlockAtIndex(appStore.selectedNames, index);
-    }
-
-    return store.blockAtIndex(appStore.selectedNames, index);
 };
 
 const columnLabels = computed(() => {
