@@ -27,7 +27,11 @@ export const useAppStore = defineStore('app', {
         },
 
         clearSelection() {
-            this.selectedItems.clear();
+            for (const item of this.selectedItems) {
+                // using clear() causes re-render of all dependent components
+                // use delete() as a workaround
+                this.selectedItems.delete(item);
+            }
         },
 
         addSelection(id: number) {

@@ -24,9 +24,6 @@
                         <SquareBlock
                             v-if="index >= 0"
                             class="block-wrapper selectable"
-                            :class="{
-                                isSelected: appStore.selectedItems.has(index),
-                            }"
                             @click="selectBlock(index, $event)"
                             :size="blockSize"
                             :data-key="index"
@@ -46,6 +43,7 @@ import { computed, ref } from 'vue';
 import { SelectionArea, SelectionEvent } from '@viselect/vue';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
+import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import {
@@ -54,7 +52,6 @@ import {
     getRowLabels,
     TimeBreakpoint,
 } from '@/utilities/generateGrid';
-import BlockDetailPopover from './BlockDetailPopover.vue';
 
 const container = ref(null);
 const popover = ref<typeof BlockDetailPopover>();

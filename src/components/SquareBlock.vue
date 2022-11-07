@@ -1,5 +1,10 @@
 <template>
-    <div class="block"></div>
+    <div
+        class="block"
+        :class="{
+            isSelected: isSelected,
+        }"
+    ></div>
 </template>
 
 <script setup lang="ts">
@@ -40,6 +45,8 @@ const background = computed(() => {
     return result;
 });
 const size = computed(() => props.size + 'px');
+
+const isSelected = computed(() => appStore.selectedItems.has(props.id));
 </script>
 
 <style scoped>
