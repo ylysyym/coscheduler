@@ -113,10 +113,6 @@ const selectedIntervalStrings = computed(() => {
     );
 });
 
-const formattedSelectedIntervalStrings = computed(() => {
-    return selectedIntervalStrings.value.join('\n');
-});
-
 const name = ref(appStore.userName);
 
 const showAlert = ref(false);
