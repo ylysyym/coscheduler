@@ -1,44 +1,48 @@
 <template>
-    <n-input
-        placeholder="Name"
-        v-model:value="name"
-        :disabled="!appStore.isJoining"
-        autofocus
-    />
-    <div class="container" v-if="hasSelectedItem">
+    <div>
         <n-space vertical>
             <div>
-                <div
-                    class="interval-display"
-                    v-for="(str, i) in selectedIntervalStrings"
-                    :key="i"
-                >
-                    {{ str }}
+                <strong>Name</strong>
+                <n-input
+                    placeholder="Name"
+                    v-model:value="name"
+                    :disabled="!appStore.isJoining"
+                    autofocus
+                />
+            </div>
+            <div v-if="hasSelectedItem">
+                <div>
+                    <strong>Selection</strong>
+                    <n-ellipsis :line-clamp="3" style="width: 100%">
+                        <div v-for="x in selectedIntervalStrings" :key="x">
+                            {{ x }}
+                        </div>
+                    </n-ellipsis>
+                </div>
+                <div>
+                    <strong>Status</strong>
+                    <n-space :vertical="!isSmallScreen" size="small">
+                        <n-button
+                            v-for="level in levels"
+                            :key="level.level"
+                            :value="level.level"
+                            @click="changeLevel(level.level)"
+                            :tertiary="level.level === selectedLevel"
+                            :strong="level.level === selectedLevel"
+                        >
+                            <span :style="{ color: level.color }">●</span>
+                            {{ level.label }}
+                        </n-button>
+                    </n-space>
                 </div>
             </div>
-            <div>
-                <n-space :vertical="!isSmallScreen" size="small">
-                    <n-button
-                        v-for="level in levels"
-                        :key="level.level"
-                        :value="level.level"
-                        @click="changeLevel(level.level)"
-                        :tertiary="level.level === selectedLevel"
-                        :strong="level.level === selectedLevel"
-                    >
-                        <span :style="{ color: level.color }">●</span>
-                        {{ level.label }}
-                    </n-button>
-                </n-space>
+            <div v-else>
+                <div>Click a square to select it.</div>
+                <div>Drag to select multiple squares.</div>
             </div>
+            <n-button type="primary" @click="saveChanges">Save</n-button>
         </n-space>
     </div>
-    <div v-else>
-        Click a square to select it.
-        <br />
-        Drag to select multiple squares.
-    </div>
-    <n-button type="primary" @click="saveChanges">Save</n-button>
     <n-modal
         v-model:show="showAlert"
         :title="alertTitle"
@@ -52,7 +56,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Interval } from 'luxon';
-import { NButton, NInput, NModal, NSpace } from 'naive-ui';
+import { NButton, NEllipsis, NInput, NModal, NSpace } from 'naive-ui';
 import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
@@ -109,6 +113,10 @@ const selectedIntervalStrings = computed(() => {
     );
 });
 
+const formattedSelectedIntervalStrings = computed(() => {
+    return selectedIntervalStrings.value.join('\n');
+});
+
 const name = ref(appStore.userName);
 
 const showAlert = ref(false);
@@ -132,12 +140,3 @@ const saveChanges = () => {
     appStore.stopEditing();
 };
 </script>
-
-<style scoped>
-.container {
-    display: inline-block;
-    height: 100%;
-    overflow: hidden;
-    width: 100%;
-}
-</style>
