@@ -6,6 +6,7 @@
         :y="position.y"
         :animated="false"
         @clickoutside="hide"
+        :to="parent"
         v-if="data !== undefined"
     >
         <n-space vertical>
@@ -38,12 +39,20 @@ import { useScheduleStore } from '@/stores/schedule';
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
+const parent = ref<HTMLElement>();
+
 const data = ref<BlockData | undefined>();
 
 const isVisible = ref(false);
+
 const position = ref({ x: 0, y: 0 });
 
-const show = (id: number, newPosition: { x: number; y: number }) => {
+const show = (
+    id: number,
+    newPosition: { x: number; y: number },
+    el?: HTMLElement
+) => {
+    parent.value = el;
     data.value = scheduleStore.blockAtIndex(appStore.selectedNames, id);
     position.value = newPosition;
     isVisible.value = true;

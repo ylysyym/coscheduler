@@ -54,7 +54,7 @@ import {
 } from '@/utilities/generateGrid';
 
 const container = ref(null);
-const popover = ref<typeof BlockDetailPopover>();
+const popover = ref<InstanceType<typeof BlockDetailPopover>>();
 
 const { width, height } = useElementSize(container);
 
@@ -131,7 +131,7 @@ const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 const selectBlock = (id: number, e: MouseEvent) => {
     if (appStore.isEditing) return;
 
-    popover.value?.show(id, { x: e.x, y: e.y });
+    popover.value?.show(id, { x: e.x, y: e.y }, e.target as HTMLElement);
 };
 </script>
 
@@ -154,6 +154,7 @@ const selectBlock = (id: number, e: MouseEvent) => {
 }
 
 .block-wrapper {
+    position: relative;
     white-space: nowrap;
 }
 
