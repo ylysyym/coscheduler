@@ -1,81 +1,46 @@
 <template>
-    <div class="title-bar">
-        <TitleBar @showJoinDialog="showJoinDialog" />
-    </div>
     <div class="control-panel">
-        <ControlPanel @showJoinDialog="showJoinDialog" />
+        <n-dialog-provider>
+            <ControlPanel />
+        </n-dialog-provider>
     </div>
-
     <div class="block-grid">
         <n-scrollbar>
             <BlockGrid />
         </n-scrollbar>
     </div>
-    <div class="edit-panel" v-if="appStore.isEditing">
-        <EditPanel />
-    </div>
-    <JoinModal ref="joinModal" />
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { NScrollbar } from 'naive-ui';
-import TitleBar from '@/components/TitleBar.vue';
+import { NDialogProvider, NScrollbar } from 'naive-ui';
 import BlockGrid from '@/components/BlockGrid.vue';
-import EditPanel from '@/components/EditPanel.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
-import JoinModal from '@/components/JoinModal.vue';
-import { useAppStore } from '@/stores/app';
 import { useScheduleStore } from '@/stores/schedule';
 
-const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
 scheduleStore.initialiseSchedule();
-
-let joinModal = ref<typeof JoinModal>();
-
-const showJoinDialog = () => {
-    joinModal.value?.show();
-};
-
-let detailPanelWidth = computed(() => (appStore.isEditing ? 300 : 0) + 'px');
 </script>
 
 <style scoped>
-.title-bar,
 .block-grid,
-.edit-panel,
 .control-panel {
     display: inline-block;
     vertical-align: top;
     width: 100%;
 }
 
-.title-bar {
-    height: 80px;
-    padding: 0;
-}
-
 @media (min-width: 900px) {
     .block-grid,
-    .edit-panel,
     .control-panel {
-        height: calc(100% - 120px);
+        height: calc(100% - 40px);
     }
     .block-grid {
-        width: calc(100% - 160px - v-bind(detailPanelWidth));
-    }
-    .edit-panel {
-        width: 300px;
-    }
-
-    .title-bar {
-        padding-left: 160px;
+        width: calc(100% - 400px);
     }
 
     .control-panel {
-        width: 160px;
+        width: 400px;
     }
 }
 </style>
