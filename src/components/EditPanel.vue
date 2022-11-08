@@ -3,6 +3,7 @@
         placeholder="Name"
         v-model:value="name"
         :disabled="!appStore.isJoining"
+        autofocus
     />
     <div class="container" v-if="hasSelectedItem">
         <n-space vertical>
@@ -61,15 +62,13 @@ import { formatInterval } from '@/utilities/formatTimes';
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
-const emit = defineEmits(['saveChanges']);
-
 const ids = computed(() => appStore.selectedItems);
 const hasSelectedItem = computed(() => appStore.hasSelectedItem);
 const hasSingleSelectedItem = computed(() => appStore.selectedItems.size === 1);
 
 const mostSelectedLevel = computed(() => {
     const selectedLevels = Array.from(ids.value).map((id) => {
-        return scheduleStore.level(appStore.userName, id).level;
+        return appStore.level(id, scheduleStore.scale).level;
     });
     return selectedLevels
         .sort((a, b) => {
@@ -83,9 +82,9 @@ const mostSelectedLevel = computed(() => {
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return scheduleStore.level(
-            appStore.userName,
-            ids.value.values().next().value
+        return appStore.level(
+            ids.value.values().next().value,
+            scheduleStore.scale
         ).level;
     } else {
         return mostSelectedLevel.value;
@@ -93,7 +92,7 @@ const selectedLevel = computed(() => {
 });
 
 const changeLevel = (level: number) => {
-    scheduleStore.changeMultipleLevels(appStore.userName, ids.value, level);
+    appStore.changeMultipleLevels(ids.value, level);
 };
 
 const levels = computed((): AvailabilityLevel[] => {
@@ -124,11 +123,13 @@ const saveChanges = () => {
         return;
     }
 
+    scheduleStore.entries[name.value] = appStore.currentEntry.slice();
+
     if (appStore.isJoining) {
-        scheduleStore.saveAs(name.value);
+        appStore.selectedNames.push(name.value);
     }
 
-    emit('saveChanges');
+    appStore.stopEditing();
 };
 </script>
 

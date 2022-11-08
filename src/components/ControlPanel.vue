@@ -68,7 +68,7 @@
                 name="edit"
                 :tab="isEditingExistingUser ? 'Edit' : 'Join'"
             >
-                <EditPanel @save-changes="saveChanges" />
+                <EditPanel />
             </n-tab-pane>
         </n-tabs>
     </div>
@@ -112,43 +112,19 @@ let isChecked = computed(() => {
 });
 
 const activeTab = computed(() => (appStore.isEditing ? 'edit' : 'view'));
-const placeholderName = '';
 
 const isEditingExistingUser = computed(() => {
-    return (
-        appStore.isEditing &&
-        appStore.userName !== placeholderName &&
-        scheduleStore.people.includes(appStore.userName)
-    );
+    return appStore.isEditing && !appStore.isJoining;
 });
 
 const startEditing = (person: string) => {
     if (appStore.isEditing) return;
+
     appStore.isEditing = true;
     appStore.isJoining = false;
     appStore.userName = person;
-    appStore.selectedNames = [person];
-    appStore.originalEntry = scheduleStore.entries[person].slice();
+    appStore.currentEntry = scheduleStore.entries[person].slice();
     showPersonPopover.value[person] = false;
-};
-
-const cancelEdit = () => {
-    if (appStore.isJoining) {
-        delete scheduleStore.entries[placeholderName];
-    } else {
-        scheduleStore.entries[appStore.userName] = appStore.originalEntry;
-    }
-    appStore.stopEditing();
-    selectAllNames();
-};
-
-const selectAllNames = () => {
-    appStore.selectedNames = Object.keys(scheduleStore.entries);
-};
-
-const saveChanges = () => {
-    appStore.stopEditing();
-    selectAllNames();
 };
 
 const beforeChangeTab = (tabName: string) => {
@@ -174,10 +150,10 @@ const beforeChangeTab = (tabName: string) => {
 
 const changeTab = (tabName: string) => {
     if (tabName === 'edit') {
-        appStore.joinAs(placeholderName);
-        scheduleStore.initialiseBlockData(placeholderName);
+        appStore.join();
+        appStore.initialiseBlockData(scheduleStore.blockCount);
     } else {
-        cancelEdit();
+        appStore.stopEditing();
     }
 };
 
@@ -190,11 +166,11 @@ const isEquivalentArray = (a: number[], b: number[]) => {
 const hasChanges = computed(() => {
     if (!appStore.isJoining) {
         return !isEquivalentArray(
-            appStore.originalEntry,
+            appStore.currentEntry,
             scheduleStore.entries[appStore.userName]
         );
     } else {
-        return !scheduleStore.isInitialData(appStore.userName);
+        return !appStore.isInitialData;
     }
 });
 </script>

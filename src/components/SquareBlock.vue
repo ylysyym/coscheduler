@@ -24,7 +24,14 @@ const settingsStore = useSettingsStore();
 const scheduleStore = useScheduleStore();
 
 const data = computed<BlockData>(() => {
-    return scheduleStore.blockAtIndex(appStore.selectedNames, props.id);
+    if (appStore.isEditing) {
+        // TODO: make this less ugly / more clear
+        return new BlockData(scheduleStore.intervals[props.id], {
+            '': scheduleStore.scale.levels[appStore.currentEntry[props.id]],
+        });
+    } else {
+        return scheduleStore.blockAtIndex(appStore.selectedNames, props.id);
+    }
 });
 
 const background = computed(() => {
