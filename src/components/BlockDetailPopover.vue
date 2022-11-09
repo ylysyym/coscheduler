@@ -7,6 +7,7 @@
         :animated="false"
         @clickoutside="hide"
         :to="parent"
+        placement="right"
         v-if="data !== undefined"
     >
         <n-space vertical>
