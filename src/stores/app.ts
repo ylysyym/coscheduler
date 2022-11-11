@@ -1,6 +1,7 @@
+import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
-import { defineStore } from 'pinia';
+import { useScheduleStore } from './schedule';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
@@ -28,13 +29,15 @@ export const useAppStore = defineStore('app', {
             this.currentEntry[blockIndex] = level;
         },
 
-        changeMultipleLevels(blocks: Set<number>, level: number) {
-            for (const id of blocks) {
+        changeSelectedLevels(level: number) {
+            for (const id of this.selectedItems) {
                 this.changeLevel(id, level);
             }
         },
 
-        level(index: number, scale: AvailabilityScale): AvailabilityLevel {
+        level(index: number): AvailabilityLevel {
+            const scheduleStore = useScheduleStore();
+            const scale = scheduleStore.scale;
             const availabilityLevel = scale.levels.find((lvl) => {
                 return lvl.level === this.currentEntry[index];
             });
@@ -83,6 +86,10 @@ export const useAppStore = defineStore('app', {
             return this.currentEntry.every(
                 (val) => val === DEFAULT_INITIAL_LEVEL
             );
+        },
+
+        firstSelectedItem(): number {
+            return this.selectedItems.values().next().value;
         },
     },
 });

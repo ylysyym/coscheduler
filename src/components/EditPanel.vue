@@ -10,11 +10,11 @@
                     autofocus
                 />
             </div>
-            <div v-if="hasSelectedItem">
+            <div v-if="appStore.hasSelectedItem">
                 <div>
                     <strong>Selection</strong>
                     <n-ellipsis :line-clamp="3" style="width: 100%">
-                        <div v-for="x in selectedIntervalStrings" :key="x">
+                        <div v-for="x in formattedSelectedIntervals" :key="x">
                             {{ x }}
                         </div>
                     </n-ellipsis>
@@ -23,7 +23,7 @@
                     <strong>Status</strong>
                     <n-space :vertical="!isSmallScreen" size="small">
                         <n-button
-                            v-for="level in levels"
+                            v-for="level in visibleLevels"
                             :key="level.level"
                             :value="level.level"
                             @click="changeLevel(level.level)"
@@ -66,14 +66,10 @@ import { formatInterval } from '@/utilities/formatTimes';
 const appStore = useAppStore();
 const scheduleStore = useScheduleStore();
 
-const ids = computed(() => appStore.selectedItems);
-const hasSelectedItem = computed(() => appStore.hasSelectedItem);
-const hasSingleSelectedItem = computed(() => appStore.selectedItems.size === 1);
-
 const mostSelectedLevel = computed(() => {
-    const selectedLevels = Array.from(ids.value).map((id) => {
-        return appStore.level(id, scheduleStore.scale).level;
-    });
+    const selectedLevels = Array.from(appStore.selectedItems).map(
+        (id) => appStore.level(id).level
+    );
     return selectedLevels
         .sort((a, b) => {
             return (
@@ -84,30 +80,31 @@ const mostSelectedLevel = computed(() => {
         .pop();
 });
 
+const hasSingleSelectedItem = computed(() => appStore.selectedItems.size === 1);
+
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return appStore.level(
-            ids.value.values().next().value,
-            scheduleStore.scale
-        ).level;
+        return appStore.level(appStore.firstSelectedItem).level;
     } else {
         return mostSelectedLevel.value;
     }
 });
 
 const changeLevel = (level: number) => {
-    appStore.changeMultipleLevels(ids.value, level);
+    appStore.changeSelectedLevels(level);
 };
 
-const levels = computed((): AvailabilityLevel[] => {
+const visibleLevels = computed((): AvailabilityLevel[] => {
     return scheduleStore.scale.levels.filter((level) => level.hidden !== true);
 });
 
 const selectedIntervals = computed(() => {
-    return Array.from(ids.value).map((id) => scheduleStore.intervals[id]);
+    return Array.from(appStore.selectedItems).map(
+        (id) => scheduleStore.intervals[id]
+    );
 });
 
-const selectedIntervalStrings = computed(() => {
+const formattedSelectedIntervals = computed(() => {
     return Interval.merge(selectedIntervals.value).map((interval) =>
         formatInterval(interval)
     );
