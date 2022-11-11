@@ -35,10 +35,10 @@ import { readableColor } from 'color2k';
 import { NPopover, NSpace, NTag } from 'naive-ui';
 import { BlockData } from '@/models/BlockData';
 import { formatInterval } from '@/utilities/formatTimes';
-import { useAppStore } from '@/stores/app';
+import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 
-const appStore = useAppStore();
+const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const parent = ref<HTMLElement>();
@@ -55,7 +55,7 @@ const show = (
     el?: HTMLElement
 ) => {
     parent.value = el;
-    data.value = scheduleStore.blockAtIndex(appStore.selectedNames, id);
+    data.value = scheduleStore.blockAtIndex(uiStore.selectedNames, id);
     position.value = newPosition;
     isVisible.value = true;
 };

@@ -44,7 +44,7 @@ import { SelectionArea, SelectionEvent } from '@viselect/vue';
 import { useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
 import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
-import { useAppStore } from '@/stores/app';
+import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import {
     generateGrid,
@@ -67,19 +67,18 @@ const blockSize = computed(() => {
     );
 });
 
-const appStore = useAppStore();
-
-const store = useScheduleStore();
+const uiStore = useUiStore();
+const scheduleStore = useScheduleStore();
 
 const columns = computed(() => {
-    return store.rowUnit.minutes / store.blockUnit.minutes;
+    return scheduleStore.rowUnit.minutes / scheduleStore.blockUnit.minutes;
 });
 
 const grid = computed(() => {
     return generateGrid(
-        store.startTime,
-        store.endTime,
-        store.blockUnit.minutes,
+        scheduleStore.startTime,
+        scheduleStore.endTime,
+        scheduleStore.blockUnit.minutes,
         TimeBreakpoint.Day,
         columns.value
     );
@@ -90,10 +89,10 @@ const blockIds = (els: Element[]): number[] => {
 };
 
 const onStart = ({ event, selection }: SelectionEvent) => {
-    if (!appStore.isEditing) return;
+    if (!uiStore.isEditing) return;
     if (!event?.ctrlKey && !event?.metaKey) {
         selection.clearSelection();
-        appStore.clearSelection();
+        uiStore.clearSelection();
     }
 };
 
@@ -102,25 +101,25 @@ const onMove = ({
         changed: { added, removed },
     },
 }: SelectionEvent) => {
-    if (!appStore.isEditing) return;
-    blockIds(added).forEach((id) => appStore.addSelection(id));
-    blockIds(removed).forEach((id) => appStore.removeSelection(id));
+    if (!uiStore.isEditing) return;
+    blockIds(added).forEach((id) => uiStore.addSelection(id));
+    blockIds(removed).forEach((id) => uiStore.removeSelection(id));
 };
 
 const columnLabels = computed(() => {
     return getColumnLabels(
         TimeBreakpoint.Day,
         columns.value,
-        store.blockUnit.minutes
+        scheduleStore.blockUnit.minutes
     );
 });
 
 const rowLabels = computed(() => {
     return getRowLabels(
         TimeBreakpoint.Day,
-        store.startTime,
+        scheduleStore.startTime,
         columns.value,
-        store.blockUnit.minutes,
+        scheduleStore.blockUnit.minutes,
         grid.value.length * grid.value[0].length
     );
 });
@@ -129,7 +128,7 @@ const gap = computed(() => Math.max(blockSize.value / 8, 2));
 const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 
 const selectBlock = (id: number, e: MouseEvent) => {
-    if (appStore.isEditing) return;
+    if (uiStore.isEditing) return;
 
     popover.value?.show(id, { x: e.x, y: e.y }, e.target as HTMLElement);
 };

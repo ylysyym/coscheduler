@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
-import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
 import { useScheduleStore } from './schedule';
 
 const DEFAULT_INITIAL_LEVEL = 1;
 
-export const useAppStore = defineStore('app', {
+export const useUiStore = defineStore('ui', {
     state: () => {
         return {
             selectedItems: new Set() as Set<number>,

@@ -13,7 +13,7 @@
                 <h3 v-if="people.length > 0">People</h3>
                 <span v-else>There's no one here!</span>
                 <n-space :vertical="!isSmallScreen">
-                    <n-checkbox-group v-model:value="appStore.selectedNames">
+                    <n-checkbox-group v-model:value="uiStore.selectedNames">
                         <n-space :vertical="!isSmallScreen">
                             <template v-for="person in people" :key="person">
                                 <n-popover
@@ -44,14 +44,14 @@
                                             &nbsp;
                                             <n-checkbox
                                                 :value="person"
-                                                :disabled="appStore.isEditing"
+                                                :disabled="uiStore.isEditing"
                                             >
                                                 Show
                                             </n-checkbox>
                                         </div>
                                         <PersonStats :person="person" />
                                         <n-button
-                                            :disabled="appStore.isEditing"
+                                            :disabled="uiStore.isEditing"
                                             type="primary"
                                             @click="startEditing(person)"
                                         >
@@ -87,12 +87,12 @@ import {
 } from 'naive-ui';
 import { computed, ref } from 'vue';
 import { isSmallScreen } from '@/utilities/breakpoints';
-import { useAppStore } from '@/stores/app';
+import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import PersonStats from '@/components/PersonStats.vue';
 import EditPanel from '@/components/EditPanel.vue';
 
-const appStore = useAppStore();
+const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const dialog = useDialog();
@@ -102,7 +102,7 @@ let showPersonPopover = ref<{ [person: string]: boolean }>({});
 
 type CheckedNameMap = { [name: string]: boolean };
 let isChecked = computed(() => {
-    return appStore.selectedNames.reduce(
+    return uiStore.selectedNames.reduce(
         (result: CheckedNameMap, name: string) => {
             result[name] = true;
             return result;
@@ -111,19 +111,19 @@ let isChecked = computed(() => {
     );
 });
 
-const activeTab = computed(() => (appStore.isEditing ? 'edit' : 'view'));
+const activeTab = computed(() => (uiStore.isEditing ? 'edit' : 'view'));
 
 const isEditingExistingUser = computed(() => {
-    return appStore.isEditing && !appStore.isJoining;
+    return uiStore.isEditing && !uiStore.isJoining;
 });
 
 const startEditing = (person: string) => {
-    if (appStore.isEditing) return;
+    if (uiStore.isEditing) return;
 
-    appStore.isEditing = true;
-    appStore.isJoining = false;
-    appStore.userName = person;
-    appStore.currentEntry = scheduleStore.entries[person].slice();
+    uiStore.isEditing = true;
+    uiStore.isJoining = false;
+    uiStore.userName = person;
+    uiStore.currentEntry = scheduleStore.entries[person].slice();
     showPersonPopover.value[person] = false;
 };
 
@@ -150,10 +150,10 @@ const beforeChangeTab = (tabName: string) => {
 
 const changeTab = (tabName: string) => {
     if (tabName === 'edit') {
-        appStore.join();
-        appStore.initialiseBlockData(scheduleStore.blockCount);
+        uiStore.join();
+        uiStore.initialiseBlockData(scheduleStore.blockCount);
     } else {
-        appStore.stopEditing();
+        uiStore.stopEditing();
     }
 };
 
@@ -164,13 +164,13 @@ const isEquivalentArray = (a: number[], b: number[]) => {
 };
 
 const hasChanges = computed(() => {
-    if (!appStore.isJoining) {
+    if (!uiStore.isJoining) {
         return !isEquivalentArray(
-            appStore.currentEntry,
-            scheduleStore.entries[appStore.userName]
+            uiStore.currentEntry,
+            scheduleStore.entries[uiStore.userName]
         );
     } else {
-        return !appStore.isInitialData;
+        return !uiStore.isInitialData;
     }
 });
 </script>

@@ -6,11 +6,11 @@
                 <n-input
                     placeholder="Name"
                     v-model:value="name"
-                    :disabled="!appStore.isJoining"
+                    :disabled="!uiStore.isJoining"
                     autofocus
                 />
             </div>
-            <div v-if="appStore.hasSelectedItem">
+            <div v-if="uiStore.hasSelectedItem">
                 <div>
                     <strong>Selection</strong>
                     <n-ellipsis :line-clamp="3" style="width: 100%">
@@ -57,18 +57,18 @@
 import { computed, ref } from 'vue';
 import { Interval } from 'luxon';
 import { NButton, NEllipsis, NInput, NModal, NSpace } from 'naive-ui';
-import { useAppStore } from '@/stores/app';
+import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { formatInterval } from '@/utilities/formatTimes';
 
-const appStore = useAppStore();
+const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const mostSelectedLevel = computed(() => {
-    const selectedLevels = Array.from(appStore.selectedItems).map(
-        (id) => appStore.level(id).level
+    const selectedLevels = Array.from(uiStore.selectedItems).map(
+        (id) => uiStore.level(id).level
     );
     return selectedLevels
         .sort((a, b) => {
@@ -80,18 +80,18 @@ const mostSelectedLevel = computed(() => {
         .pop();
 });
 
-const hasSingleSelectedItem = computed(() => appStore.selectedItems.size === 1);
+const hasSingleSelectedItem = computed(() => uiStore.selectedItems.size === 1);
 
 const selectedLevel = computed(() => {
     if (hasSingleSelectedItem.value) {
-        return appStore.level(appStore.firstSelectedItem).level;
+        return uiStore.level(uiStore.firstSelectedItem).level;
     } else {
         return mostSelectedLevel.value;
     }
 });
 
 const changeLevel = (level: number) => {
-    appStore.changeSelectedLevels(level);
+    uiStore.changeSelectedLevels(level);
 };
 
 const visibleLevels = computed((): AvailabilityLevel[] => {
@@ -99,7 +99,7 @@ const visibleLevels = computed((): AvailabilityLevel[] => {
 });
 
 const selectedIntervals = computed(() => {
-    return Array.from(appStore.selectedItems).map(
+    return Array.from(uiStore.selectedItems).map(
         (id) => scheduleStore.intervals[id]
     );
 });
@@ -110,7 +110,7 @@ const formattedSelectedIntervals = computed(() => {
     );
 });
 
-const name = ref(appStore.userName);
+const name = ref(uiStore.userName);
 
 const showAlert = ref(false);
 const alertTitle = ref();
@@ -124,12 +124,12 @@ const saveChanges = () => {
         return;
     }
 
-    scheduleStore.entries[name.value] = appStore.currentEntry.slice();
+    scheduleStore.entries[name.value] = uiStore.currentEntry.slice();
 
-    if (appStore.isJoining) {
-        appStore.selectedNames.push(name.value);
+    if (uiStore.isJoining) {
+        uiStore.selectedNames.push(name.value);
     }
 
-    appStore.stopEditing();
+    uiStore.stopEditing();
 };
 </script>

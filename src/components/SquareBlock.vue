@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { BlockData } from '@/models/BlockData';
-import { useAppStore } from '@/stores/app';
+import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { useSettingsStore } from '@/stores/settings';
 
@@ -19,18 +19,18 @@ const props = defineProps<{
     size: number;
 }>();
 
-const appStore = useAppStore();
+const uiStore = useUiStore();
 const settingsStore = useSettingsStore();
 const scheduleStore = useScheduleStore();
 
 const data = computed<BlockData>(() => {
-    if (appStore.isEditing) {
+    if (uiStore.isEditing) {
         // TODO: make this less ugly / more clear
         return new BlockData(scheduleStore.intervals[props.id], {
-            '': scheduleStore.scale.levels[appStore.currentEntry[props.id]],
+            '': scheduleStore.scale.levels[uiStore.currentEntry[props.id]],
         });
     } else {
-        return scheduleStore.blockAtIndex(appStore.selectedNames, props.id);
+        return scheduleStore.blockAtIndex(uiStore.selectedNames, props.id);
     }
 });
 
@@ -53,7 +53,7 @@ const background = computed(() => {
 });
 const size = computed(() => props.size + 'px');
 
-const isSelected = computed(() => appStore.selectedItems.has(props.id));
+const isSelected = computed(() => uiStore.selectedItems.has(props.id));
 </script>
 
 <style scoped>
