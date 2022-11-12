@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { light5RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 import { BlockData } from '@/models/BlockData';
+import { getScheduleById } from '@/api/schedules';
 
 export const useScheduleStore = defineStore('schedule', {
     state: () => {
@@ -44,6 +45,10 @@ export const useScheduleStore = defineStore('schedule', {
                 }, {});
 
             return new BlockData(this.intervals[index], entries);
+        },
+
+        async get(id: string) {
+            await getScheduleById(id);
         },
     },
 

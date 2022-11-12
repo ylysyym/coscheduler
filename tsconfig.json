@@ -4,9 +4,12 @@
         "strict": true,
         "noImplicitReturns": true,
         "jsx": "preserve",
+        "module": "es2020",
         "moduleResolution": "node",
         "lib": [
             "es2019",
+            "DOM",
+            "esnext"
         ],
         "target": "es6",
         "baseUrl": ".",
@@ -14,7 +17,11 @@
             "@/*": [
                 "src/*"
             ]
-        }
+        },
+        "types": [
+            "vite/client",
+            "web-bluetooth",
+        ]
     },
     "include": [
         "**/*.ts",
