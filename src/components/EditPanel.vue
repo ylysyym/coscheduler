@@ -58,6 +58,7 @@ import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { formatInterval } from '@/utilities/formatTimes';
+import { updateSchedule } from '@/api/schedules';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
@@ -132,6 +133,9 @@ const fields = ref({
 const saveChanges = () => {
     form.value?.validate().then(() => {
         scheduleStore.entries[fields.value.name] = uiStore.currentEntry.slice();
+        updateSchedule(scheduleStore.id, {
+            [fields.value.name]: uiStore.currentEntry,
+        });
 
         if (uiStore.isJoining) {
             uiStore.selectedNames.push(fields.value.name);

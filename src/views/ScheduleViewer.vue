@@ -16,14 +16,18 @@ import { NDialogProvider, NScrollbar } from 'naive-ui';
 import BlockGrid from '@/components/BlockGrid.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
 
 const props = defineProps<{
     id: string;
 }>();
 
 const scheduleStore = useScheduleStore();
+const uiStore = useUiStore();
 
-scheduleStore.initialiseSchedule(props.id);
+scheduleStore.initialiseSchedule(props.id).then(() => {
+    uiStore.selectedNames = scheduleStore.people;
+});
 </script>
 
 <style scoped>

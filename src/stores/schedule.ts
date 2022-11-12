@@ -8,6 +8,7 @@ import { getScheduleById } from '@/api/schedules';
 export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
+            id: '',
             entries: {} as {
                 [name: string]: number[];
             },
@@ -25,6 +26,7 @@ export const useScheduleStore = defineStore('schedule', {
         async initialiseSchedule(id: string) {
             const schedule = await getScheduleById(id);
 
+            this.id = id;
             this.title = schedule.title;
             this.entries = schedule.entries;
             this.scale = schedule.scale;

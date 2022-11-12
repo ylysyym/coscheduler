@@ -1,6 +1,8 @@
+import { DateTime } from 'luxon';
 import { Schedule } from '@/models/Schedule';
 import { ScheduleParameters } from '@/models/ScheduleParameters';
-import { DateTime } from 'luxon';
+
+// TODO: implement error handling
 
 export const getScheduleById = async (id: string) => {
     const request = await fetch(
@@ -34,6 +36,16 @@ export const createSchedule = async (parameters: ScheduleParameters) => {
     return location?.split('/').pop();
 };
 
-export const updateSchedule = (entries: { [name: string]: number[] }) => {
-    // update schedule
+export const updateSchedule = async (
+    id: string,
+    entries: { [name: string]: number[] }
+) => {
+    const request = await fetch(
+        `${import.meta.env.VITE_API_URL}/schedules/${id}`,
+        {
+            method: 'PATCH',
+            body: JSON.stringify({ entries }),
+        }
+    );
+    const response = await request.json();
 };
