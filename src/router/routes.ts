@@ -3,7 +3,7 @@ import ScheduleCreator from '@/views/ScheduleCreator.vue';
 import SettingsEditor from '@/views/SettingsEditor.vue';
 
 export const routes = [
-    { path: '/', component: ScheduleViewer },
-    { path: '/create', component: ScheduleCreator },
+    { path: '/schedule/:id', component: ScheduleViewer, props: true },
+    { path: '/create', component: ScheduleCreator, alias: '/' },
     { path: '/settings', component: SettingsEditor },
 ];

@@ -17,9 +17,13 @@ import BlockGrid from '@/components/BlockGrid.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import { useScheduleStore } from '@/stores/schedule';
 
+const props = defineProps<{
+    id: string;
+}>();
+
 const scheduleStore = useScheduleStore();
 
-scheduleStore.initialiseSchedule();
+scheduleStore.initialiseSchedule(props.id);
 </script>
 
 <style scoped>

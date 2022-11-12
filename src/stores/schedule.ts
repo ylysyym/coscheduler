@@ -14,7 +14,7 @@ export const useScheduleStore = defineStore('schedule', {
             scale: light5RedGreenScale,
             rowUnit: defaultTimeUnits['1d'],
             blockUnit: defaultTimeUnits['1h'],
-            startTime: {} as DateTime,
+            startTime: DateTime.now(),
             blockCount: 0,
             title: '',
             description: '',
@@ -22,16 +22,8 @@ export const useScheduleStore = defineStore('schedule', {
     },
 
     actions: {
-        initialiseSchedule() {
-            const currentDate = DateTime.now().set({
-                minute: 0,
-                second: 0,
-                millisecond: 0,
-            });
-            this.startTime = currentDate;
-            this.blockCount = 10 * 7 * 24;
-            this.title = 'Basic schedule';
-            this.description = 'This schedule is used for testing purposes.';
+        async initialiseSchedule(id: string) {
+            await getScheduleById(id);
         },
 
         blockAtIndex(names: string[], index: number): BlockData {
