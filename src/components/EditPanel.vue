@@ -107,14 +107,14 @@ const formattedSelectedIntervals = computed(() => {
     );
 });
 
-const rules: FormRules = {
+const rules = ref<FormRules>({
     name: {
         required: true,
         message: 'Please enter a name',
         validator: (rule, value) => {
             if (value.length <= 0) {
                 return false;
-            } else if (value in scheduleStore.entries) {
+            } else if (uiStore.isJoining && value in scheduleStore.entries) {
                 rule.message = 'Name is already in use';
                 return false;
             }
@@ -122,7 +122,7 @@ const rules: FormRules = {
             return true;
         },
     },
-};
+});
 
 const form = ref<InstanceType<typeof NForm>>();
 
