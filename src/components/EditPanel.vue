@@ -2,13 +2,16 @@
     <div>
         <n-space vertical>
             <div>
-                <strong>Name</strong>
-                <n-input
-                    placeholder="Name"
-                    v-model:value="name"
-                    :disabled="!uiStore.isJoining"
-                    autofocus
-                />
+                <n-form :rules="rules" :model="fields" ref="form">
+                    <n-form-item label="Name" path="name">
+                        <n-input
+                            placeholder="Name"
+                            v-model:value="fields.name"
+                            :disabled="!uiStore.isJoining"
+                            autofocus
+                        />
+                    </n-form-item>
+                </n-form>
             </div>
             <div v-if="uiStore.hasSelectedItem">
                 <div>
@@ -43,20 +46,13 @@
             <n-button type="primary" @click="saveChanges">Save</n-button>
         </n-space>
     </div>
-    <n-modal
-        v-model:show="showAlert"
-        :title="alertTitle"
-        :content="alertMessage"
-        type="error"
-        preset="dialog"
-        positive-text="OK"
-    />
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Interval } from 'luxon';
-import { NButton, NEllipsis, NInput, NModal, NSpace } from 'naive-ui';
+import { NButton, NEllipsis, NForm, NFormItem, NInput, NSpace } from 'naive-ui';
+import type { FormRules } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
@@ -110,26 +106,38 @@ const formattedSelectedIntervals = computed(() => {
     );
 });
 
-const name = ref(uiStore.userName);
+const rules: FormRules = {
+    name: {
+        required: true,
+        message: 'Please enter a name',
+        validator: (rule, value) => {
+            if (value.length <= 0) {
+                return false;
+            } else if (value in scheduleStore.entries) {
+                rule.message = 'Name is already in use';
+                return false;
+            }
 
-const showAlert = ref(false);
-const alertTitle = ref();
-const alertMessage = ref();
+            return true;
+        },
+    },
+};
+
+const form = ref<InstanceType<typeof NForm>>();
+
+const fields = ref({
+    name: uiStore.userName,
+});
 
 const saveChanges = () => {
-    if (name.value.length <= 0) {
-        alertMessage.value = "Name can't be empty";
-        alertTitle.value = 'Invalid name';
-        showAlert.value = true;
-        return;
-    }
+    form.value?.validate().then(() => {
+        scheduleStore.entries[fields.value.name] = uiStore.currentEntry.slice();
 
-    scheduleStore.entries[name.value] = uiStore.currentEntry.slice();
+        if (uiStore.isJoining) {
+            uiStore.selectedNames.push(fields.value.name);
+        }
 
-    if (uiStore.isJoining) {
-        uiStore.selectedNames.push(name.value);
-    }
-
-    uiStore.stopEditing();
+        uiStore.stopEditing();
+    });
 };
 </script>

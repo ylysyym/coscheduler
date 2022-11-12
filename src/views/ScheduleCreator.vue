@@ -69,7 +69,9 @@ const rules: FormRules = {
     title: {
         required: true,
         validator: (rule, value) => {
-            if (value.length > 240) {
+            if (value.length <= 0) {
+                return false;
+            } else if (value.length > 240) {
                 rule.message = `Title can have a maximum of 240 characters (currently ${value.length})`;
                 return false;
             }
