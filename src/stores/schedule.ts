@@ -13,8 +13,8 @@ export const useScheduleStore = defineStore('schedule', {
             },
             scale: light5RedGreenScale,
             rowUnit: defaultTimeUnits['1d'],
-            blockUnit: defaultTimeUnits['1h'],
             startTime: DateTime.now(),
+            blockDuration: 60,
             blockCount: 0,
             title: '',
             description: '',
@@ -23,7 +23,14 @@ export const useScheduleStore = defineStore('schedule', {
 
     actions: {
         async initialiseSchedule(id: string) {
-            await getScheduleById(id);
+            const schedule = await getScheduleById(id);
+
+            this.title = schedule.title;
+            this.entries = schedule.entries;
+            this.scale = schedule.scale;
+            this.blockDuration = schedule.blockDuration;
+            this.startTime = schedule.startTime;
+            this.blockCount = schedule.blockCount;
         },
 
         blockAtIndex(names: string[], index: number): BlockData {
@@ -52,7 +59,7 @@ export const useScheduleStore = defineStore('schedule', {
         intervals(): Interval[] {
             const result = [];
             const intervalDuration = Duration.fromObject({
-                minutes: this.blockUnit.minutes,
+                minutes: this.blockDuration,
             });
 
             let intervalStart = this.startTime;
@@ -71,7 +78,7 @@ export const useScheduleStore = defineStore('schedule', {
 
         endTime(): DateTime {
             return this.startTime.plus({
-                minutes: this.blockUnit.minutes * this.blockCount,
+                minutes: this.blockDuration * this.blockCount,
             });
         },
     },

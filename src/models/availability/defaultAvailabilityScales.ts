@@ -7,6 +7,7 @@ import {
 import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
 
 export const light3RedGreenScale: AvailabilityScale = {
+    title: 'Red-green 3',
     levels: [
         {
             level: 0,
@@ -33,6 +34,7 @@ export const light3RedGreenScale: AvailabilityScale = {
 };
 
 export const light5RedGreenScale: AvailabilityScale = {
+    title: 'Red-green 5',
     levels: [
         {
             level: 0,

@@ -71,14 +71,14 @@ const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const columns = computed(() => {
-    return scheduleStore.rowUnit.minutes / scheduleStore.blockUnit.minutes;
+    return scheduleStore.rowUnit.minutes / scheduleStore.blockDuration;
 });
 
 const grid = computed(() => {
     return generateGrid(
         scheduleStore.startTime,
         scheduleStore.endTime,
-        scheduleStore.blockUnit.minutes,
+        scheduleStore.blockDuration,
         TimeBreakpoint.Day,
         columns.value
     );
@@ -110,7 +110,7 @@ const columnLabels = computed(() => {
     return getColumnLabels(
         TimeBreakpoint.Day,
         columns.value,
-        scheduleStore.blockUnit.minutes
+        scheduleStore.blockDuration
     );
 });
 
@@ -119,7 +119,7 @@ const rowLabels = computed(() => {
         TimeBreakpoint.Day,
         scheduleStore.startTime,
         columns.value,
-        scheduleStore.blockUnit.minutes,
+        scheduleStore.blockDuration,
         grid.value.length * grid.value[0].length
     );
 });
