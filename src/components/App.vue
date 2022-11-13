@@ -9,6 +9,10 @@
 
 <script setup lang="ts">
 import NavigationMenu from '@/components/NavigationMenu.vue';
+import { useSettingsStore } from '@/stores/settings';
+
+const store = useSettingsStore();
+store.initialise();
 </script>
 
 <style scoped>
