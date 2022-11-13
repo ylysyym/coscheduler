@@ -11,7 +11,11 @@ export const getScheduleById = async (id: string) => {
             method: 'GET',
         }
     );
-    const response = await request.json();
+    const response = await request.json().catch((err) => {
+        if (!request.ok) {
+            throw `${request.status}: ${request.statusText}`;
+        }
+    });
 
     const schedule: Schedule = {
         title: response.title,
