@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <span class="schedule-title">{{ scheduleStore.title }}</span>
+        <ShareWidget />
         <n-tabs
             size="large"
             type="segment"
@@ -23,12 +24,13 @@
 </template>
 
 <script setup lang="ts">
-import { NTabs, NTabPane, useDialog } from 'naive-ui';
 import { computed } from 'vue';
+import { NTabs, NTabPane, useDialog } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import EditPanel from '@/components/EditPanel.vue';
 import ViewPanel from '@/components/ViewPanel.vue';
+import ShareWidget from './ShareWidget.vue';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
