@@ -1,35 +1,43 @@
 <template>
     <div class="container">
-        <h1>Create Schedule</h1>
-        <n-form :rules="rules" :model="fields" ref="form">
-            <n-form-item label="Title" path="title">
-                <n-input placeholder="Title" v-model:value="fields.title" />
-            </n-form-item>
-            <n-form-item label="Unit of time" path="timeUnit">
-                <n-select
-                    :options="schemas"
-                    v-model:value="fields.timeUnit"
-                    :on-update:value="onSchemaSelected"
-                />
-            </n-form-item>
-            <n-form-item label="Time range" path="timeRange">
-                <n-date-picker
-                    :type="datePickerType"
-                    v-model:value="fields.timeRange"
-                    :time-picker-props="timePickerProps"
-                    update-value-on-close
-                    :actions="null"
-                    :format="dateFormat"
-                />
-            </n-form-item>
-            <n-form-item label="Availability options" path="scale">
-                <n-select
-                    :options="scaleOptions"
-                    v-model:value="fields.scale"
-                />
-            </n-form-item>
-            <n-button type="primary" @click="create">Create</n-button>
-        </n-form>
+        <n-scrollbar>
+            <div class="inner-container">
+                <h1>Create Schedule</h1>
+                <n-form :rules="rules" :model="fields" ref="form">
+                    <n-form-item label="Title" path="title">
+                        <n-input
+                            placeholder="Title"
+                            v-model:value="fields.title"
+                        />
+                    </n-form-item>
+                    <n-form-item label="Unit of time" path="timeUnit">
+                        <n-select
+                            :options="schemas"
+                            v-model:value="fields.timeUnit"
+                            :on-update:value="onSchemaSelected"
+                        />
+                    </n-form-item>
+                    <n-form-item label="Time range" path="timeRange">
+                        <n-date-picker
+                            panel
+                            :type="datePickerType"
+                            v-model:value="fields.timeRange"
+                            :time-picker-props="timePickerProps"
+                            update-value-on-close
+                            :actions="null"
+                            :format="dateFormat"
+                        />
+                    </n-form-item>
+                    <n-form-item label="Availability options" path="scale">
+                        <n-select
+                            :options="scaleOptions"
+                            v-model:value="fields.scale"
+                        />
+                    </n-form-item>
+                    <n-button type="primary" @click="create">Create</n-button>
+                </n-form>
+            </div>
+        </n-scrollbar>
     </div>
 </template>
 
@@ -41,6 +49,7 @@ import {
     NForm,
     NFormItem,
     NInput,
+    NScrollbar,
     NSelect,
     useMessage,
 } from 'naive-ui';
@@ -190,7 +199,11 @@ const create = () => {
 
 <style scoped>
 .container {
+    height: calc(100% - 40px);
+}
+.inner-container {
     max-width: 900px;
     margin: 0 auto;
+    padding: 12px;
 }
 </style>
