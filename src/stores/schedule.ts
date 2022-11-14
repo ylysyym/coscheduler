@@ -19,20 +19,28 @@ export const useScheduleStore = defineStore('schedule', {
             blockCount: 0,
             title: '',
             description: '',
+            error: '',
+            hasError: false,
         };
     },
 
     actions: {
         async initialiseSchedule(id: string) {
-            const schedule = await getScheduleById(id);
-
-            this.id = id;
-            this.title = schedule.title;
-            this.entries = schedule.entries;
-            this.scale = schedule.scale;
-            this.blockDuration = schedule.blockDuration;
-            this.startTime = schedule.startTime;
-            this.blockCount = schedule.blockCount;
+            this.hasError = false;
+            await getScheduleById(id)
+                .then((schedule) => {
+                    this.id = id;
+                    this.title = schedule.title;
+                    this.entries = schedule.entries;
+                    this.scale = schedule.scale;
+                    this.blockDuration = schedule.blockDuration;
+                    this.startTime = schedule.startTime;
+                    this.blockCount = schedule.blockCount;
+                })
+                .catch((err) => {
+                    this.hasError = true;
+                    this.error = err;
+                });
         },
 
         blockAtIndex(names: string[], index: number): BlockData {

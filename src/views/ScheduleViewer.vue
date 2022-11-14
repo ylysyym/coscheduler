@@ -1,5 +1,5 @@
 <template>
-    <template v-if="isValidId">
+    <template v-if="!scheduleStore.hasError">
         <div class="control-panel">
             <n-dialog-provider>
                 <ControlPanel />
@@ -11,11 +11,10 @@
             </n-scrollbar>
         </div>
     </template>
-    <ErrorDisplay class="error-display" :error="errorMessage" v-else />
+    <ErrorDisplay class="error-display" v-else />
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { NDialogProvider, NScrollbar } from 'naive-ui';
 import BlockGrid from '@/components/BlockGrid.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
@@ -30,18 +29,9 @@ const props = defineProps<{
 const scheduleStore = useScheduleStore();
 const uiStore = useUiStore();
 
-const isValidId = ref(true);
-const errorMessage = ref();
-
-scheduleStore
-    .initialiseSchedule(props.id)
-    .then(() => {
-        uiStore.selectedNames = scheduleStore.people;
-    })
-    .catch((err) => {
-        errorMessage.value = err;
-        isValidId.value = false;
-    });
+scheduleStore.initialiseSchedule(props.id).then(() => {
+    uiStore.selectedNames = scheduleStore.people;
+});
 </script>
 
 <style scoped>
