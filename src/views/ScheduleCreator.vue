@@ -42,6 +42,7 @@ import {
     NFormItem,
     NInput,
     NSelect,
+    useMessage,
 } from 'naive-ui';
 import type { FormRules } from 'naive-ui';
 import { DateTime } from 'luxon';
@@ -55,6 +56,7 @@ import { createSchedule } from '@/api/schedules';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const message = useMessage();
 
 const form = ref<InstanceType<typeof NForm>>();
 
@@ -162,7 +164,7 @@ const create = () => {
         .then(() => {
             if (fields.timeRange === null) return;
 
-            let params: ScheduleParameters = {
+            const params: ScheduleParameters = {
                 title: fields.title,
                 blockCount: blockCount.value,
                 blockDuration: fields.timeUnit,
@@ -170,12 +172,18 @@ const create = () => {
                 scale: availabilityOptions[fields.scale],
             };
 
-            return createSchedule(params);
+            return createSchedule(params)
+                .then((id: string) => {
+                    router.push('/schedule/' + id);
+                })
+                .catch(() => {
+                    message.error(
+                        'An error occured while creating your schedule'
+                    );
+                });
         })
-        .then((id: string | undefined) => {
-            if (id !== undefined) {
-                router.push('/schedule/' + id);
-            }
+        .catch(() => {
+            // validation failed, do nothing
         });
 };
 </script>

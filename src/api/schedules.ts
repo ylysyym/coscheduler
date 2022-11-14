@@ -5,51 +5,63 @@ import { ScheduleParameters } from '@/models/ScheduleParameters';
 // TODO: implement error handling
 
 export const getScheduleById = async (id: string) => {
-    const request = await fetch(
+    const response = await fetch(
         `${import.meta.env.VITE_API_URL}/schedules/${id}`,
         {
             method: 'GET',
         }
     );
-    const response = await request.json().catch(() => {
-        if (!request.ok) {
-            throw `${request.status}: ${request.statusText}`;
-        }
-    });
+
+    if (!response.ok) {
+        throw new Error(`${response.status}: ${response.statusText}`);
+    }
+
+    const json = await response.json();
 
     const schedule: Schedule = {
-        title: response.title,
-        startTime: DateTime.fromISO(response.startTime),
-        blockCount: response.blockCount,
-        blockDuration: response.blockDuration,
-        scale: response.scale,
-        entries: response.entries,
+        title: json.title,
+        startTime: DateTime.fromISO(json.startTime),
+        blockCount: json.blockCount,
+        blockDuration: json.blockDuration,
+        scale: json.scale,
+        entries: json.entries,
     };
 
     return schedule;
 };
 
 export const createSchedule = async (parameters: ScheduleParameters) => {
-    const request = await fetch(`${import.meta.env.VITE_API_URL}/schedules`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/schedules`, {
         method: 'POST',
         body: JSON.stringify(parameters),
     });
-    const response = await request.json();
-    const location = request.headers.get('Location');
 
-    return location?.split('/').pop();
+    if (!response.ok) {
+        throw new Error(`${response.status}: ${response.statusText}`);
+    }
+
+    const location = response.headers.get('Location');
+
+    if (location === null) {
+        throw new Error('Location is null');
+    }
+
+    return location.split('/').pop() || '';
 };
 
 export const updateSchedule = async (
     id: string,
     entries: { [name: string]: number[] }
 ) => {
-    const request = await fetch(
+    const response = await fetch(
         `${import.meta.env.VITE_API_URL}/schedules/${id}`,
         {
             method: 'PATCH',
             body: JSON.stringify({ entries }),
         }
     );
-    const response = await request.json();
+
+    if (!response.ok) {
+        throw new Error(`${response.status}: ${response.statusText}`);
+    }
 };

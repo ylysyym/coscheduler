@@ -39,7 +39,7 @@ export const useScheduleStore = defineStore('schedule', {
                 })
                 .catch((err) => {
                     this.hasError = true;
-                    this.error = err;
+                    this.error = err.message;
                 });
         },
 

@@ -51,7 +51,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Interval } from 'luxon';
-import { NButton, NEllipsis, NForm, NFormItem, NInput, NSpace } from 'naive-ui';
+import {
+    NButton,
+    NEllipsis,
+    NForm,
+    NFormItem,
+    NInput,
+    NSpace,
+    useMessage,
+} from 'naive-ui';
 import type { FormRules } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
@@ -62,6 +70,8 @@ import { updateSchedule } from '@/api/schedules';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
+
+const message = useMessage();
 
 const mostSelectedLevel = computed(() => {
     const selectedLevels = Array.from(uiStore.selectedItems).map(
@@ -135,13 +145,17 @@ const saveChanges = () => {
         scheduleStore.entries[fields.value.name] = uiStore.currentEntry.slice();
         updateSchedule(scheduleStore.id, {
             [fields.value.name]: uiStore.currentEntry,
-        });
+        })
+            .then(() => {
+                if (uiStore.isJoining) {
+                    uiStore.selectedNames.push(fields.value.name);
+                }
 
-        if (uiStore.isJoining) {
-            uiStore.selectedNames.push(fields.value.name);
-        }
-
-        uiStore.stopEditing();
+                uiStore.stopEditing();
+            })
+            .catch(() => {
+                message.error('An error occured while saving your changes');
+            });
     });
 };
 </script>

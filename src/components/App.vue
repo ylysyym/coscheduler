@@ -3,11 +3,14 @@
         <div class="menu">
             <NavigationMenu />
         </div>
-        <RouterView />
+        <n-message-provider>
+            <RouterView />
+        </n-message-provider>
     </div>
 </template>
 
 <script setup lang="ts">
+import { NMessageProvider } from 'naive-ui';
 import NavigationMenu from '@/components/NavigationMenu.vue';
 import { useSettingsStore } from '@/stores/settings';
 
