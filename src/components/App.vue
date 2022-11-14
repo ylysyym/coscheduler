@@ -1,8 +1,6 @@
 <template>
     <div class="root">
-        <div class="menu">
-            <NavigationMenu />
-        </div>
+        <NavigationMenu />
         <n-message-provider>
             <RouterView />
         </n-message-provider>
@@ -22,9 +20,5 @@ store.initialise();
 .root {
     height: 100vh;
     overflow: hidden;
-}
-
-.menu {
-    height: 40px;
 }
 </style>

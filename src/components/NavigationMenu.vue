@@ -1,8 +1,12 @@
 <template>
-    <n-space size="large">
-        <n-popover trigger="click" :show-arrow="false" raw>
+    <n-space class="container">
+        <n-popover ref="popover" trigger="click" :show-arrow="false" raw>
             <template #trigger>
-                <n-button color="#672bbb" icon-placement="right">
+                <n-button
+                    color="#672bbb"
+                    icon-placement="right"
+                    class="menu-button"
+                >
                     <template #icon>
                         <n-icon>
                             <svg
@@ -32,7 +36,7 @@
                         </div>
                     </div>
                 </n-list-item>
-                <n-list-item class="compact-list-item">
+                <n-list-item class="compact-list-item" @click="closeMenu">
                     <router-link class="menu-item" to="/about">
                         About
                     </router-link>
@@ -42,25 +46,27 @@
                 </n-list-item>
             </n-list>
         </n-popover>
-        <n-button type="primary" @click="$router.push('/create')">
-            <template #icon>
-                <n-icon>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                        viewBox="0 0 16 16"
-                    >
-                        <g fill="none">
-                            <path
-                                d="M8.5 2.75a.75.75 0 0 0-1.5 0V7H2.75a.75.75 0 0 0 0 1.5H7v4.25a.75.75 0 0 0 1.5 0V8.5h4.25a.75.75 0 0 0 0-1.5H8.5V2.75z"
-                                fill="currentColor"
-                            ></path>
-                        </g>
-                    </svg>
-                </n-icon>
-            </template>
-            Create
-        </n-button>
+        <router-link to="/create" v-slot="{ href, navigate }">
+            <n-button type="primary" @click="navigate" :href="href">
+                <template #icon>
+                    <n-icon>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 16 16"
+                        >
+                            <g fill="none">
+                                <path
+                                    d="M8.5 2.75a.75.75 0 0 0-1.5 0V7H2.75a.75.75 0 0 0 0 1.5H7v4.25a.75.75 0 0 0 1.5 0V8.5h4.25a.75.75 0 0 0 0-1.5H8.5V2.75z"
+                                    fill="currentColor"
+                                ></path>
+                            </g>
+                        </svg>
+                    </n-icon>
+                </template>
+                Create schedule
+            </n-button>
+        </router-link>
     </n-space>
 </template>
 
@@ -74,14 +80,23 @@ import {
     NSelect,
     NSpace,
 } from 'naive-ui';
+import { ref } from 'vue';
+
+const popover = ref<InstanceType<typeof NPopover>>();
+
+const closeMenu = () => {
+    popover.value?.setShow(false);
+};
 </script>
 
 <style scoped>
-.logo {
-    background: #672bbb;
-    color: #fff;
-    display: inline-block;
-    padding: 8px;
+.container {
+    height: 32px;
+    padding: 4px;
+}
+
+.menu-button {
+    border-radius: 0;
 }
 
 .compact-list-item {
@@ -101,7 +116,7 @@ import {
 }
 
 .menu-item:hover {
-    background: #8656ad;
+    background: rgba(127, 77, 198, 1);
     color: #fff;
 }
 
@@ -117,5 +132,9 @@ import {
 .sub-item {
     display: inline-flex;
     flex-grow: 1;
+}
+
+a {
+    text-decoration: none;
 }
 </style>
