@@ -24,7 +24,7 @@
                         <SquareBlock
                             v-if="index >= 0"
                             class="block-wrapper selectable"
-                            @click="selectBlock(index, $event)"
+                            @click.self="selectBlock(index, $event)"
                             :size="blockSize"
                             :data-key="index"
                             :id="index"
