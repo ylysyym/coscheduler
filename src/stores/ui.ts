@@ -58,6 +58,7 @@ export const useUiStore = defineStore('ui', {
             this.isEditing = false;
             this.isJoining = false;
             this.userName = '';
+            this.changeTab('view');
         },
 
         clearSelection() {
