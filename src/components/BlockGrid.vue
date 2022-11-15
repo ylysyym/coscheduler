@@ -16,11 +16,11 @@
                 >
                     {{ label }}
                 </div>
-                <template v-for="(arr, row) in grid" :key="row">
+                <template v-for="(row, rowIndex) in grid" :key="rowIndex">
                     <div class="block-wrapper labels">
-                        {{ rowLabels[row] }}
+                        {{ rowLabels[rowIndex] }}
                     </div>
-                    <template v-for="(index, col) in arr" :key="col">
+                    <template v-for="index in row" :key="index">
                         <SquareBlock
                             v-if="index >= 0"
                             class="block-wrapper selectable"
