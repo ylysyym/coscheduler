@@ -47,34 +47,37 @@ import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import {
+    columnCount,
     generateGrid,
     getColumnLabels,
     getRowLabels,
-    TimeBreakpoint,
 } from '@/utilities/generateGrid';
 
-const container = ref(null);
-const popover = ref<InstanceType<typeof BlockDetailPopover>>();
+const uiStore = useUiStore();
+const scheduleStore = useScheduleStore();
+
+const container = ref();
 
 const { width } = useElementSize(container);
+
+const popover = ref<InstanceType<typeof BlockDetailPopover>>();
 
 const blockSize = computed(() => {
     return Math.max(Math.floor(width.value / (columns.value + 5)), 15);
 });
 
-const uiStore = useUiStore();
-const scheduleStore = useScheduleStore();
+const rowDuration = computed(() => columnCount(scheduleStore.blockDuration));
 
 const columns = computed(() => {
-    return scheduleStore.rowUnit.minutes / scheduleStore.blockDuration;
+    return rowDuration.value / scheduleStore.blockDuration;
 });
 
 const grid = computed(() => {
     return generateGrid(
         scheduleStore.startTime,
-        scheduleStore.endTime,
+        scheduleStore.blockCount,
         scheduleStore.blockDuration,
-        TimeBreakpoint.Day,
+        rowDuration.value,
         columns.value
     );
 });
@@ -103,7 +106,7 @@ const onMove = ({
 
 const columnLabels = computed(() => {
     return getColumnLabels(
-        TimeBreakpoint.Day,
+        rowDuration.value,
         columns.value,
         scheduleStore.blockDuration
     );
@@ -111,7 +114,7 @@ const columnLabels = computed(() => {
 
 const rowLabels = computed(() => {
     return getRowLabels(
-        TimeBreakpoint.Day,
+        rowDuration.value,
         scheduleStore.startTime,
         columns.value,
         scheduleStore.blockDuration,

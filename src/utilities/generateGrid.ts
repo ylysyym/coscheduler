@@ -1,33 +1,31 @@
 import { DateTime } from 'luxon';
 
-export enum TimeBreakpoint {
-    // what each row on the grid represents
-    None,
-    Hour,
-    Day,
-    Week,
-    Month,
-}
-
 export type GridIndexMap = number[][];
 
-const isBreakpointStart = (time: DateTime, breakpoint: TimeBreakpoint) => {
-    switch (breakpoint) {
-        case TimeBreakpoint.Hour:
-            return time.minute === 0;
-        case TimeBreakpoint.Day:
-            return time.hour === 0;
-        case TimeBreakpoint.Week:
-            return time.weekday === 1;
-        case TimeBreakpoint.Month:
-            return time.day === 1;
-        default:
-            return true;
+const isFirstColumn = (time: DateTime, rowDuration: number) => {
+    if (rowDuration <= 60) {
+        return time.minute === 0;
+    } else if (rowDuration <= 24 * 60) {
+        return time.hour === 0;
+    } else if (rowDuration <= 7 * 24 * 60) {
+        return time.weekday === 1;
+    }
+
+    return true;
+};
+
+export const columnCount = (minutes: number) => {
+    if (minutes < 60) {
+        return 60;
+    } else if (minutes < 12 * 60) {
+        return 24 * 60;
+    } else {
+        return 7 * 24 * 60;
     }
 };
 
 export const getColumnLabels = (
-    breakpoint: TimeBreakpoint,
+    rowDuration: number,
     cols: number,
     interval: number
 ): string[] => {
@@ -35,14 +33,18 @@ export const getColumnLabels = (
     let startTime = DateTime.now().set({
         hour: 0,
         minute: 0,
-        day: 1,
+        weekday: 1,
     });
+    let format = '';
+    if (rowDuration <= 60) {
+        format = ':mm';
+    } else if (rowDuration <= 24 * 60) {
+        format = 'HH';
+    } else {
+        format = 'EEE';
+    }
     for (let i = 0; i < cols; i++) {
-        if (breakpoint === TimeBreakpoint.Hour) {
-            result.push(startTime.toFormat(':mm'));
-        } else if (breakpoint === TimeBreakpoint.Day) {
-            result.push(startTime.toFormat('HH'));
-        }
+        result.push(startTime.toFormat(format));
         startTime = startTime.plus({
             minutes: interval,
         });
@@ -52,18 +54,26 @@ export const getColumnLabels = (
 };
 
 export const getRowLabels = (
-    breakpoint: TimeBreakpoint,
+    rowDuration: number,
     start: DateTime,
     cols: number,
     interval: number,
     blocks: number
 ): string[] => {
     const result: string[] = [];
+    let format = '';
+    if (rowDuration <= 60) {
+        format = 'HH';
+    } else if (rowDuration <= 24 * 60) {
+        format = 'LLL dd';
+    } else {
+        format = 'LLL dd';
+        start = start.set({
+            weekday: 1,
+        });
+    }
     for (let i = 0; i < blocks; i += cols) {
-        switch (breakpoint) {
-            case TimeBreakpoint.Day:
-                result.push(start.toFormat('LLL dd'));
-        }
+        result.push(start.toFormat(format));
         start = start.plus({
             minutes: cols * interval,
         });
@@ -74,12 +84,12 @@ export const getRowLabels = (
 
 const getStartOffset = (
     start: DateTime,
-    breakpoint: TimeBreakpoint,
+    rowDuration: number,
     interval: number
 ): number => {
     let offset = 0;
 
-    while (!isBreakpointStart(start, breakpoint)) {
+    while (!isFirstColumn(start, rowDuration)) {
         start = start.minus({
             minutes: interval,
         });
@@ -87,22 +97,6 @@ const getStartOffset = (
     }
 
     return offset;
-};
-
-const getTotalBlocks = (
-    start: DateTime,
-    end: DateTime,
-    interval: number
-): number => {
-    let count = 0;
-    while (start < end) {
-        start = start.plus({
-            minutes: interval,
-        });
-        count++;
-    }
-
-    return count;
 };
 
 const createGrid = (
@@ -132,13 +126,12 @@ const createGrid = (
 
 export const generateGrid = (
     start: DateTime,
-    end: DateTime,
+    blockCount: number,
     interval: number,
-    breakpoint: TimeBreakpoint,
+    rowDuration: number,
     columns: number
 ): GridIndexMap => {
-    const blocks = getTotalBlocks(start, end, interval);
-    const offset = getStartOffset(start, breakpoint, interval);
+    const offset = getStartOffset(start, rowDuration, interval);
 
-    return createGrid(blocks, columns, offset);
+    return createGrid(blockCount, columns, offset);
 };
