@@ -43,6 +43,7 @@
 
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import {
     NButton,
     NDatePicker,
@@ -62,7 +63,6 @@ import {
 } from '@/models/availability/defaultAvailabilityScales';
 import { ScheduleParameters } from '@/models/ScheduleParameters';
 import { createSchedule } from '@/api/schedules';
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const message = useMessage();
@@ -132,14 +132,12 @@ let dateFormat = computed(() =>
 );
 
 const schemas = computed(() => {
-    return Object.values(defaultTimeUnits)
-        .filter((unit) => unit.blockUnit)
-        .map((unit) => {
-            return {
-                label: unit.description,
-                value: unit.minutes,
-            };
-        });
+    return Object.values(defaultTimeUnits).map((unit) => {
+        return {
+            label: unit.description,
+            value: unit.minutes,
+        };
+    });
 });
 
 const blockCount = computed(() => {
@@ -150,10 +148,10 @@ const blockCount = computed(() => {
     );
 });
 
-let availabilityOptions = [light5RedGreenScale, light3RedGreenScale];
+let scales = [light5RedGreenScale, light3RedGreenScale];
 
 let scaleOptions = computed(() => {
-    return availabilityOptions.map((scale, index) => {
+    return scales.map((scale, index) => {
         return {
             label: scale.title,
             value: index,
@@ -178,7 +176,7 @@ const create = () => {
                 blockCount: blockCount.value,
                 blockDuration: fields.timeUnit,
                 startTime: DateTime.fromMillis(fields.timeRange[0]),
-                scale: availabilityOptions[fields.scale],
+                scale: scales[fields.scale],
             };
 
             return createSchedule(params)

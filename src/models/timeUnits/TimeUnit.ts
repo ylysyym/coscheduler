@@ -1,5 +1,4 @@
 export interface TimeUnit {
-    description: string;
-    minutes: number;
-    blockUnit: boolean;
+    readonly description: string;
+    readonly minutes: number;
 }

@@ -1,10 +1,9 @@
-import {
-    BUSY_COLOR,
-    NEUTRAL_COLOR,
-    AVAILABLE_COLOR,
-    UNKNOWN_COLOR,
-} from '@/models/availability/colors';
 import { AvailabilityScale } from '@/models/availability/AvailabilityScale';
+
+const NEUTRAL_COLOR = '#ffeb3b';
+const BUSY_COLOR = '#ff3d00';
+const AVAILABLE_COLOR = '#64dd17';
+const UNKNOWN_COLOR = '#ddd';
 
 export const light3RedGreenScale: AvailabilityScale = {
     title: 'Red-green 3',

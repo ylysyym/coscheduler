@@ -12,17 +12,17 @@
         v-if="data !== undefined"
     >
         <n-space vertical>
-            <strong>{{ formatInterval(data?.interval) }}</strong>
-            <n-space v-for="person in Object.keys(data?.entries)" :key="person">
+            <strong>{{ formatInterval(data.interval) }}</strong>
+            <n-space v-for="person in Object.keys(data.entries)" :key="person">
                 {{ person }}
                 <n-tag
                     size="small"
                     :color="{
-                        color: data?.entries[person].color,
-                        textColor: readableColor(data?.entries[person].color),
+                        color: data.entries[person].color,
+                        textColor: readableColor(data.entries[person].color),
                     }"
                 >
-                    {{ data?.entries[person].label }}
+                    {{ data.entries[person].label }}
                 </n-tag>
             </n-space>
         </n-space>
@@ -43,7 +43,7 @@ const scheduleStore = useScheduleStore();
 
 const parent = ref<HTMLElement>();
 
-const data = ref<BlockData | undefined>();
+const data = ref<BlockData>();
 
 const isVisible = ref(false);
 
