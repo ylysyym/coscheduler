@@ -82,6 +82,7 @@ const startEditing = (person: string) => {
     uiStore.userName = person;
     uiStore.currentEntry = scheduleStore.entries[person].slice();
     showPersonPopover.value[person] = false;
+    uiStore.selectedTab = 'edit';
 };
 </script>
 

@@ -93,6 +93,7 @@ const closeMenu = () => {
 .container {
     height: 32px;
     padding: 4px;
+    width: 400px;
 }
 
 .menu-button {

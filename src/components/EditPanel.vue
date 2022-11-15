@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="edit-container">
         <n-space vertical>
             <div>
                 <n-form :rules="rules" :model="fields" ref="form">

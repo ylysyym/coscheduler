@@ -1,50 +1,54 @@
 <template>
-    <div class="container">
-        <span class="schedule-title">{{ scheduleStore.title }}</span>
-        <ShareWidget />
-        <n-tabs
-            size="large"
-            type="segment"
-            @update:value="changeTab"
-            @before-leave="beforeChangeTab"
-            :value="activeTab"
-            default-value="view"
-        >
-            <n-tab-pane name="view" tab="View">
-                <ViewPanel />
-            </n-tab-pane>
-            <n-tab-pane
-                name="edit"
-                :tab="isEditingExistingUser ? 'Edit' : 'Join'"
+    <div class="control-container">
+        <div>
+            <n-tabs
+                type="segment"
+                @update:value="changeTab"
+                @before-leave="beforeChangeTab"
+                :value="uiStore.selectedTab"
+                default-value="view"
             >
-                <EditPanel />
-            </n-tab-pane>
-        </n-tabs>
+                <n-tab name="view">View</n-tab>
+                <n-tab name="edit">
+                    {{ editTabLabel }}
+                </n-tab>
+                <n-tab name="share">Share</n-tab>
+            </n-tabs>
+        </div>
+        <n-scrollbar>
+            <div class="tab-pane">
+                <ViewPanel v-if="uiStore.selectedTab === 'view'" />
+                <ShareWidget v-else-if="uiStore.selectedTab === 'share'" />
+                <EditPanel v-else-if="uiStore.selectedTab === 'edit'" />
+            </div>
+        </n-scrollbar>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { NTabs, NTabPane, useDialog } from 'naive-ui';
+import { NScrollbar, NTab, NTabs, useDialog } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import EditPanel from '@/components/EditPanel.vue';
 import ViewPanel from '@/components/ViewPanel.vue';
-import ShareWidget from './ShareWidget.vue';
+import ShareWidget from '@/components/ShareWidget.vue';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const dialog = useDialog();
 
-const activeTab = computed(() => (uiStore.isEditing ? 'edit' : 'view'));
-
 const isEditingExistingUser = computed(() => {
     return uiStore.isEditing && !uiStore.isJoining;
 });
 
-const beforeChangeTab = (tabName: string) => {
-    if (tabName === 'view') {
+const editTabLabel = computed(() => {
+    return isEditingExistingUser.value ? 'Edit' : 'Join';
+});
+
+const beforeChangeTab = (newTabName: string, oldTabName: string) => {
+    if (oldTabName === 'edit') {
         if (hasChanges.value) {
             return new Promise<boolean>((resolve) => {
                 dialog.warning({
@@ -68,9 +72,11 @@ const changeTab = (tabName: string) => {
     if (tabName === 'edit') {
         uiStore.join();
         uiStore.initialiseBlockData(scheduleStore.blockCount);
-    } else {
+    } else if (uiStore.isEditing) {
         uiStore.stopEditing();
     }
+
+    uiStore.changeTab(tabName);
 };
 
 const isEquivalentArray = (a: number[], b: number[]) => {
@@ -92,12 +98,13 @@ const hasChanges = computed(() => {
 </script>
 
 <style scoped>
-.container {
-    padding: 8px;
+.control-container {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
-.schedule-title {
-    font-size: 1.6em;
-    font-weight: bold;
+.tab-pane {
+    padding: 8px;
 }
 </style>

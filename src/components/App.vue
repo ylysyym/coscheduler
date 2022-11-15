@@ -1,14 +1,18 @@
 <template>
     <div class="root">
         <NavigationMenu />
-        <n-message-provider>
-            <RouterView />
-        </n-message-provider>
+        <div class="app-container">
+            <n-message-provider>
+                <n-dialog-provider>
+                    <RouterView />
+                </n-dialog-provider>
+            </n-message-provider>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { NMessageProvider } from 'naive-ui';
+import { NDialogProvider, NMessageProvider } from 'naive-ui';
 import NavigationMenu from '@/components/NavigationMenu.vue';
 import { useSettingsStore } from '@/stores/settings';
 
@@ -20,5 +24,9 @@ store.initialise();
 .root {
     height: 100vh;
     overflow: hidden;
+}
+
+.app-container {
+    height: calc(100% - 40px);
 }
 </style>

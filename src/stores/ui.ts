@@ -13,6 +13,7 @@ export const useUiStore = defineStore('ui', {
             selectedNames: [] as string[],
             userName: '',
             currentEntry: [] as number[],
+            selectedTab: 'view',
         };
     },
 
@@ -73,6 +74,10 @@ export const useUiStore = defineStore('ui', {
 
         removeSelection(id: number) {
             this.selectedItems.delete(id);
+        },
+
+        changeTab(tabName: string) {
+            this.selectedTab = tabName;
         },
     },
 

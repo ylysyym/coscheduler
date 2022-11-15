@@ -1,7 +1,6 @@
 <template>
     <div class="share-widget">
         <n-input-group>
-            <n-input-group-label>Share</n-input-group-label>
             <n-input ref="input" :value="shareLink" @click="select" />
             <n-button @click="copy">Copy</n-button>
         </n-input-group>
@@ -10,7 +9,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { NButton, NInput, NInputGroup, NInputGroupLabel } from 'naive-ui';
+import { NButton, NInput, NInputGroup } from 'naive-ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { useClipboard } from '@vueuse/core';
 
@@ -32,9 +31,3 @@ const copy = () => {
     clipboard.copy(shareLink.value);
 };
 </script>
-
-<style scoped>
-.share-widget {
-    margin: 8px 0;
-}
-</style>
