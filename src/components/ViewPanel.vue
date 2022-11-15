@@ -1,6 +1,6 @@
 <template>
-    <h3 v-if="scheduleStore.people.length > 0">People</h3>
-    <span v-else>There's no one here!</span>
+    <span class="people-header">People</span>
+    <span v-if="scheduleStore.people.length <= 0">There's no one here!</span>
     <n-space :vertical="!isSmallScreen">
         <n-checkbox-group v-model:value="uiStore.selectedNames">
             <n-space :vertical="!isSmallScreen">
@@ -87,6 +87,12 @@ const startEditing = (person: string) => {
 </script>
 
 <style scoped>
+.people-header {
+    display: block;
+    font-weight: bold;
+    margin: 4px;
+}
+
 .struckout {
     text-decoration: line-through;
 }
