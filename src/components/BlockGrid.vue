@@ -56,15 +56,10 @@ import {
 const container = ref(null);
 const popover = ref<InstanceType<typeof BlockDetailPopover>>();
 
-const { width, height } = useElementSize(container);
+const { width } = useElementSize(container);
 
 const blockSize = computed(() => {
-    return Math.max(
-        Math.floor(
-            Math.min(width.value / (columns.value + 5), height.value / 3)
-        ),
-        15
-    );
+    return Math.max(Math.floor(width.value / (columns.value + 5)), 15);
 });
 
 const uiStore = useUiStore();
@@ -136,8 +131,6 @@ const selectBlock = (id: number, e: MouseEvent) => {
 
 <style scoped>
 .container {
-    display: inline-block;
-    height: 100%;
     width: 100%;
 }
 
