@@ -1,43 +1,42 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
-import { light5RedGreenScale } from '@/models/availability/defaultAvailabilityScales';
 import { BlockData } from '@/models/BlockData';
 import { getScheduleById } from '@/api/schedules';
+import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { Schedule } from '@/models/Schedule';
+import { useUiStore } from './ui';
+
+interface ErrorData {
+    hasError: boolean;
+    error: Error;
+}
 
 export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
-            id: '',
-            entries: {} as {
-                [name: string]: number[];
-            },
-            scale: light5RedGreenScale,
-            startTime: DateTime.now(),
-            blockDuration: 60,
-            blockCount: 0,
-            title: '',
-            description: '',
-            error: '',
-            hasError: false,
+            schedules: {} as { [id: string]: Schedule },
+            errors: {} as { [id: string]: ErrorData },
         };
     },
 
     actions: {
         async initialiseSchedule(id: string) {
-            this.hasError = false;
             await getScheduleById(id)
                 .then((schedule) => {
-                    this.id = id;
-                    this.title = schedule.title;
-                    this.entries = schedule.entries;
-                    this.scale = schedule.scale;
-                    this.blockDuration = schedule.blockDuration;
-                    this.startTime = schedule.startTime;
-                    this.blockCount = schedule.blockCount;
+                    this.schedules[id] = {
+                        title: schedule.title,
+                        entries: schedule.entries,
+                        scale: schedule.scale,
+                        blockCount: schedule.blockCount,
+                        blockDuration: schedule.blockDuration,
+                        startTime: schedule.startTime,
+                    };
                 })
                 .catch((err) => {
-                    this.hasError = true;
-                    this.error = err.message;
+                    this.errors[id] = {
+                        hasError: true,
+                        error: err,
+                    };
                 });
         },
 
@@ -47,19 +46,28 @@ export const useScheduleStore = defineStore('schedule', {
                 .reduce((obj, key) => {
                     return {
                         ...obj,
-                        [key]: this.scale.levels[this.entries[key][index]],
+                        [key]: this.levels[this.entries[key][index]],
                     };
                 }, {});
 
             return new BlockData(this.intervals[index], entries);
         },
 
-        async get(id: string) {
-            await getScheduleById(id);
+        updateEntry(name: string, levels: number[]) {
+            this.schedule.entries[name] = levels;
         },
     },
 
     getters: {
+        schedule(): Schedule {
+            const ui = useUiStore();
+            return this.schedules[ui.scheduleId];
+        },
+
+        entries(): { [name: string]: number[] } {
+            return this.schedule.entries;
+        },
+
         people(): string[] {
             return Object.keys(this.entries);
         },
@@ -84,10 +92,41 @@ export const useScheduleStore = defineStore('schedule', {
             return result;
         },
 
+        startTime(): DateTime {
+            return this.schedule.startTime;
+        },
+
         endTime(): DateTime {
             return this.startTime.plus({
                 minutes: this.blockDuration * this.blockCount,
             });
+        },
+
+        levels(): AvailabilityLevel[] {
+            return this.schedule.scale.levels;
+        },
+
+        title(): string {
+            return this.schedule.title;
+        },
+
+        blockCount(): number {
+            return this.schedule.blockCount;
+        },
+
+        blockDuration(): number {
+            return this.schedule.blockDuration;
+        },
+
+        hasError(): boolean {
+            const ui = useUiStore();
+            const errorData = this.errors[ui.scheduleId];
+            return errorData !== undefined && errorData.hasError;
+        },
+
+        error(): Error {
+            const ui = useUiStore();
+            return this.errors[ui.scheduleId]?.error || new Error();
         },
     },
 });

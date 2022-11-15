@@ -18,7 +18,7 @@
             <div class="error-notification">
                 There was an issue viewing the schedule
             </div>
-            <div class="error-message">{{ scheduleStore.error }}</div>
+            <div class="error-message">{{ scheduleStore.error.message }}</div>
             <div class="error-suggestion">
                 Instead, you can try:
                 <n-button type="primary" @click="$router.push('/create')">

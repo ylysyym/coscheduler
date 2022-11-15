@@ -27,7 +27,7 @@ const data = computed<BlockData>(() => {
     if (uiStore.isEditing) {
         // TODO: make this less ugly / more clear
         return new BlockData(scheduleStore.intervals[props.id], {
-            '': scheduleStore.scale.levels[uiStore.currentEntry[props.id]],
+            '': scheduleStore.levels[uiStore.currentEntry[props.id]],
         });
     } else {
         return scheduleStore.blockAtIndex(uiStore.selectedNames, props.id);
@@ -36,7 +36,7 @@ const data = computed<BlockData>(() => {
 
 const background = computed(() => {
     if (Object.keys(data.value.entries).length === 0) {
-        return scheduleStore.scale.levels[0].color;
+        return scheduleStore.levels[0].color;
     }
 
     let result = 'linear-gradient(to ' + settingsStore.orientation;

@@ -14,6 +14,7 @@ export const useUiStore = defineStore('ui', {
             userName: '',
             currentEntry: [] as number[],
             selectedTab: 'view',
+            currentScheduleId: '',
         };
     },
 
@@ -37,15 +38,15 @@ export const useUiStore = defineStore('ui', {
 
         level(index: number): AvailabilityLevel {
             const scheduleStore = useScheduleStore();
-            const scale = scheduleStore.scale;
-            const availabilityLevel = scale.levels.find((lvl) => {
+            const levels = scheduleStore.levels;
+            const availabilityLevel = levels.find((lvl) => {
                 return lvl.level === this.currentEntry[index];
             });
             if (availabilityLevel !== undefined) {
                 return availabilityLevel;
             }
 
-            return scale.levels[0];
+            return levels[0];
         },
 
         join() {
@@ -80,6 +81,10 @@ export const useUiStore = defineStore('ui', {
         changeTab(tabName: string) {
             this.selectedTab = tabName;
         },
+
+        setScheduleId(id: string) {
+            this.currentScheduleId = id;
+        },
     },
 
     getters: {
@@ -96,5 +101,7 @@ export const useUiStore = defineStore('ui', {
         firstSelectedItem(): number {
             return this.selectedItems.values().next().value;
         },
+
+        scheduleId: (state) => state.currentScheduleId,
     },
 });

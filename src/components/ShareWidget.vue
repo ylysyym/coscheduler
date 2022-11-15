@@ -10,15 +10,15 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { NButton, NInput, NInputGroup } from 'naive-ui';
-import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
 import { useClipboard } from '@vueuse/core';
 
-const scheduleStore = useScheduleStore();
+const uiStore = useUiStore();
 
 const clipboard = useClipboard();
 
 const shareLink = computed(() => {
-    return `${window.location.origin}/schedule/${scheduleStore.id}`;
+    return `${window.location.origin}/schedule/${uiStore.scheduleId}`;
 });
 
 const input = ref<InstanceType<typeof NInput>>();

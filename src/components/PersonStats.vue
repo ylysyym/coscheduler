@@ -5,14 +5,14 @@
                 <div
                     class="bar-block"
                     :style="{
-                        background: scheduleStore.scale.levels[level].color,
+                        background: scheduleStore.levels[level].color,
                         width: (value / scheduleStore.blockCount) * 200 + 'px',
                     }"
                 >
                     &nbsp;
                 </div>
             </template>
-            {{ scheduleStore.scale.levels[level].label }} ({{ value }})
+            {{ scheduleStore.levels[level].label }} ({{ value }})
         </n-tooltip>
     </div>
 </template>
@@ -33,7 +33,7 @@ let entries = computed(() => scheduleStore.entries[props.person]);
 let entriesStats = computed((): Map<number, number> => {
     let map = new Map();
 
-    for (let i = scheduleStore.scale.levels.length - 1; i >= 0; i--) {
+    for (let i = scheduleStore.levels.length - 1; i >= 0; i--) {
         map.set(i, 0);
     }
 

@@ -102,7 +102,7 @@ const changeLevel = (level: number) => {
 };
 
 const visibleLevels = computed((): AvailabilityLevel[] => {
-    return scheduleStore.scale.levels.filter((level) => level.hidden !== true);
+    return scheduleStore.levels.filter((level) => level.hidden !== true);
 });
 
 const selectedIntervals = computed(() => {
@@ -142,8 +142,11 @@ const fields = ref({
 
 const saveChanges = () => {
     form.value?.validate().then(() => {
-        scheduleStore.entries[fields.value.name] = uiStore.currentEntry.slice();
-        updateSchedule(scheduleStore.id, {
+        scheduleStore.updateEntry(
+            fields.value.name,
+            uiStore.currentEntry.slice()
+        );
+        updateSchedule(uiStore.scheduleId, {
             [fields.value.name]: uiStore.currentEntry,
         })
             .then(() => {
