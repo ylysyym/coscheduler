@@ -1,18 +1,6 @@
 <template>
     <div class="edit-container">
         <n-space vertical>
-            <div>
-                <n-form :rules="rules" :model="fields" ref="form">
-                    <n-form-item label="Name" path="name">
-                        <n-input
-                            placeholder="Name"
-                            v-model:value="fields.name"
-                            :disabled="!uiStore.isJoining"
-                            autofocus
-                        />
-                    </n-form-item>
-                </n-form>
-            </div>
             <div v-if="uiStore.hasSelectedItem">
                 <div>
                     <strong>Selection</strong>
@@ -43,7 +31,23 @@
                 <div>Click a square to select it.</div>
                 <div>Drag to select multiple squares.</div>
             </div>
-            <n-button type="primary" @click="saveChanges">Save</n-button>
+            <div>
+                <n-input-group>
+                    <n-input
+                        placeholder="Name"
+                        v-model:value="name"
+                        :disabled="!uiStore.isJoining"
+                        :status="isValidName ? undefined : 'error'"
+                        autofocus
+                    />
+                    <n-button type="primary" @click="saveChanges"
+                        >Save</n-button
+                    >
+                </n-input-group>
+                <span :class="{ errorLabel: !isValidName }">{{
+                    nameValidationMessage
+                }}</span>
+            </div>
         </n-space>
     </div>
 </template>
@@ -54,13 +58,11 @@ import { Interval } from 'luxon';
 import {
     NButton,
     NEllipsis,
-    NForm,
-    NFormItem,
     NInput,
+    NInputGroup,
     NSpace,
     useMessage,
 } from 'naive-ui';
-import type { FormRules } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
@@ -117,48 +119,50 @@ const formattedSelectedIntervals = computed(() => {
     );
 });
 
-const rules = ref<FormRules>({
-    name: {
-        required: true,
-        message: 'Please enter a name',
-        validator: (rule, value) => {
-            if (value.length <= 0) {
-                return false;
-            } else if (uiStore.isJoining && value in scheduleStore.entries) {
-                rule.message = 'Name is already in use';
-                return false;
-            }
+const name = ref(uiStore.userName);
+const isValidName = ref(true);
+const nameValidationMessage = ref('');
 
-            return true;
-        },
-    },
-});
+const isExistingName = computed(() => name.value in scheduleStore.entries);
 
-const form = ref<InstanceType<typeof NForm>>();
+const validateName = () => {
+    if (name.value.length === 0) {
+        nameValidationMessage.value = 'Name is required';
+        return false;
+    } else if (isExistingName.value) {
+        nameValidationMessage.value = 'Name is already being used';
+        return false;
+    }
 
-const fields = ref({
-    name: uiStore.userName,
-});
+    return true;
+};
 
 const saveChanges = () => {
-    form.value?.validate().then(() => {
-        scheduleStore.updateEntry(
-            fields.value.name,
-            uiStore.currentEntry.slice()
-        );
-        updateSchedule(uiStore.scheduleId, {
-            [fields.value.name]: uiStore.currentEntry,
-        })
-            .then(() => {
-                if (uiStore.isJoining) {
-                    uiStore.selectedNames.push(fields.value.name);
-                }
+    if (uiStore.isJoining) {
+        isValidName.value = validateName();
 
-                uiStore.stopEditing();
-            })
-            .catch(() => {
-                message.error('An error occured while saving your changes');
-            });
-    });
+        if (!isValidName.value) return;
+    }
+
+    scheduleStore.updateEntry(name.value, uiStore.currentEntry.slice());
+    updateSchedule(uiStore.scheduleId, {
+        [name.value]: uiStore.currentEntry,
+    })
+        .then(() => {
+            if (uiStore.isJoining) {
+                uiStore.selectedNames.push(name.value);
+            }
+
+            uiStore.stopEditing();
+        })
+        .catch(() => {
+            message.error('An error occured while saving your changes');
+        });
 };
 </script>
+
+<style scoped>
+.errorLabel {
+    color: red;
+}
+</style>
