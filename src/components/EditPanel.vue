@@ -18,10 +18,23 @@
                             :key="level.level"
                             :value="level.level"
                             @click="changeLevel(level.level)"
-                            :tertiary="level.level === selectedLevel"
-                            :strong="level.level === selectedLevel"
+                            :color="
+                                level.level === selectedLevel
+                                    ? level.color
+                                    : undefined
+                            "
+                            :text-color="
+                                level.level === selectedLevel
+                                    ? toRgba(readableColor(level.color))
+                                    : undefined
+                            "
+                            :style="
+                                level.level === selectedLevel
+                                    ? undefined
+                                    : `box-shadow: inset 6px 0px 0 0 ${level.color}`
+                            "
+                            :secondary="level.level !== selectedLevel"
                         >
-                            <span :style="{ color: level.color }">●</span>
                             {{ level.label }}
                         </n-button>
                     </n-space>
@@ -55,6 +68,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Interval } from 'luxon';
+import { readableColor, toRgba } from 'color2k';
 import {
     NButton,
     NEllipsis,
