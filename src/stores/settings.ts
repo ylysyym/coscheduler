@@ -6,6 +6,8 @@ export const useSettingsStore = defineStore('settings', {
             orientation: 'bottom right',
             dateFormat: '',
             timeFormat: '',
+            theme: 'light',
+            language: 'en',
         };
     },
 
@@ -25,12 +27,24 @@ export const useSettingsStore = defineStore('settings', {
             localStorage.setItem('timeFormat', format);
         },
 
+        setTheme(theme: string) {
+            this.theme = theme;
+            localStorage.setItem('theme', theme);
+        },
+
+        setLanguage(lang: string) {
+            this.language = lang;
+            localStorage.setItem('language', lang);
+        },
+
         initialise() {
             this.timeFormat = localStorage.getItem('timeFormat') || 'HH:mm';
             this.dateFormat =
                 localStorage.getItem('dateFormat') || 'yyyy LLL dd (EEE)';
             this.orientation =
                 localStorage.getItem('orientation') || 'bottom right';
+            this.theme = localStorage.getItem('theme') || 'light';
+            this.language = localStorage.getItem('language') || 'en';
         },
     },
 
