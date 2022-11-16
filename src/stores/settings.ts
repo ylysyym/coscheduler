@@ -52,5 +52,9 @@ export const useSettingsStore = defineStore('settings', {
         timestampFormat(): string {
             return this.dateFormat + ', ' + this.timeFormat;
         },
+
+        isDarkMode(): boolean {
+            return this.theme === 'dark';
+        },
     },
 });

@@ -1,5 +1,8 @@
 <template>
-    <n-config-provider :theme-overrides="themeOverrides">
+    <n-config-provider
+        :theme="store.isDarkMode ? darkTheme : undefined"
+        :theme-overrides="themeOverrides"
+    >
         <div class="root">
             <NavigationMenu />
             <div class="app-container">
@@ -14,10 +17,16 @@
 </template>
 
 <script setup lang="ts">
-import { NConfigProvider, NDialogProvider, NMessageProvider } from 'naive-ui';
+import {
+    darkTheme,
+    NConfigProvider,
+    NDialogProvider,
+    NMessageProvider,
+} from 'naive-ui';
 import type { GlobalThemeOverrides } from 'naive-ui';
 import NavigationMenu from '@/components/NavigationMenu.vue';
 import { useSettingsStore } from '@/stores/settings';
+import { computed } from 'vue';
 
 const store = useSettingsStore();
 store.initialise();
@@ -28,14 +37,20 @@ const themeOverrides: GlobalThemeOverrides = {
         primaryColorHover: '#7f4dc6FF',
         primaryColorSuppl: '#7f4dc6FF',
         primaryColorPressed: '#5b26a5FF',
+        baseColor: '#fff',
         fontWeightStrong: '550',
         borderRadius: '0',
     },
 };
+
+const background = computed(() => (store.isDarkMode ? '#000' : '#fff'));
+const textColor = computed(() => (store.isDarkMode ? '#fff' : '#000'));
 </script>
 
 <style scoped>
 .root {
+    background: v-bind(background);
+    color: v-bind(textColor);
     height: 100vh;
     overflow: hidden;
 }
