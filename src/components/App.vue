@@ -28,6 +28,8 @@ const themeOverrides: GlobalThemeOverrides = {
         primaryColorHover: '#7f4dc6FF',
         primaryColorSuppl: '#7f4dc6FF',
         primaryColorPressed: '#5b26a5FF',
+        fontWeightStrong: '550',
+        borderRadius: '0',
     },
 };
 </script>

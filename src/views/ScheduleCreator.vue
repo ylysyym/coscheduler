@@ -197,7 +197,7 @@ const create = () => {
 
 <style scoped>
 .container {
-    height: calc(100% - 40px);
+    height: 100%;
 }
 .inner-container {
     max-width: 900px;
