@@ -11,6 +11,8 @@ interface ErrorData {
     error: Error;
 }
 
+type AvailabilityCount = { [availability: number]: number };
+
 export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
@@ -127,6 +129,29 @@ export const useScheduleStore = defineStore('schedule', {
         error(): Error {
             const ui = useUiStore();
             return this.errors[ui.scheduleId]?.error || new Error();
+        },
+
+        availabilityCounts(): AvailabilityCount[] {
+            const result = [] as AvailabilityCount[];
+
+            const defaultCounts: AvailabilityCount = {};
+
+            for (let i = 1; i < this.levels.length; i++) {
+                defaultCounts[i] = 0;
+            }
+
+            for (let i = 0; i < this.blockCount; i++) {
+                const counts: AvailabilityCount = { ...defaultCounts };
+                for (const person of this.people) {
+                    const level = this.entries[person][i];
+                    for (let j = level; j >= 1; j--) {
+                        counts[j]++;
+                    }
+                }
+                result.push(counts);
+            }
+
+            return result;
         },
     },
 });

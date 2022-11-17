@@ -15,7 +15,7 @@
     "license": "0BSD",
     "devDependencies": {
         "@babel/types": "^7.20.2",
-        "@types/luxon": "^2.4.0",
+        "@types/luxon": "^3.1.0",
         "@typescript-eslint/eslint-plugin": "^5.37.0",
         "@typescript-eslint/parser": "^5.37.0",
         "@vitejs/plugin-vue": "^3.2.0",
@@ -24,7 +24,7 @@
         "eslint": "^8.23.1",
         "eslint-config-prettier": "^8.5.0",
         "eslint-plugin-vue": "^9.4.0",
-        "luxon": "^2.5.0",
+        "luxon": "^3.1.0",
         "naive-ui": "^2.33.3",
         "pinia": "^2.0.22",
         "prettier": "^2.7.1",
