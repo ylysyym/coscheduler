@@ -68,3 +68,46 @@ export const light5RedGreenScale: AvailabilityScale = {
         },
     ],
 };
+
+export const viridis5Scale: AvailabilityScale = {
+    title: 'Viridis 5',
+    levels: [
+        {
+            level: 0,
+            color: UNKNOWN_COLOR,
+            label: 'Unknown',
+            hidden: true,
+        },
+        {
+            level: 1,
+            color: '#440154',
+            label: 'Busy',
+        },
+        {
+            level: 2,
+            color: '#3b528b',
+            label: 'Somewhat busy',
+        },
+        {
+            level: 3,
+            color: '#21918c',
+            label: 'Maybe',
+        },
+        {
+            level: 4,
+            color: '#5ec962',
+            label: 'Somewhat free',
+        },
+        {
+            level: 5,
+            color: '#fde725',
+            label: 'Free',
+        },
+    ],
+};
+
+export const defaultScales = [
+    light5RedGreenScale,
+    light3RedGreenScale,
+    viridis5Scale,
+];

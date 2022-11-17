@@ -57,10 +57,7 @@ import {
 import type { FormRules } from 'naive-ui';
 import { DateTime } from 'luxon';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
-import {
-    light3RedGreenScale,
-    light5RedGreenScale,
-} from '@/models/availability/defaultAvailabilityScales';
+import { defaultScales } from '@/models/availability/defaultAvailabilityScales';
 import { ScheduleParameters } from '@/models/ScheduleParameters';
 import { createSchedule } from '@/api/schedules';
 
@@ -148,7 +145,7 @@ const blockCount = computed(() => {
     );
 });
 
-let scales = [light5RedGreenScale, light3RedGreenScale];
+let scales = defaultScales;
 
 let scaleOptions = computed(() => {
     return scales.map((scale, index) => {
