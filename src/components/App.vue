@@ -41,6 +41,10 @@ const themeOverrides: GlobalThemeOverrides = {
         fontWeightStrong: '550',
         borderRadius: '0',
     },
+    Collapse: {
+        itemMargin: '0',
+        dividerColor: '#ffffff00',
+    },
 };
 
 const background = computed(() => (store.isDarkMode ? '#000' : '#fff'));

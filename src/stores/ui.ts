@@ -15,6 +15,7 @@ export const useUiStore = defineStore('ui', {
             currentEntry: [] as number[],
             selectedTab: 'view',
             currentScheduleId: '',
+            expandedViewSections: new Set(['people', 'filter']),
         };
     },
 
@@ -85,6 +86,14 @@ export const useUiStore = defineStore('ui', {
         setScheduleId(id: string) {
             this.currentScheduleId = id;
         },
+
+        toggleViewSection(section: string) {
+            if (this.expandedViewSections.has(section)) {
+                this.expandedViewSections.delete(section);
+            } else {
+                this.expandedViewSections.add(section);
+            }
+        },
     },
 
     getters: {
@@ -103,5 +112,7 @@ export const useUiStore = defineStore('ui', {
         },
 
         scheduleId: (state) => state.currentScheduleId,
+
+        expandedSections: (state) => Array.from(state.expandedViewSections),
     },
 });
