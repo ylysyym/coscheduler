@@ -39,7 +39,18 @@ const background = computed(() => {
         return scheduleStore.levels[0].color;
     }
 
-    let result = 'linear-gradient(to ' + settingsStore.orientation;
+    let gradientType = '';
+    let gradientParameter = '';
+
+    if (settingsStore.orientation === 'conic') {
+        gradientType = 'conic';
+        gradientParameter = 'at center';
+    } else {
+        gradientType = 'linear';
+        gradientParameter = 'to ' + settingsStore.orientation;
+    }
+
+    let result = `${gradientType}-gradient(${gradientParameter}`;
     let n = 100 / Object.keys(data.value.entries).length;
     let sorted = Object.values(data.value.entries);
     sorted.sort((a, b) => b.level - a.level);

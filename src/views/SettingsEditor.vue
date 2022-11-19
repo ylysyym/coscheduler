@@ -3,7 +3,7 @@
         <h1>Settings</h1>
         <n-space vertical>
             <n-form>
-                <n-form-item label="Multi-display orientation">
+                <n-form-item label="Block display mode">
                     <n-radio-group v-model:value="orientation">
                         <n-radio
                             v-for="orientation in orientations"
@@ -53,9 +53,10 @@ import { useSettingsStore } from '@/stores/settings';
 const store = useSettingsStore();
 
 const orientations = [
-    { label: 'Vertical', value: 'bottom' },
-    { label: 'Horizontal', value: 'right' },
-    { label: 'Diagonal', value: 'bottom right' },
+    { label: 'Vertical stripes', value: 'bottom' },
+    { label: 'Horizontal stripes', value: 'right' },
+    { label: 'Diagonal stripes', value: 'bottom right' },
+    { label: 'Pie', value: 'conic' },
 ];
 
 let orientation = ref(store.orientation);
