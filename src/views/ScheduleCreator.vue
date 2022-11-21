@@ -73,14 +73,16 @@ const fields = reactive({
     scale: 0,
 });
 
+const maxTitleLength = ref(240);
+
 const rules: FormRules = {
     title: {
         required: true,
         validator: (rule, value) => {
             if (value.length <= 0) {
                 return false;
-            } else if (value.length > 240) {
-                rule.message = `Title can have a maximum of 240 characters (currently ${value.length})`;
+            } else if (value.length > maxTitleLength.value) {
+                rule.message = `Title can have a maximum of ${maxTitleLength.value} characters (currently ${value.length})`;
                 return false;
             }
 
@@ -109,8 +111,8 @@ const rules: FormRules = {
     },
 };
 
-let timePickerProps = computed(() => {
-    let minutes = [];
+const timePickerProps = computed(() => {
+    const minutes = [];
     for (let i = 0; i < 60; i += fields.timeUnit) {
         minutes.push(i);
     }
@@ -120,11 +122,11 @@ let timePickerProps = computed(() => {
     };
 });
 
-let datePickerType = computed(() =>
+const datePickerType = computed(() =>
     fields.timeUnit >= 24 * 60 ? 'daterange' : 'datetimerange'
 );
 
-let dateFormat = computed(() =>
+const dateFormat = computed(() =>
     fields.timeUnit >= 24 * 60 ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm'
 );
 
@@ -145,9 +147,9 @@ const blockCount = computed(() => {
     );
 });
 
-let scales = defaultScales;
+const scales = defaultScales;
 
-let scaleOptions = computed(() => {
+const scaleOptions = computed(() => {
     return scales.map((scale, index) => {
         return {
             label: scale.title,

@@ -1,68 +1,67 @@
 <template>
-    <div class="edit-container">
-        <n-space vertical>
-            <div v-if="uiStore.hasSelectedItem">
-                <div>
-                    <strong>Selection</strong>
-                    <n-ellipsis :line-clamp="3" style="width: 100%">
-                        <div v-for="x in formattedSelectedIntervals" :key="x">
-                            {{ x }}
-                        </div>
-                    </n-ellipsis>
-                </div>
-                <div>
-                    <strong>Status</strong>
-                    <n-space :vertical="!isSmallScreen" size="small">
-                        <n-button
-                            v-for="level in visibleLevels"
-                            :key="level.level"
-                            :value="level.level"
-                            @click="changeLevel(level.level)"
-                            :color="
-                                level.level === selectedLevel
-                                    ? level.color
-                                    : undefined
-                            "
-                            :text-color="
-                                level.level === selectedLevel
-                                    ? toRgba(readableColor(level.color))
-                                    : undefined
-                            "
-                            :style="
-                                level.level === selectedLevel
-                                    ? undefined
-                                    : `box-shadow: inset 6px 0px 0 0 ${level.color}`
-                            "
-                            :secondary="level.level !== selectedLevel"
-                        >
-                            {{ level.label }}
-                        </n-button>
-                    </n-space>
-                </div>
-            </div>
-            <div v-else>
-                <div>Click a square to select it.</div>
-                <div>Drag to select multiple squares.</div>
+    <n-space vertical>
+        <div v-if="uiStore.hasSelectedItem">
+            <div>
+                <strong>Selection</strong>
+                <n-ellipsis :line-clamp="3" style="width: 100%">
+                    <div
+                        v-for="(interval, index) in formattedSelectedIntervals"
+                        :key="index"
+                    >
+                        {{ interval }}
+                    </div>
+                </n-ellipsis>
             </div>
             <div>
-                <n-input-group>
-                    <n-input
-                        placeholder="Name"
-                        v-model:value="name"
-                        :disabled="!uiStore.isJoining"
-                        :status="isValidName ? undefined : 'error'"
-                        autofocus
-                    />
-                    <n-button type="primary" @click="saveChanges"
-                        >Save</n-button
+                <strong>Status</strong>
+                <n-space :vertical="!isSmallScreen" size="small">
+                    <n-button
+                        v-for="level in visibleLevels"
+                        :key="level.level"
+                        :value="level.level"
+                        @click="changeLevel(level.level)"
+                        :color="
+                            level.level === selectedLevel
+                                ? level.color
+                                : undefined
+                        "
+                        :text-color="
+                            level.level === selectedLevel
+                                ? toRgba(readableColor(level.color))
+                                : undefined
+                        "
+                        :style="
+                            level.level === selectedLevel
+                                ? undefined
+                                : `box-shadow: inset 6px 0 0 0 ${level.color}`
+                        "
+                        :secondary="level.level !== selectedLevel"
                     >
-                </n-input-group>
-                <span :class="{ errorLabel: !isValidName }">{{
-                    nameValidationMessage
-                }}</span>
+                        {{ level.label }}
+                    </n-button>
+                </n-space>
             </div>
-        </n-space>
-    </div>
+        </div>
+        <div v-else>
+            <div>Click a square to select it.</div>
+            <div>Drag to select multiple squares.</div>
+        </div>
+        <div>
+            <n-input-group>
+                <n-input
+                    placeholder="Name"
+                    v-model:value="name"
+                    :disabled="!uiStore.isJoining"
+                    :status="isValidName ? undefined : 'error'"
+                    autofocus
+                />
+                <n-button type="primary" @click="saveChanges">Save</n-button>
+            </n-input-group>
+            <span :class="{ errorLabel: !isValidName }">{{
+                nameValidationMessage
+            }}</span>
+        </div>
+    </n-space>
 </template>
 
 <script setup lang="ts">

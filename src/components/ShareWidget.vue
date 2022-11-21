@@ -1,8 +1,8 @@
 <template>
-    <div class="share-widget">
+    <div>
         <n-input-group>
-            <n-input ref="input" :value="shareLink" @click="select" />
-            <n-button @click="copy">Copy</n-button>
+            <n-input ref="input" :value="shareLink" @click="selectAll" />
+            <n-button @click="copyLink">Copy</n-button>
         </n-input-group>
     </div>
 </template>
@@ -23,11 +23,11 @@ const shareLink = computed(() => {
 
 const input = ref<InstanceType<typeof NInput>>();
 
-const select = () => {
+const selectAll = () => {
     input.value?.select();
 };
 
-const copy = () => {
+const copyLink = () => {
     clipboard.copy(shareLink.value);
 };
 </script>

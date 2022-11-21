@@ -1,24 +1,22 @@
 <template>
-    <div>
-        <n-tooltip v-for="[level, value] in entriesStats" :key="level">
-            <template #trigger>
-                <div
-                    class="bar-block"
-                    :style="{
-                        background: scheduleStore.levels[level].color,
-                        width: (value / scheduleStore.blockCount) * 200 + 'px',
-                    }"
-                >
-                    &nbsp;
-                </div>
-            </template>
-            {{ scheduleStore.levels[level].label }} ({{ value }})
-        </n-tooltip>
-    </div>
+    <n-tooltip v-for="[level, value] in entryStats" :key="level">
+        <template #trigger>
+            <div
+                class="bar-block"
+                :style="{
+                    background: scheduleStore.levels[level].color,
+                    width: (value / scheduleStore.blockCount) * barWidth + 'px',
+                }"
+            >
+                &nbsp;
+            </div>
+        </template>
+        {{ scheduleStore.levels[level].label }} ({{ value }})
+    </n-tooltip>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { NTooltip } from 'naive-ui';
 import { useScheduleStore } from '@/stores/schedule';
 
@@ -28,16 +26,18 @@ const props = defineProps<{
 
 const scheduleStore = useScheduleStore();
 
-let entries = computed(() => scheduleStore.entries[props.person]);
+const barWidth = ref(200);
 
-let entriesStats = computed((): Map<number, number> => {
-    let map = new Map();
+const entries = computed(() => scheduleStore.entries[props.person]);
+
+const entryStats = computed((): Map<number, number> => {
+    const map = new Map();
 
     for (let i = scheduleStore.levels.length - 1; i >= 0; i--) {
         map.set(i, 0);
     }
 
-    for (let level of entries.value) {
+    for (const level of entries.value) {
         map.set(level, map.get(level) + 1);
     }
 

@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 
-export type GridIndexMap = number[][];
+type GridIndexMap = number[][];
 
 const isFirstColumn = (time: DateTime, rowDuration: number) => {
     if (rowDuration <= 60) {

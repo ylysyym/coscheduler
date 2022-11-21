@@ -59,7 +59,7 @@ const orientations = [
     { label: 'Pie', value: 'conic' },
 ];
 
-let orientation = ref(store.orientation);
+const orientation = ref(store.orientation);
 
 const now = DateTime.now();
 const exampleDate = DateTime.now().set({

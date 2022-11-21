@@ -51,7 +51,7 @@ const background = computed(() => {
     }
 
     let result = `${gradientType}-gradient(${gradientParameter}`;
-    let n = 100 / Object.keys(data.value.entries).length;
+    const n = 100 / Object.keys(data.value.entries).length;
     let sorted = Object.values(data.value.entries);
     sorted.sort((a, b) => b.level - a.level);
     for (let i = 0; i < sorted.length; i++) {
