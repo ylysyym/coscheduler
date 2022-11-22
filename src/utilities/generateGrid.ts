@@ -3,54 +3,26 @@ import { DateTime } from 'luxon';
 type GridIndexMap = number[][];
 
 const isFirstColumn = (time: DateTime, rowDuration: number) => {
-    if (rowDuration <= 60) {
-        return time.minute === 0;
-    } else if (rowDuration <= 24 * 60) {
-        return time.hour === 0;
-    } else if (rowDuration <= 7 * 24 * 60) {
+    if (rowDuration >= 7 * 24 * 60) {
         return time.weekday === 1;
     }
 
-    return true;
+    const totalMinutes = time.minute + time.hour * 60;
+    return totalMinutes % rowDuration === 0;
 };
 
-export const columnCount = (minutes: number) => {
-    if (minutes < 60) {
+export const rowDuration = (minutes: number) => {
+    if (minutes <= 5) {
         return 60;
+    } else if (minutes <= 15) {
+        return 6 * 60;
+    } else if (minutes <= 30) {
+        return 12 * 60;
     } else if (minutes < 12 * 60) {
         return 24 * 60;
     } else {
         return 7 * 24 * 60;
     }
-};
-
-export const getColumnLabels = (
-    rowDuration: number,
-    cols: number,
-    interval: number
-): string[] => {
-    const result: string[] = [];
-    let startTime = DateTime.now().set({
-        hour: 0,
-        minute: 0,
-        weekday: 1,
-    });
-    let format = '';
-    if (rowDuration <= 60) {
-        format = ':mm';
-    } else if (rowDuration <= 24 * 60) {
-        format = 'HH';
-    } else {
-        format = 'EEE';
-    }
-    for (let i = 0; i < cols; i++) {
-        result.push(startTime.toFormat(format));
-        startTime = startTime.plus({
-            minutes: interval,
-        });
-    }
-
-    return result;
 };
 
 export const getRowLabels = (
@@ -62,14 +34,14 @@ export const getRowLabels = (
 ): string[] => {
     const result: string[] = [];
     let format = '';
-    if (rowDuration <= 60) {
-        format = 'HH';
-    } else if (rowDuration <= 24 * 60) {
-        format = 'LLL dd';
+    if (rowDuration < 24 * 60) {
+        format = 'dd LLL HH:mm';
     } else {
-        format = 'LLL dd';
-        start = start.set({
-            weekday: 1,
+        format = 'dd LLL';
+    }
+    while (!isFirstColumn(start, rowDuration)) {
+        start = start.minus({
+            minutes: interval,
         });
     }
     for (let i = 0; i < blocks; i += cols) {

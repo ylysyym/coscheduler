@@ -8,14 +8,6 @@
             }"
         >
             <div class="grid">
-                <div class="block-wrapper"></div>
-                <div
-                    class="block-wrapper labels"
-                    v-for="label in columnLabels"
-                    :key="label"
-                >
-                    {{ label }}
-                </div>
                 <template v-for="(row, rowIndex) in grid" :key="rowIndex">
                     <div class="block-wrapper labels">
                         {{ rowLabels[rowIndex] }}
@@ -47,9 +39,8 @@ import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import {
-    columnCount,
+    rowDuration,
     generateGrid,
-    getColumnLabels,
     getRowLabels,
 } from '@/utilities/generateGrid';
 
@@ -63,13 +54,15 @@ const { width } = useElementSize(container);
 const popover = ref<InstanceType<typeof BlockDetailPopover>>();
 
 const blockSize = computed(() => {
-    return Math.max(Math.floor(width.value / (columns.value + 5)), 15);
+    return Math.max(Math.floor(width.value / (columnCount.value + 5)), 15);
 });
 
-const rowDuration = computed(() => columnCount(scheduleStore.blockDuration));
+const rowDurationMinutes = computed(() =>
+    rowDuration(scheduleStore.blockDuration)
+);
 
-const columns = computed(() => {
-    return rowDuration.value / scheduleStore.blockDuration;
+const columnCount = computed(() => {
+    return rowDurationMinutes.value / scheduleStore.blockDuration;
 });
 
 const grid = computed(() => {
@@ -77,8 +70,8 @@ const grid = computed(() => {
         scheduleStore.startTime,
         scheduleStore.blockCount,
         scheduleStore.blockDuration,
-        rowDuration.value,
-        columns.value
+        rowDurationMinutes.value,
+        columnCount.value
     );
 });
 
@@ -104,19 +97,11 @@ const onMove = ({
     blockIds(removed).forEach((id) => uiStore.removeSelection(id));
 };
 
-const columnLabels = computed(() => {
-    return getColumnLabels(
-        rowDuration.value,
-        columns.value,
-        scheduleStore.blockDuration
-    );
-});
-
 const rowLabels = computed(() => {
     return getRowLabels(
-        rowDuration.value,
+        rowDurationMinutes.value,
         scheduleStore.startTime,
-        columns.value,
+        columnCount.value,
         scheduleStore.blockDuration,
         grid.value.length * grid.value[0].length
     );
@@ -134,6 +119,7 @@ const selectBlock = (id: number, e: MouseEvent) => {
 
 <style scoped>
 .container {
+    padding: 4px;
     width: 100%;
 }
 
@@ -141,7 +127,7 @@ const selectBlock = (id: number, e: MouseEvent) => {
     display: grid;
     user-select: none;
     grid-template-columns: min-content repeat(
-            v-bind(columns),
+            v-bind(columnCount),
             v-bind(blockSize + 'px')
         );
     grid-auto-rows: v-bind(blockSize + 'px');
