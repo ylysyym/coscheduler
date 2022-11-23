@@ -105,7 +105,7 @@ const dateFormat = ref(store.dateFormat);
 const timeFormat = ref(store.timeFormat);
 
 const formatPreview = computed(() => {
-    return exampleDate.toFormat(dateFormat.value + ', ' + timeFormat.value);
+    return exampleDate.toFormat(dateFormat.value + ' ' + timeFormat.value);
 });
 
 const save = () => {

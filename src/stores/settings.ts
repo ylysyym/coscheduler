@@ -50,7 +50,7 @@ export const useSettingsStore = defineStore('settings', {
 
     getters: {
         timestampFormat(): string {
-            return this.dateFormat + ', ' + this.timeFormat;
+            return this.dateFormat + ' ' + this.timeFormat;
         },
 
         isDarkMode(): boolean {
