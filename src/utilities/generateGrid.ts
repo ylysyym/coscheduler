@@ -25,33 +25,27 @@ export const rowDuration = (minutes: number) => {
     }
 };
 
-export const getRowLabels = (
+export const rowStartTimes = (
     rowDuration: number,
-    start: DateTime,
-    cols: number,
+    startTime: DateTime,
     interval: number,
-    blocks: number
-): string[] => {
-    const result: string[] = [];
-    let format = '';
-    if (rowDuration < 24 * 60) {
-        format = 'dd LLL HH:mm';
-    } else {
-        format = 'dd LLL';
-    }
-    while (!isFirstColumn(start, rowDuration)) {
-        start = start.minus({
+    rowCount: number
+): DateTime[] => {
+    const times: DateTime[] = [];
+    let rowStartTime = startTime;
+    while (!isFirstColumn(rowStartTime, rowDuration)) {
+        rowStartTime = rowStartTime.minus({
             minutes: interval,
         });
     }
-    for (let i = 0; i < blocks; i += cols) {
-        result.push(start.toFormat(format));
-        start = start.plus({
-            minutes: cols * interval,
+    for (let i = 0; i < rowCount; i++) {
+        times.push(rowStartTime);
+        rowStartTime = rowStartTime.plus({
+            minutes: rowDuration,
         });
     }
 
-    return result;
+    return times;
 };
 
 const getStartOffset = (

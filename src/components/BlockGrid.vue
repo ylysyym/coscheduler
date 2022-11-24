@@ -8,20 +8,33 @@
             }"
         >
             <div class="grid">
+                <template
+                    v-for="[label, bounds] in dateLabelRowBounds"
+                    :key="label"
+                >
+                    <div
+                        class="label date-label"
+                        :style="
+                            'grid-row: ' + bounds.start + ' / ' + bounds.end
+                        "
+                    >
+                        {{ label }}
+                    </div>
+                </template>
                 <template v-for="(row, rowIndex) in grid" :key="rowIndex">
-                    <div class="block-wrapper labels">
-                        {{ rowLabels[rowIndex] }}
+                    <div class="label time-label">
+                        {{ timeLabels[rowIndex] }}
                     </div>
                     <template v-for="index in row" :key="index">
                         <SquareBlock
                             v-if="index >= 0"
-                            class="block-wrapper selectable"
+                            class="selectable"
                             @click.self="selectBlock(index, $event)"
                             :size="blockSize"
                             :data-key="index"
                             :id="index"
                         />
-                        <div class="block-wrapper" v-else></div>
+                        <div v-else></div>
                     </template>
                 </template>
             </div>
@@ -41,7 +54,7 @@ import { useScheduleStore } from '@/stores/schedule';
 import {
     rowDuration,
     generateGrid,
-    getRowLabels,
+    rowStartTimes,
 } from '@/utilities/generateGrid';
 
 const uiStore = useUiStore();
@@ -97,14 +110,40 @@ const onMove = ({
     blockIds(removed).forEach((id) => uiStore.removeSelection(id));
 };
 
-const rowLabels = computed(() => {
-    return getRowLabels(
+const rowTimes = computed(() => {
+    return rowStartTimes(
         rowDurationMinutes.value,
         scheduleStore.startTime,
-        columnCount.value,
         scheduleStore.blockDuration,
-        grid.value.length * grid.value[0].length
+        grid.value.length
     );
+});
+
+const dateLabels = computed(() => {
+    // TODO: allow changing format
+    return rowTimes.value.map((date) => date.toFormat('dd LLL'));
+});
+
+const timeLabels = computed(() => {
+    return rowTimes.value.map((date) => date.toFormat('HH:mm'));
+});
+
+const dateLabelRowBounds = computed(() => {
+    const result = new Map<string, { start: number; end: number }>();
+    let start = 1;
+    for (let i = 1; i <= dateLabels.value.length; i++) {
+        if (
+            i === dateLabels.value.length ||
+            dateLabels.value[i] !== dateLabels.value[i - 1]
+        ) {
+            result.set(dateLabels.value[i - 1], {
+                start,
+                end: i + 1,
+            });
+            start = i + 1;
+        }
+    }
+    return result;
 });
 
 const gap = computed(() => Math.max(blockSize.value / 8, 2));
@@ -126,7 +165,7 @@ const selectBlock = (id: number, e: MouseEvent) => {
 .grid {
     display: grid;
     user-select: none;
-    grid-template-columns: min-content repeat(
+    grid-template-columns: min-content min-content repeat(
             v-bind(columnCount),
             v-bind(blockSize + 'px')
         );
@@ -134,15 +173,21 @@ const selectBlock = (id: number, e: MouseEvent) => {
     gap: v-bind(blockGap);
 }
 
-.block-wrapper {
-    position: relative;
+.label {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    padding: 0 8px;
+    text-align: right;
     white-space: nowrap;
 }
 
-.labels {
-    text-align: center;
-    align-self: center;
-    padding: 8px;
+.date-label {
+    background: #ddd;
+}
+
+.time-label {
+    background: #eee;
 }
 
 .isSelected {
