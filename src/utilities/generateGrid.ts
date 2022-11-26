@@ -12,14 +12,8 @@ const isFirstColumn = (time: DateTime, rowDuration: number) => {
 };
 
 export const rowDuration = (minutes: number) => {
-    if (minutes <= 5) {
-        return 60;
-    } else if (minutes <= 15) {
-        return 6 * 60;
-    } else if (minutes <= 30) {
-        return 12 * 60;
-    } else if (minutes < 12 * 60) {
-        return 24 * 60;
+    if (minutes < 12 * 60) {
+        return 24 * minutes;
     } else {
         return 7 * 24 * 60;
     }

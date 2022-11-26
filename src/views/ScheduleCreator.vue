@@ -20,7 +20,7 @@
                     <n-form-item label="Time range" path="timeRange">
                         <n-date-picker
                             panel
-                            :type="datePickerType"
+                            type="datetimerange"
                             v-model:value="fields.timeRange"
                             :time-picker-props="timePickerProps"
                             update-value-on-close
@@ -122,13 +122,7 @@ const timePickerProps = computed(() => {
     };
 });
 
-const datePickerType = computed(() =>
-    fields.timeUnit >= 24 * 60 ? 'daterange' : 'datetimerange'
-);
-
-const dateFormat = computed(() =>
-    fields.timeUnit >= 24 * 60 ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm'
-);
+const dateFormat = 'yyyy-MM-dd HH:mm';
 
 const schemas = computed(() => {
     return Object.values(defaultTimeUnits).map((unit) => {
