@@ -5,9 +5,7 @@
         :x="position.x"
         :y="position.y"
         :animated="false"
-        @clickoutside="hide"
-        :to="parent"
-        placement="right-start"
+        :placement="placement"
         :show-arrow="false"
         v-if="data !== undefined"
     >
@@ -41,20 +39,20 @@ import { useScheduleStore } from '@/stores/schedule';
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
-const parent = ref<HTMLElement>();
-
 const data = ref<BlockData>();
 
 const isVisible = ref(false);
 
 const position = ref({ x: 0, y: 0 });
 
+const placement = ref<'left' | 'right'>('right');
+
 const show = (
     id: number,
     newPosition: { x: number; y: number },
-    el?: HTMLElement
+    isLeftHalf: boolean
 ) => {
-    parent.value = el;
+    placement.value = isLeftHalf ? 'right' : 'left';
     data.value = scheduleStore.blockAtIndex(uiStore.selectedNames, id);
     position.value = newPosition;
     isVisible.value = true;
@@ -66,5 +64,6 @@ const hide = () => {
 
 defineExpose({
     show,
+    hide,
 });
 </script>

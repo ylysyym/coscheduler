@@ -29,7 +29,8 @@
                         <SquareBlock
                             v-if="index >= 0"
                             class="selectable"
-                            @click.self="selectBlock(index, $event)"
+                            @mouseover.self="selectBlock(index, $event)"
+                            @mouseleave="unselect"
                             :size="blockSize"
                             :data-key="index"
                             :id="index"
@@ -46,7 +47,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { SelectionArea, SelectionEvent } from '@viselect/vue';
-import { useElementSize } from '@vueuse/core';
+import { useDebounceFn, useElementSize } from '@vueuse/core';
 import SquareBlock from '@/components/SquareBlock.vue';
 import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
 import { useUiStore } from '@/stores/ui';
@@ -149,16 +150,47 @@ const dateLabelRowBounds = computed(() => {
 const gap = computed(() => Math.max(blockSize.value / 8, 2));
 const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 
+const isHovering = ref(true);
+
+const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
+    if (uiStore.isEditing) return;
+    if (!isHovering.value) return;
+
+    const isLeftHalf = id % columnCount.value < columnCount.value / 2;
+    const el = e.target as HTMLElement;
+    const rect = el.getBoundingClientRect();
+
+    popover.value?.show(
+        id,
+        {
+            x: isLeftHalf ? rect.right : rect.left,
+            y: rect.top + (rect.bottom - rect.top) / 2,
+        },
+        isLeftHalf
+    );
+}, 150);
+
 const selectBlock = (id: number, e: MouseEvent) => {
     if (uiStore.isEditing) return;
 
-    popover.value?.show(id, { x: e.x, y: e.y }, e.target as HTMLElement);
+    isHovering.value = true;
+    uiStore.selectedItems.add(id);
+    showPopover(id, e);
+};
+
+const unselect = () => {
+    if (uiStore.isEditing) return;
+
+    isHovering.value = false;
+    uiStore.clearSelection();
+    popover.value?.hide();
 };
 </script>
 
 <style scoped>
 .container {
     padding: 4px;
+    user-select: none;
     width: 100%;
 }
 
