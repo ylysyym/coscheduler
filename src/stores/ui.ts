@@ -16,6 +16,7 @@ export const useUiStore = defineStore('ui', {
             selectedTab: 'view',
             currentScheduleId: '',
             expandedViewSections: new Set(['people', 'filter']),
+            hoveredItem: -1,
         };
     },
 
@@ -94,6 +95,14 @@ export const useUiStore = defineStore('ui', {
                 this.expandedViewSections.add(section);
             }
         },
+
+        hoverItem(item: number) {
+            this.hoveredItem = item;
+        },
+
+        unhover() {
+            this.hoveredItem = -1;
+        },
     },
 
     getters: {
@@ -114,5 +123,7 @@ export const useUiStore = defineStore('ui', {
         scheduleId: (state) => state.currentScheduleId,
 
         expandedSections: (state) => Array.from(state.expandedViewSections),
+
+        isHovering: (state) => state.hoveredItem >= 0,
     },
 });

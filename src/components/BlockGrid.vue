@@ -150,11 +150,8 @@ const dateLabelRowBounds = computed(() => {
 const gap = computed(() => Math.max(blockSize.value / 8, 2));
 const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 
-const isHovering = ref(true);
-
 const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
-    if (uiStore.isEditing) return;
-    if (!isHovering.value) return;
+    if (!uiStore.isHovering) return;
 
     const isLeftHalf = id % columnCount.value < columnCount.value / 2;
     const el = e.target as HTMLElement;
@@ -171,18 +168,12 @@ const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
 }, 100);
 
 const selectBlock = (id: number, e: MouseEvent) => {
-    if (uiStore.isEditing) return;
-
-    isHovering.value = true;
-    uiStore.selectedItems.add(id);
+    uiStore.hoverItem(id);
     showPopover(id, e);
 };
 
 const unselect = () => {
-    if (uiStore.isEditing) return;
-
-    isHovering.value = false;
-    uiStore.clearSelection();
+    uiStore.unhover();
     popover.value?.hide();
 };
 </script>
@@ -225,5 +216,9 @@ const unselect = () => {
 .isSelected {
     filter: brightness(0.85);
     outline: v-bind(blockGap + ' solid rgb(121, 83, 230)');
+}
+
+.isHovered {
+    filter: brightness(0.7);
 }
 </style>

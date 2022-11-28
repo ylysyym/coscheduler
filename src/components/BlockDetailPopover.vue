@@ -12,7 +12,7 @@
         v-if="data !== undefined"
     >
         <div class="header">{{ formatInterval(data.interval) }}</div>
-        <div class="content" v-if="people.length">
+        <div class="content" v-if="!uiStore.isEditing && people.length">
             <n-space vertical>
                 <n-space v-for="person in people" :key="person">
                     {{ person }}

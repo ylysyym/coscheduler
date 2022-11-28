@@ -3,6 +3,7 @@
         class="block"
         :class="{
             isSelected: isSelected,
+            isHovered: isHovered,
         }"
     ></div>
 </template>
@@ -65,6 +66,7 @@ const background = computed(() => {
 const size = computed(() => props.size + 'px');
 
 const isSelected = computed(() => uiStore.selectedItems.has(props.id));
+const isHovered = computed(() => uiStore.hoveredItem === props.id);
 </script>
 
 <style scoped>
