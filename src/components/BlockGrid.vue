@@ -25,15 +25,15 @@
                     <div class="label time-label">
                         {{ timeLabels[rowIndex] }}
                     </div>
-                    <template v-for="index in row" :key="index">
+                    <template v-for="(id, colIndex) in row" :key="colIndex">
                         <SquareBlock
-                            v-if="index >= 0"
+                            v-if="id >= 0"
                             class="selectable"
-                            @mouseover.self="selectBlock(index, $event)"
+                            @mouseover.self="selectBlock(id, colIndex, $event)"
                             @mouseleave="unselect"
                             :size="blockSize"
-                            :data-key="index"
-                            :id="index"
+                            :data-key="id"
+                            :id="id"
                         />
                         <div v-else></div>
                     </template>
@@ -150,10 +150,10 @@ const dateLabelRowBounds = computed(() => {
 const gap = computed(() => Math.max(blockSize.value / 8, 2));
 const blockGap = computed(() => Math.floor(gap.value / 2) + 'px');
 
-const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
+const showPopover = useDebounceFn((id: number, col: number, e: MouseEvent) => {
     if (!uiStore.isHovering) return;
 
-    const isLeftHalf = id % columnCount.value < columnCount.value / 2;
+    const isLeftHalf = col % columnCount.value < columnCount.value / 2;
     const el = e.target as HTMLElement;
     const rect = el.getBoundingClientRect();
 
@@ -167,9 +167,9 @@ const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
     );
 }, 100);
 
-const selectBlock = (id: number, e: MouseEvent) => {
+const selectBlock = (id: number, col: number, e: MouseEvent) => {
     uiStore.hoverItem(id);
-    showPopover(id, e);
+    showPopover(id, col, e);
 };
 
 const unselect = () => {
