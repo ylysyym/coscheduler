@@ -168,7 +168,7 @@ const showPopover = useDebounceFn((id: number, e: MouseEvent) => {
         },
         isLeftHalf
     );
-}, 150);
+}, 100);
 
 const selectBlock = (id: number, e: MouseEvent) => {
     if (uiStore.isEditing) return;

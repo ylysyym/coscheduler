@@ -1,6 +1,8 @@
 <template>
     <n-popover
         trigger="manual"
+        class="popover"
+        style="padding: 0"
         :show="isVisible"
         :x="position.x"
         :y="position.y"
@@ -9,26 +11,30 @@
         :show-arrow="false"
         v-if="data !== undefined"
     >
-        <n-space vertical>
-            <strong>{{ formatInterval(data.interval) }}</strong>
-            <n-space v-for="person in Object.keys(data.entries)" :key="person">
-                {{ person }}
-                <n-tag
-                    size="small"
-                    :color="{
-                        color: data.entries[person].color,
-                        textColor: readableColor(data.entries[person].color),
-                    }"
-                >
-                    {{ data.entries[person].label }}
-                </n-tag>
+        <div class="header">{{ formatInterval(data.interval) }}</div>
+        <div class="content" v-if="people.length">
+            <n-space vertical>
+                <n-space v-for="person in people" :key="person">
+                    {{ person }}
+                    <n-tag
+                        size="small"
+                        :color="{
+                            color: data.entries[person].color,
+                            textColor: readableColor(
+                                data.entries[person].color
+                            ),
+                        }"
+                    >
+                        {{ data.entries[person].label }}
+                    </n-tag>
+                </n-space>
             </n-space>
-        </n-space>
+        </div>
     </n-popover>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { readableColor } from 'color2k';
 import { NPopover, NSpace, NTag } from 'naive-ui';
 import { BlockData } from '@/models/BlockData';
@@ -40,6 +46,8 @@ const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
 const data = ref<BlockData>();
+
+const people = computed(() => Object.keys(data.value?.entries || {}));
 
 const isVisible = ref(false);
 
@@ -67,3 +75,21 @@ defineExpose({
     hide,
 });
 </script>
+
+<style scoped>
+.popover {
+    padding: 0;
+}
+
+.header {
+    background: #672bbb;
+    color: white;
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+}
+
+.content {
+    padding: 8px;
+}
+</style>
