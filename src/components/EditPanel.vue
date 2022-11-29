@@ -78,7 +78,7 @@ import {
 } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
-import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { formatInterval } from '@/utilities/formatTimes';
 import { updateSchedule } from '@/api/schedules';

@@ -1,5 +1,5 @@
 import { Interval } from 'luxon';
-import { AvailabilityLevel } from './availability/AvailabilityLevel';
+import { AvailabilityLevel } from './AvailabilityLevel';
 
 interface Entries {
     [name: string]: AvailabilityLevel;

@@ -2,7 +2,7 @@ import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
 import { getScheduleById } from '@/api/schedules';
 import { BlockData } from '@/models/BlockData';
-import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { Schedule } from '@/models/Schedule';
 import { ColorPalette } from '@/models/palettes/ColorPalette';
 import { generatePalette } from '@/utilities/generatePalette';

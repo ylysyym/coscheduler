@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
+import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { useScheduleStore } from './schedule';
 
 const DEFAULT_INITIAL_LEVEL = 1;
