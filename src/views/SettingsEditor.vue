@@ -56,6 +56,7 @@ import {
 import { DateTime } from 'luxon';
 import { useSettingsStore } from '@/stores/settings';
 import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
+import { formatTime } from '@/utilities/formatTimes';
 
 const store = useSettingsStore();
 
@@ -87,8 +88,8 @@ const orientation = ref(store.orientation);
 
 const now = DateTime.now();
 const exampleDate = DateTime.now().set({
-    hour: Math.max(now.hour, 14),
-    day: Math.max(now.day, 20),
+    hour: Math.min(now.hour, 13),
+    day: Math.max(now.day, 13),
 });
 
 const dateFormats = [
@@ -129,7 +130,7 @@ const dateFormat = ref(store.dateFormat);
 const timeFormat = ref(store.timeFormat);
 
 const formatPreview = computed(() => {
-    return exampleDate.toFormat(dateFormat.value + ' ' + timeFormat.value);
+    return formatTime(exampleDate, dateFormat.value, timeFormat.value);
 });
 
 const save = () => {
