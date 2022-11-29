@@ -1,7 +1,6 @@
 <template>
     <n-popover
         trigger="manual"
-        class="popover"
         style="padding: 0"
         :show="isVisible"
         :x="position.x"
@@ -77,10 +76,6 @@ defineExpose({
 </script>
 
 <style scoped>
-.popover {
-    padding: 0;
-}
-
 .header {
     background: #672bbb;
     color: white;
