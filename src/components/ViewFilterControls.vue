@@ -45,14 +45,12 @@ const scheduleStore = useScheduleStore();
 const filterStore = useFilterStore();
 
 const availabilityOptions = computed(() => {
-    return scheduleStore.levels
-        .filter((level) => level.level > 0)
-        .map((level) => {
-            return {
-                value: level.level,
-                label: level.label,
-            };
-        });
+    return scheduleStore.levels.map((level) => {
+        return {
+            value: level.level,
+            label: level.label,
+        };
+    });
 });
 
 const selectedAvailability = ref(filterStore.minimumAvailability);

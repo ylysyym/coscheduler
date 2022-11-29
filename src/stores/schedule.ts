@@ -4,8 +4,6 @@ import { getScheduleById } from '@/api/schedules';
 import { BlockData } from '@/models/BlockData';
 import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { Schedule } from '@/models/Schedule';
-import { ColorPalette } from '@/models/palettes/ColorPalette';
-import { generatePalette } from '@/utilities/generatePalette';
 import { useUiStore } from './ui';
 import { useSettingsStore } from './settings';
 
@@ -117,12 +115,14 @@ export const useScheduleStore = defineStore('schedule', {
             });
         },
 
-        colors(): ColorPalette {
+        colors(): string[] {
             const settings = useSettingsStore();
-            return generatePalette(
-                settings.colorScale,
-                this.schedule.levels.length
-            );
+
+            return this.schedule.levels.map((_, index) => {
+                return settings.colorScale(
+                    index / (this.schedule.levels.length - 1)
+                );
+            });
         },
 
         title(): string {

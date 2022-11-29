@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { useScheduleStore } from './schedule';
 
-const DEFAULT_INITIAL_LEVEL = 1;
+const DEFAULT_INITIAL_LEVEL = 0;
 
 export const useUiStore = defineStore('ui', {
     state: () => {

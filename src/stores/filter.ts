@@ -6,7 +6,7 @@ type BlockRange = [number, number];
 export const useFilterStore = defineStore('filter', {
     state: () => {
         return {
-            minimumAvailability: 1,
+            minimumAvailability: 0,
             minimumPeople: 1,
             minimumDuration: 1,
         };

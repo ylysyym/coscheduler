@@ -35,9 +35,11 @@ const data = computed<BlockData>(() => {
     }
 });
 
+const unknownColor = '#ddd'; // TODO: switch in dark mode
+
 const background = computed(() => {
     if (Object.keys(data.value.entries).length === 0) {
-        return scheduleStore.levels[0].color;
+        return unknownColor;
     }
 
     let gradientType = '';

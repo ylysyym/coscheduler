@@ -16,7 +16,7 @@
                 <strong>Status</strong>
                 <n-space :vertical="!isSmallScreen" size="small">
                     <n-button
-                        v-for="level in visibleLevels"
+                        v-for="level in scheduleStore.levels"
                         :key="level.level"
                         :value="level.level"
                         @click="changeLevel(level.level)"
@@ -78,7 +78,6 @@ import {
 } from 'naive-ui';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
-import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { formatInterval } from '@/utilities/formatTimes';
 import { updateSchedule } from '@/api/schedules';
@@ -115,10 +114,6 @@ const selectedLevel = computed(() => {
 const changeLevel = (level: number) => {
     uiStore.changeSelectedLevels(level);
 };
-
-const visibleLevels = computed((): AvailabilityLevel[] => {
-    return scheduleStore.levels.filter((level) => level.level > 0);
-});
 
 const selectedIntervals = computed(() => {
     return Array.from(uiStore.selectedItems).map(

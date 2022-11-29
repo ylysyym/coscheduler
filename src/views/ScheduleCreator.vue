@@ -169,7 +169,7 @@ const create = () => {
                 blockCount: blockCount.value,
                 blockDuration: fields.timeUnit,
                 startTime: DateTime.fromMillis(fields.timeRange[0]),
-                levels: ['Unknown', ...levels[fields.scale]],
+                levels: levels[fields.scale],
             };
 
             return createSchedule(params)
