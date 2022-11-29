@@ -117,7 +117,7 @@ const changeLevel = (level: number) => {
 };
 
 const visibleLevels = computed((): AvailabilityLevel[] => {
-    return scheduleStore.levels.filter((level) => level.hidden !== true);
+    return scheduleStore.levels.filter((level) => level.level > 0);
 });
 
 const selectedIntervals = computed(() => {

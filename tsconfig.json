@@ -2,6 +2,7 @@
     "compilerOptions": {
         "sourceMap": true,
         "strict": true,
+        "allowSyntheticDefaultImports": true,
         "noImplicitReturns": true,
         "jsx": "preserve",
         "module": "es2020",

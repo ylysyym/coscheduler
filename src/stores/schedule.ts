@@ -1,10 +1,13 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
-import { BlockData } from '@/models/BlockData';
 import { getScheduleById } from '@/api/schedules';
+import { BlockData } from '@/models/BlockData';
 import { AvailabilityLevel } from '@/models/availability/AvailabilityLevel';
 import { Schedule } from '@/models/Schedule';
+import { ColorPalette } from '@/models/palettes/ColorPalette';
+import { generatePalette } from '@/utilities/generatePalette';
 import { useUiStore } from './ui';
+import { useSettingsStore } from './settings';
 
 interface ErrorData {
     hasError: boolean;
@@ -28,7 +31,7 @@ export const useScheduleStore = defineStore('schedule', {
                     this.schedules[id] = {
                         title: schedule.title,
                         entries: schedule.entries,
-                        scale: schedule.scale,
+                        levels: schedule.levels,
                         blockCount: schedule.blockCount,
                         blockDuration: schedule.blockDuration,
                         startTime: schedule.startTime,
@@ -105,7 +108,21 @@ export const useScheduleStore = defineStore('schedule', {
         },
 
         levels(): AvailabilityLevel[] {
-            return this.schedule.scale.levels;
+            return this.schedule.levels.map((label, index) => {
+                return {
+                    level: index,
+                    color: this.colors[index],
+                    label: label,
+                };
+            });
+        },
+
+        colors(): ColorPalette {
+            const settings = useSettingsStore();
+            return generatePalette(
+                settings.colorScale,
+                this.schedule.levels.length
+            );
         },
 
         title(): string {

@@ -15,6 +15,7 @@
     "license": "0BSD",
     "devDependencies": {
         "@babel/types": "^7.20.2",
+        "@types/colormap": "^2.3.1",
         "@types/luxon": "^3.1.0",
         "@typescript-eslint/eslint-plugin": "^5.37.0",
         "@typescript-eslint/parser": "^5.37.0",
@@ -36,6 +37,7 @@
         "vue-tsc": "^1.0.9"
     },
     "dependencies": {
-        "@viselect/vue": "^3.1.1"
+        "@viselect/vue": "^3.1.1",
+        "colormap": "^2.3.2"
     }
 }

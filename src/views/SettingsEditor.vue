@@ -3,6 +3,12 @@
         <h1>Settings</h1>
         <n-space vertical>
             <n-form>
+                <n-form-item label="Color palette">
+                    <n-select
+                        :options="colorOptions"
+                        v-model:value="selectedMap"
+                    />
+                </n-form-item>
                 <n-form-item label="Block display mode">
                     <n-radio-group v-model:value="orientation">
                         <n-radio
@@ -49,8 +55,26 @@ import {
 } from 'naive-ui';
 import { DateTime } from 'luxon';
 import { useSettingsStore } from '@/stores/settings';
+import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
 
 const store = useSettingsStore();
+
+const colorMaps = defaultColorMaps;
+
+const colorOptions = computed(() => {
+    return colorMaps.map((map, index) => {
+        return {
+            label: map.name,
+            value: index,
+        };
+    });
+});
+
+const selectedMap = ref(
+    colorMaps.findIndex((palette) => {
+        return JSON.stringify(palette.value) === JSON.stringify(store.colorMap);
+    })
+);
 
 const orientations = [
     { label: 'Vertical stripes', value: 'bottom' },
@@ -112,6 +136,7 @@ const save = () => {
     store.setOrientation(orientation.value);
     store.setDateFormat(dateFormat.value);
     store.setTimeFormat(timeFormat.value);
+    store.setColorMap(colorMaps[selectedMap.value].value);
 };
 </script>
 

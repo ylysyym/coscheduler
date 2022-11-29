@@ -1,4 +1,6 @@
+import { getScale } from 'color2k';
 import { defineStore } from 'pinia';
+import { presetScale } from '@/models/palettes/presetScale';
 
 export const useSettingsStore = defineStore('settings', {
     state: () => {
@@ -8,6 +10,7 @@ export const useSettingsStore = defineStore('settings', {
             timeFormat: '',
             theme: 'light',
             language: 'en',
+            colorMap: 'viridis' as string | string[],
         };
     },
 
@@ -37,6 +40,11 @@ export const useSettingsStore = defineStore('settings', {
             localStorage.setItem('language', lang);
         },
 
+        setColorMap(map: string | string[]) {
+            this.colorMap = map;
+            localStorage.setItem('colorMap', JSON.stringify(map));
+        },
+
         initialise() {
             this.timeFormat = localStorage.getItem('timeFormat') || 'HH:mm';
             this.dateFormat =
@@ -45,6 +53,8 @@ export const useSettingsStore = defineStore('settings', {
                 localStorage.getItem('orientation') || 'bottom right';
             this.theme = localStorage.getItem('theme') || 'light';
             this.language = localStorage.getItem('language') || 'en';
+            const colorMap = localStorage.getItem('colorMap');
+            this.colorMap = colorMap ? JSON.parse(colorMap) : 'viridis';
         },
     },
 
@@ -55,6 +65,14 @@ export const useSettingsStore = defineStore('settings', {
 
         isDarkMode(): boolean {
             return this.theme === 'dark';
+        },
+
+        colorScale(): (value: number) => string {
+            if (Array.isArray(this.colorMap)) {
+                return getScale(...this.colorMap);
+            } else {
+                return presetScale(this.colorMap);
+            }
         },
     },
 });

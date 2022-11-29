@@ -30,7 +30,7 @@
                     </n-form-item>
                     <n-form-item label="Availability options" path="scale">
                         <n-select
-                            :options="scaleOptions"
+                            :options="levelOptions"
                             v-model:value="fields.scale"
                         />
                     </n-form-item>
@@ -57,7 +57,7 @@ import {
 import type { FormRules } from 'naive-ui';
 import { DateTime } from 'luxon';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
-import { defaultScales } from '@/models/availability/defaultAvailabilityScales';
+import { defaultLevelLabels } from '@/models/defaultLevelLabels';
 import { ScheduleParameters } from '@/models/ScheduleParameters';
 import { createSchedule } from '@/api/schedules';
 
@@ -141,12 +141,12 @@ const blockCount = computed(() => {
     );
 });
 
-const scales = defaultScales;
+const levels = defaultLevelLabels;
 
-const scaleOptions = computed(() => {
-    return scales.map((scale, index) => {
+const levelOptions = computed(() => {
+    return levels.map((level, index) => {
         return {
-            label: scale.title,
+            label: level.join(' - '),
             value: index,
         };
     });
@@ -169,7 +169,7 @@ const create = () => {
                 blockCount: blockCount.value,
                 blockDuration: fields.timeUnit,
                 startTime: DateTime.fromMillis(fields.timeRange[0]),
-                scale: scales[fields.scale],
+                levels: ['Unknown', ...levels[fields.scale]],
             };
 
             return createSchedule(params)

@@ -23,7 +23,7 @@ export const getScheduleById = async (id: string) => {
         startTime: DateTime.fromISO(json.startTime),
         blockCount: json.blockCount,
         blockDuration: json.blockDuration,
-        scale: json.scale,
+        levels: json.levels,
         entries: json.entries,
     };
 
