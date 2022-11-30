@@ -66,7 +66,7 @@ const formatDuration = (n: number) => {
 const peopleCount = computed(() => scheduleStore.people.length);
 
 const peopleMarks = computed(() => {
-    const marks = {} as { [n: number]: string };
+    const marks = {} as Record<number, string>;
     marks[peopleCount.value] = 'All';
     for (let i = 1; i < peopleCount.value; i++) {
         marks[i] = i.toString();

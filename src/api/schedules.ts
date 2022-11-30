@@ -51,7 +51,7 @@ export const createSchedule = async (parameters: ScheduleParameters) => {
 
 export const updateSchedule = async (
     id: string,
-    entries: { [name: string]: number[] }
+    entries: Record<string, number[]>
 ) => {
     const response = await fetch(
         `${import.meta.env.VITE_API_URL}/schedules/${id}`,

@@ -12,13 +12,13 @@ interface ErrorData {
     error: Error;
 }
 
-type AvailabilityCount = { [availability: number]: number };
+type AvailabilityCount = Record<number, number>;
 
 export const useScheduleStore = defineStore('schedule', {
     state: () => {
         return {
-            schedules: {} as { [id: string]: Schedule },
-            errors: {} as { [id: string]: ErrorData },
+            schedules: {} as Record<string, Schedule>,
+            errors: {} as Record<string, ErrorData>,
         };
     },
 
@@ -67,7 +67,7 @@ export const useScheduleStore = defineStore('schedule', {
             return this.schedules[ui.scheduleId];
         },
 
-        entries(): { [name: string]: number[] } {
+        entries(): Record<string, number[]> {
             return this.schedule.entries;
         },
 

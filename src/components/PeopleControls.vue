@@ -59,12 +59,11 @@ import PersonStats from '@/components/PersonStats.vue';
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();
 
-const showPersonPopover = ref<{ [person: string]: boolean }>({});
+const showPersonPopover = ref<Record<string, boolean>>({});
 
-type CheckedNameMap = { [name: string]: boolean };
 const isChecked = computed(() => {
     return uiStore.selectedNames.reduce(
-        (result: CheckedNameMap, name: string) => {
+        (result: Record<string, boolean>, name: string) => {
             result[name] = true;
             return result;
         },

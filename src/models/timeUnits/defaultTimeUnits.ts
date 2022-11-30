@@ -1,6 +1,6 @@
 import { TimeUnit } from './TimeUnit';
 
-export const defaultTimeUnits: { [key: string]: TimeUnit } = {
+export const defaultTimeUnits: Record<string, TimeUnit> = {
     '5m': {
         description: '5 minutes',
         minutes: 5,

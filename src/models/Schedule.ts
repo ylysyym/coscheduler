@@ -6,5 +6,5 @@ export interface Schedule {
     blockCount: number;
     startTime: DateTime;
     levels: string[];
-    entries: { [name: string]: number[] };
+    entries: Record<string, number[]>;
 }
