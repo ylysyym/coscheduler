@@ -1,14 +1,14 @@
 <template>
     <div class="container">
-        <h1>Settings</h1>
+        <div class="title">Settings</div>
         <n-space vertical>
             <n-form>
-                <n-form-item label="Color palette">
-                    <n-select
-                        :options="colorOptions"
-                        v-model:value="selectedMap"
-                    />
-                </n-form-item>
+                <div class="header">Block display</div>
+
+                Color palette
+                <ColorPalettePreview :palette="colorMaps[selectedMap].value" />
+                <n-select :options="colorOptions" v-model:value="selectedMap" />
+                <br />
                 <n-form-item label="Block display mode">
                     <n-radio-group v-model:value="orientation">
                         <n-radio
@@ -20,6 +20,7 @@
                         </n-radio>
                     </n-radio-group>
                 </n-form-item>
+                <div class="header">Timestamp format</div>
                 <n-form-item label="Date format">
                     <n-select
                         :options="dateFormatOptions"
@@ -57,6 +58,7 @@ import { DateTime } from 'luxon';
 import { useSettingsStore } from '@/stores/settings';
 import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
 import { formatTime } from '@/utilities/formatTime';
+import ColorPalettePreview from '@/components/ColorPalettePreview.vue';
 
 const store = useSettingsStore();
 
@@ -145,5 +147,16 @@ const save = () => {
 .container {
     margin: 0 auto;
     max-width: 900px;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.header {
+    font-size: 1.4em;
+    font-weight: bold;
+    margin: 8px 0;
 }
 </style>
