@@ -1,6 +1,5 @@
-import { getScale } from 'color2k';
 import { defineStore } from 'pinia';
-import { presetScale } from '@/utilities/presetScale';
+import { colorScale } from '@/utilities/colorScale';
 
 export const useSettingsStore = defineStore('settings', {
     state: () => {
@@ -64,11 +63,7 @@ export const useSettingsStore = defineStore('settings', {
         },
 
         colorScale(): (value: number) => string {
-            if (Array.isArray(this.colorMap)) {
-                return getScale(...this.colorMap);
-            } else {
-                return presetScale(this.colorMap);
-            }
+            return colorScale(this.colorMap);
         },
     },
 });

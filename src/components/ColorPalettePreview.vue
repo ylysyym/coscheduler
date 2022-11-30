@@ -12,9 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { presetScale } from '@/utilities/presetScale';
-import { getScale } from 'color2k';
 import { computed } from 'vue';
+import { colorScale } from '@/utilities/colorScale';
 
 const props = defineProps<{
     palette: string | string[];
@@ -23,12 +22,7 @@ const props = defineProps<{
 const sectionCount = 20;
 
 const colors = computed(() => {
-    let scale;
-    if (Array.isArray(props.palette)) {
-        scale = getScale(...props.palette);
-    } else {
-        scale = presetScale(props.palette);
-    }
+    const scale = colorScale(props.palette);
 
     const result = [];
     for (let i = 0; i < sectionCount; i++) {
