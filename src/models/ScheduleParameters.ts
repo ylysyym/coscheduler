@@ -1,9 +1,9 @@
 import { DateTime } from 'luxon';
 
 export interface ScheduleParameters {
-    title: string;
-    blockDuration: number;
-    blockCount: number;
-    startTime: DateTime;
-    levels: string[];
+    readonly title: string;
+    readonly blockDuration: number;
+    readonly blockCount: number;
+    readonly startTime: DateTime;
+    readonly levels: string[];
 }

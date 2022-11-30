@@ -1,16 +1,7 @@
 import { Interval } from 'luxon';
 import { AvailabilityLevel } from './AvailabilityLevel';
 
-interface Entries {
-    [name: string]: AvailabilityLevel;
-}
-
-export class BlockData {
-    public readonly interval: Interval;
-    public readonly entries: Entries;
-
-    constructor(interval: Interval, entries: Entries) {
-        this.interval = interval;
-        this.entries = entries;
-    }
+export interface BlockData {
+    readonly interval: Interval;
+    readonly entries: Record<string, AvailabilityLevel>;
 }

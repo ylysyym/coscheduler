@@ -27,9 +27,12 @@ const scheduleStore = useScheduleStore();
 const data = computed<BlockData>(() => {
     if (uiStore.isEditing) {
         // TODO: make this less ugly / more clear
-        return new BlockData(scheduleStore.intervals[props.id], {
-            '': scheduleStore.levels[uiStore.currentEntry[props.id]],
-        });
+        return {
+            interval: scheduleStore.intervals[props.id],
+            entries: {
+                '': scheduleStore.levels[uiStore.currentEntry[props.id]],
+            },
+        };
     } else {
         return scheduleStore.blockAtIndex(uiStore.selectedNames, props.id);
     }

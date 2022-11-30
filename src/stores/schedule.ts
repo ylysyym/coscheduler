@@ -8,8 +8,8 @@ import { useUiStore } from './ui';
 import { useSettingsStore } from './settings';
 
 interface ErrorData {
-    hasError: boolean;
-    error: Error;
+    readonly hasError: boolean;
+    readonly error: Error;
 }
 
 type AvailabilityCount = Record<number, number>;
@@ -53,7 +53,10 @@ export const useScheduleStore = defineStore('schedule', {
                     };
                 }, {});
 
-            return new BlockData(this.intervals[index], entries);
+            return {
+                interval: this.intervals[index],
+                entries: entries,
+            };
         },
 
         updateEntry(name: string, levels: number[]) {

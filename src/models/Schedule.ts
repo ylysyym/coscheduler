@@ -1,10 +1,10 @@
 import { DateTime } from 'luxon';
 
 export interface Schedule {
-    title: string;
-    blockDuration: number;
-    blockCount: number;
-    startTime: DateTime;
-    levels: string[];
-    entries: Record<string, number[]>;
+    readonly title: string;
+    readonly blockDuration: number;
+    readonly blockCount: number;
+    readonly startTime: DateTime;
+    readonly levels: string[];
+    readonly entries: Record<string, number[]>;
 }
