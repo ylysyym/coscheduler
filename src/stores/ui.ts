@@ -21,7 +21,7 @@ export const useUiStore = defineStore('ui', {
     },
 
     actions: {
-        initialiseBlockData(blockCount: number) {
+        initialiseLevels(blockCount: number) {
             this.currentEntry = [];
             for (let i = 0; i < blockCount; i++) {
                 this.currentEntry.push(DEFAULT_INITIAL_LEVEL);

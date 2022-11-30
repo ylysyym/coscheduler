@@ -10,8 +10,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { NButton, NInput, NInputGroup } from 'naive-ui';
-import { useUiStore } from '@/stores/ui';
 import { useClipboard } from '@vueuse/core';
+import { useUiStore } from '@/stores/ui';
 
 const uiStore = useUiStore();
 

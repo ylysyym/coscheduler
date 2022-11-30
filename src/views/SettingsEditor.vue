@@ -56,7 +56,7 @@ import {
 import { DateTime } from 'luxon';
 import { useSettingsStore } from '@/stores/settings';
 import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
-import { formatTime } from '@/utilities/formatTimes';
+import { formatTime } from '@/utilities/formatTime';
 
 const store = useSettingsStore();
 

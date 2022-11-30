@@ -57,7 +57,7 @@ import {
 import type { FormRules } from 'naive-ui';
 import { DateTime } from 'luxon';
 import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
-import { defaultLevelLabels } from '@/models/defaultLevelLabels';
+import { defaultLevelLabels } from '@/models/defaultLevels';
 import { ScheduleParameters } from '@/models/ScheduleParameters';
 import { createSchedule } from '@/api/schedules';
 

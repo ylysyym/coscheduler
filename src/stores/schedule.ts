@@ -1,8 +1,8 @@
 import { DateTime, Duration, Interval } from 'luxon';
 import { defineStore } from 'pinia';
 import { getScheduleById } from '@/api/schedules';
-import { BlockData } from '@/models/BlockData';
 import { AvailabilityLevel } from '@/models/AvailabilityLevel';
+import { BlockData } from '@/models/BlockData';
 import { Schedule } from '@/models/Schedule';
 import { useUiStore } from './ui';
 import { useSettingsStore } from './settings';

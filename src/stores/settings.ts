@@ -1,6 +1,6 @@
 import { getScale } from 'color2k';
 import { defineStore } from 'pinia';
-import { presetScale } from '@/models/palettes/presetScale';
+import { presetScale } from '@/utilities/presetScale';
 
 export const useSettingsStore = defineStore('settings', {
     state: () => {

@@ -71,7 +71,7 @@ const beforeChangeTab = (newTabName: string, oldTabName: string) => {
 const changeTab = (tabName: string) => {
     if (tabName === 'edit') {
         uiStore.join();
-        uiStore.initialiseBlockData(scheduleStore.blockCount);
+        uiStore.initialiseLevels(scheduleStore.blockCount);
     } else if (uiStore.isEditing) {
         uiStore.stopEditing();
     }

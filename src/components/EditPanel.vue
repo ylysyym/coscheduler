@@ -79,7 +79,7 @@ import {
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { isSmallScreen } from '@/utilities/breakpoints';
-import { formatInterval } from '@/utilities/formatTimes';
+import { formatInterval } from '@/utilities/formatTime';
 import { updateSchedule } from '@/api/schedules';
 
 const uiStore = useUiStore();

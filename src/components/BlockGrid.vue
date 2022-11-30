@@ -52,11 +52,7 @@ import SquareBlock from '@/components/SquareBlock.vue';
 import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
 import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
-import {
-    rowDuration,
-    generateGrid,
-    rowStartTimes,
-} from '@/utilities/generateGrid';
+import { generateGrid, rowDuration, rowStartTimes } from '@/utilities/grid';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();

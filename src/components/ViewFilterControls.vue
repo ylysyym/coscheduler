@@ -39,7 +39,7 @@ import { NEllipsis, NSelect, NSlider } from 'naive-ui';
 import { Duration, Interval } from 'luxon';
 import { useScheduleStore } from '@/stores/schedule';
 import { useFilterStore } from '@/stores/filter';
-import { formatInterval } from '@/utilities/formatTimes';
+import { formatInterval } from '@/utilities/formatTime';
 
 const scheduleStore = useScheduleStore();
 const filterStore = useFilterStore();
