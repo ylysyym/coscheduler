@@ -18,33 +18,40 @@
         "parser": "@typescript-eslint/parser",
         "sourceType": "module"
     },
-    "plugins": [
-        "vue",
-        "@typescript-eslint"
-    ],
+    "plugins": ["vue", "@typescript-eslint"],
     "rules": {
         "@typescript-eslint/no-var-requires": "off",
-        "import/order": ["warn", {
-            "alphabetize": {
-                "order": "asc"
-            },
-            "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
-            "pathGroups": [
-                {
-                    "pattern": "@/**",
-                    "group": "internal"
-                }
-            ]
-        }]
+        "import/order": [
+            "warn",
+            {
+                "alphabetize": {
+                    "order": "asc"
+                },
+                "groups": [
+                    "builtin",
+                    "external",
+                    "internal",
+                    "parent",
+                    "sibling",
+                    "index"
+                ],
+                "pathGroups": [
+                    {
+                        "pattern": "@/**",
+                        "group": "internal"
+                    }
+                ]
+            }
+        ]
     },
     "settings": {
         "import/parsers": {
-          "@typescript-eslint/parser": [".ts", ".tsx"]
+            "@typescript-eslint/parser": [".ts", ".tsx"]
         },
         "import/resolver": {
-          "typescript": {
-            "alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
-          }
+            "typescript": {
+                "alwaysTryTypes": true // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+            }
         }
     }
 }

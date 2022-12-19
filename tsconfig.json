@@ -7,29 +7,14 @@
         "jsx": "preserve",
         "module": "es2020",
         "moduleResolution": "node",
-        "lib": [
-            "es2019",
-            "DOM",
-            "esnext"
-        ],
+        "lib": ["es2019", "DOM", "esnext"],
         "target": "es6",
         "baseUrl": ".",
         "paths": {
-            "@/*": [
-                "src/*"
-            ]
+            "@/*": ["src/*"]
         },
-        "types": [
-            "vite/client",
-            "web-bluetooth",
-        ]
+        "types": ["vite/client", "web-bluetooth"]
     },
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "**/*.vue"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+    "include": ["**/*.ts", "**/*.tsx", "**/*.vue"],
+    "exclude": ["node_modules"]
 }
