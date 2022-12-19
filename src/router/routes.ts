@@ -1,5 +1,5 @@
-import ScheduleViewer from '@/views/ScheduleViewer.vue';
 import ScheduleCreator from '@/views/ScheduleCreator.vue';
+import ScheduleViewer from '@/views/ScheduleViewer.vue';
 import SettingsEditor from '@/views/SettingsEditor.vue';
 
 export const routes = [

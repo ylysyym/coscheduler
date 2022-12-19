@@ -4,8 +4,8 @@ import { getScheduleById } from '@/api/schedules';
 import { AvailabilityLevel } from '@/models/AvailabilityLevel';
 import { BlockData } from '@/models/BlockData';
 import { Schedule } from '@/models/Schedule';
-import { useUiStore } from './ui';
 import { useSettingsStore } from './settings';
+import { useUiStore } from './ui';
 
 interface ErrorData {
     readonly hasError: boolean;
