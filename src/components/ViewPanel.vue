@@ -6,7 +6,7 @@
     >
         <template #arrow>&nbsp;</template>
         <template #header-extra="props">
-            <n-icon size="20" v-if="props.collapsed">
+            <n-icon v-if="props.collapsed" size="20">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -20,7 +20,7 @@
                     </g>
                 </svg>
             </n-icon>
-            <n-icon size="20" v-else>
+            <n-icon v-else size="20">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"

@@ -1,9 +1,9 @@
 <template>
     <div>
         <div
-            class="color-block"
             v-for="(color, index) in colors"
             :key="index"
+            class="color-block"
             :style="{
                 background: color,
             }"

@@ -3,10 +3,10 @@
         <div>
             <n-tabs
                 type="segment"
-                @update:value="changeTab"
-                @before-leave="beforeChangeTab"
                 :value="uiStore.selectedTab"
                 default-value="view"
+                @update:value="changeTab"
+                @before-leave="beforeChangeTab"
             >
                 <n-tab name="view">View</n-tab>
                 <n-tab name="edit">

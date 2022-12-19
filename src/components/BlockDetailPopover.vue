@@ -1,5 +1,6 @@
 <template>
     <n-popover
+        v-if="data !== undefined"
         trigger="manual"
         style="padding: 0"
         :show="isVisible"
@@ -8,10 +9,9 @@
         :animated="false"
         :placement="placement"
         :show-arrow="false"
-        v-if="data !== undefined"
     >
         <div class="header">{{ formatInterval(data.interval) }}</div>
-        <div class="content" v-if="!uiStore.isEditing && people.length">
+        <div v-if="!uiStore.isEditing && people.length" class="content">
             <n-space vertical>
                 <n-space v-for="person in people" :key="person">
                     {{ person }}

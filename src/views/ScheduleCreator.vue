@@ -3,25 +3,25 @@
         <n-scrollbar>
             <div class="inner-container">
                 <h1>Create Schedule</h1>
-                <n-form :rules="rules" :model="fields" ref="form">
+                <n-form ref="form" :rules="rules" :model="fields">
                     <n-form-item label="Title" path="title">
                         <n-input
-                            placeholder="Title"
                             v-model:value="fields.title"
+                            placeholder="Title"
                         />
                     </n-form-item>
                     <n-form-item label="Unit of time" path="timeUnit">
                         <n-select
-                            :options="schemas"
                             v-model:value="fields.timeUnit"
+                            :options="schemas"
                             :on-update:value="onSchemaSelected"
                         />
                     </n-form-item>
                     <n-form-item label="Time range" path="timeRange">
                         <n-date-picker
+                            v-model:value="fields.timeRange"
                             panel
                             type="datetimerange"
-                            v-model:value="fields.timeRange"
                             :time-picker-props="timePickerProps"
                             update-value-on-close
                             :actions="null"
@@ -30,8 +30,8 @@
                     </n-form-item>
                     <n-form-item label="Availability options" path="scale">
                         <n-select
-                            :options="levelOptions"
                             v-model:value="fields.scale"
+                            :options="levelOptions"
                         />
                     </n-form-item>
                     <n-button type="primary" @click="create">Create</n-button>

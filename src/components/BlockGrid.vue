@@ -1,5 +1,5 @@
 <template>
-    <div class="container" ref="container">
+    <div ref="container" class="container">
         <SelectionArea
             :on-move="onMove"
             :on-start="onStart"
@@ -28,12 +28,12 @@
                     <template v-for="(id, colIndex) in row" :key="colIndex">
                         <SquareBlock
                             v-if="id >= 0"
+                            :id="id"
                             class="selectable"
-                            @mouseover.self="selectBlock(id, colIndex, $event)"
-                            @mouseleave="unselect"
                             :size="blockSize"
                             :data-key="id"
-                            :id="id"
+                            @mouseover.self="selectBlock(id, colIndex, $event)"
+                            @mouseleave="unselect"
                         />
                         <div v-else></div>
                     </template>

@@ -1,5 +1,5 @@
 <template>
-    <div class="loading-container" v-if="isLoading">
+    <div v-if="isLoading" class="loading-container">
         <n-spin size="large" />
     </div>
     <template v-else-if="!scheduleStore.hasError">
@@ -12,11 +12,11 @@
                 <BlockGrid />
             </n-scrollbar>
         </div>
-        <div class="control-panel" v-if="isSmallScreen">
+        <div v-if="isSmallScreen" class="control-panel">
             <ControlPanel class="small-control-panel" />
         </div>
     </template>
-    <ErrorDisplay class="error-display" v-else />
+    <ErrorDisplay v-else class="error-display" />
 </template>
 
 <script setup lang="ts">

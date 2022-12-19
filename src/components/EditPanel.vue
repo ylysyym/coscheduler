@@ -19,7 +19,6 @@
                         v-for="level in scheduleStore.levels"
                         :key="level.level"
                         :value="level.level"
-                        @click="changeLevel(level.level)"
                         :color="
                             level.level === selectedLevel
                                 ? level.color
@@ -36,6 +35,7 @@
                                 : `box-shadow: inset 6px 0 0 0 ${level.color}`
                         "
                         :secondary="level.level !== selectedLevel"
+                        @click="changeLevel(level.level)"
                     >
                         {{ level.label }}
                     </n-button>
@@ -49,8 +49,8 @@
         <div>
             <n-input-group>
                 <n-input
-                    placeholder="Name"
                     v-model:value="name"
+                    placeholder="Name"
                     :disabled="!uiStore.isJoining"
                     :status="isValidName ? undefined : 'error'"
                     autofocus

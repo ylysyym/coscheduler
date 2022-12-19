@@ -11,11 +11,11 @@
                     >
                         <template #trigger>
                             <n-button
-                                @click="showPersonPopover[person] = true"
                                 tertiary
                                 :class="{
                                     'hidden-person': !isChecked[person],
                                 }"
+                                @click="showPersonPopover[person] = true"
                             >
                                 {{ person }}
                             </n-button>

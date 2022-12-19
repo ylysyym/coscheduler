@@ -7,30 +7,30 @@
 
                 Color palette
                 <ColorPalettePreview :palette="colorMaps[selectedMap].value" />
-                <n-select :options="colorOptions" v-model:value="selectedMap" />
+                <n-select v-model:value="selectedMap" :options="colorOptions" />
                 <br />
                 <n-form-item label="Block display mode">
                     <n-radio-group v-model:value="orientation">
                         <n-radio
-                            v-for="orientation in orientations"
-                            :key="orientation.value"
-                            :value="orientation.value"
+                            v-for="orientationOption in orientations"
+                            :key="orientationOption.value"
+                            :value="orientationOption.value"
                         >
-                            {{ orientation.label }}
+                            {{ orientationOption.label }}
                         </n-radio>
                     </n-radio-group>
                 </n-form-item>
                 <div class="header">Timestamp format</div>
                 <n-form-item label="Date format">
                     <n-select
-                        :options="dateFormatOptions"
                         v-model:value="dateFormat"
+                        :options="dateFormatOptions"
                     />
                 </n-form-item>
                 <n-form-item label="Time format">
                     <n-select
-                        :options="timeFormatOptions"
                         v-model:value="timeFormat"
+                        :options="timeFormatOptions"
                     />
                 </n-form-item>
                 <n-form-item label="Preview">

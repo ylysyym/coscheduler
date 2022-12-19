@@ -1,25 +1,25 @@
 <template>
     Minimum availability
     <n-select
-        :options="availabilityOptions"
         v-model:value="selectedAvailability"
+        :options="availabilityOptions"
         @update:value="updateFilterAvailability"
     />
     Minimum duration
     <n-slider
+        v-model:value="minimumDuration"
         :min="1"
         :max="Math.min(scheduleStore.blockCount, 40)"
         :format-tooltip="formatDuration"
-        v-model:value="minimumDuration"
         @update:value="updateFilterDuration"
     />
     Minimum number of people
     <n-slider
+        v-model:value="minimumPeople"
         :min="1"
         :max="peopleCount"
         :marks="peopleMarks"
         :tooltip="false"
-        v-model:value="minimumPeople"
         @update:value="updateFilterPeopleCount"
     />
     <strong>Matches</strong>

@@ -33,12 +33,12 @@
                         <div class="sub-item">
                             <n-button-group>
                                 <n-button
-                                    @click="settings.setTheme('light')"
                                     :type="
                                         selectedTheme === 'light'
                                             ? 'primary'
                                             : 'default'
                                     "
+                                    @click="settings.setTheme('light')"
                                 >
                                     <n-icon>
                                         <svg
@@ -54,12 +54,12 @@
                                     </n-icon>
                                 </n-button>
                                 <n-button
-                                    @click="settings.setTheme('dark')"
                                     :type="
                                         selectedTheme === 'dark'
                                             ? 'primary'
                                             : 'default'
                                     "
+                                    @click="settings.setTheme('dark')"
                                 >
                                     <n-icon>
                                         <svg
@@ -81,8 +81,8 @@
                         <div class="sub-item-label">Language</div>
                         <div class="sub-item">
                             <n-select
-                                :options="languageOptions"
                                 v-model:value="selectedLanguage"
+                                :options="languageOptions"
                                 @update:value="
                                     settings.setLanguage(selectedLanguage)
                                 "
@@ -100,8 +100,8 @@
                 </n-list-item>
             </n-list>
         </n-popover>
-        <router-link to="/create" v-slot="{ href, navigate }">
-            <n-button type="primary" @click="navigate" :href="href">
+        <router-link v-slot="{ href, navigate }" to="/create">
+            <n-button type="primary" :href="href" @click="navigate">
                 <template #icon>
                     <n-icon>
                         <svg
