@@ -8,7 +8,7 @@
         "build": "vue-tsc --noEmit && vite build",
         "preview": "vite preview",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "lint": "eslint .",
+        "lint": "eslint . --ext .vue,.js,.ts,.tsx",
         "format": "prettier --write . --ignore-path .gitignore"
     },
     "author": "Lrdwhyt@gmail.com",

@@ -49,12 +49,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { NButton, NCheckbox, NCheckboxGroup, NPopover, NSpace } from 'naive-ui';
-import { isSmallScreen } from '@/utilities/breakpoints';
-import { useUiStore } from '@/stores/ui';
-import { useScheduleStore } from '@/stores/schedule';
+import { computed, ref } from 'vue';
 import PersonStats from '@/components/PersonStats.vue';
+import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
+import { isSmallScreen } from '@/utilities/breakpoints';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();

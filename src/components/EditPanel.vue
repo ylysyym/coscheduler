@@ -65,9 +65,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { Interval } from 'luxon';
 import { readableColor, toRgba } from 'color2k';
+import { Interval } from 'luxon';
 import {
     NButton,
     NEllipsis,
@@ -76,11 +75,12 @@ import {
     NSpace,
     useMessage,
 } from 'naive-ui';
-import { useUiStore } from '@/stores/ui';
+import { computed, ref } from 'vue';
+import { updateSchedule } from '@/api/schedules';
 import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
 import { isSmallScreen } from '@/utilities/breakpoints';
 import { formatInterval } from '@/utilities/formatTime';
-import { updateSchedule } from '@/api/schedules';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();

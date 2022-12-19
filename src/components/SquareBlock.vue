@@ -11,9 +11,9 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { BlockData } from '@/models/BlockData';
-import { useUiStore } from '@/stores/ui';
 import { useScheduleStore } from '@/stores/schedule';
 import { useSettingsStore } from '@/stores/settings';
+import { useUiStore } from '@/stores/ui';
 
 const props = defineProps<{
     id: number;

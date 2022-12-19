@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { NScrollbar, NSpin } from 'naive-ui';
+import { ref } from 'vue';
 import BlockGrid from '@/components/BlockGrid.vue';
 import ControlPanel from '@/components/ControlPanel.vue';
 import ErrorDisplay from '@/components/ErrorDisplay.vue';

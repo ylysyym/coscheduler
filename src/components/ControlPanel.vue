@@ -26,13 +26,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import { NScrollbar, NTab, NTabs, useDialog } from 'naive-ui';
-import { useUiStore } from '@/stores/ui';
-import { useScheduleStore } from '@/stores/schedule';
+import { computed } from 'vue';
 import EditPanel from '@/components/EditPanel.vue';
-import ViewPanel from '@/components/ViewPanel.vue';
 import ShareWidget from '@/components/ShareWidget.vue';
+import ViewPanel from '@/components/ViewPanel.vue';
+import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
 
 const uiStore = useUiStore();
 const scheduleStore = useScheduleStore();

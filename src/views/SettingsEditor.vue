@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { DateTime } from 'luxon';
 import {
     NButton,
     NForm,
@@ -54,11 +54,11 @@ import {
     NSelect,
     NSpace,
 } from 'naive-ui';
-import { DateTime } from 'luxon';
-import { useSettingsStore } from '@/stores/settings';
-import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
-import { formatTime } from '@/utilities/formatTime';
+import { computed, ref } from 'vue';
 import ColorPalettePreview from '@/components/ColorPalettePreview.vue';
+import { defaultColorMaps } from '@/models/palettes/defaultColorMaps';
+import { useSettingsStore } from '@/stores/settings';
+import { formatTime } from '@/utilities/formatTime';
 
 const store = useSettingsStore();
 

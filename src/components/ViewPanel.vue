@@ -52,9 +52,9 @@
 
 <script setup lang="ts">
 import { NCollapse, NCollapseItem, NIcon } from 'naive-ui';
-import { useUiStore } from '@/stores/ui';
 import PeopleControls from '@/components/PeopleControls.vue';
 import ViewFilterControls from '@/components/ViewFilterControls.vue';
+import { useUiStore } from '@/stores/ui';
 
 const uiStore = useUiStore();
 

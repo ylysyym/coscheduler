@@ -45,13 +45,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { SelectionArea, SelectionEvent } from '@viselect/vue';
 import { useDebounceFn, useElementSize } from '@vueuse/core';
-import SquareBlock from '@/components/SquareBlock.vue';
+import { computed, ref } from 'vue';
 import BlockDetailPopover from '@/components/BlockDetailPopover.vue';
-import { useUiStore } from '@/stores/ui';
+import SquareBlock from '@/components/SquareBlock.vue';
 import { useScheduleStore } from '@/stores/schedule';
+import { useUiStore } from '@/stores/ui';
 import { generateGrid, rowDuration, rowStartTimes } from '@/utilities/grid';
 
 const uiStore = useUiStore();

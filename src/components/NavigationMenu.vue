@@ -125,7 +125,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import {
     NButton,
     NButtonGroup,
@@ -136,6 +135,7 @@ import {
     NSelect,
     NSpace,
 } from 'naive-ui';
+import { computed, ref } from 'vue';
 import { useSettingsStore } from '@/stores/settings';
 
 const settings = useSettingsStore();

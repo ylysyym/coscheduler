@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
 import { NTooltip } from 'naive-ui';
+import { computed, ref } from 'vue';
 import { useScheduleStore } from '@/stores/schedule';
 
 const props = defineProps<{

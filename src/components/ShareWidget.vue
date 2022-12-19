@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { NButton, NInput, NInputGroup } from 'naive-ui';
 import { useClipboard } from '@vueuse/core';
+import { NButton, NInput, NInputGroup } from 'naive-ui';
+import { computed, ref } from 'vue';
 import { useUiStore } from '@/stores/ui';
 
 const uiStore = useUiStore();

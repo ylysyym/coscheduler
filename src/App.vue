@@ -17,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import {
     darkTheme,
     NConfigProvider,
@@ -25,6 +24,7 @@ import {
     NMessageProvider,
 } from 'naive-ui';
 import type { GlobalThemeOverrides } from 'naive-ui';
+import { computed } from 'vue';
 import NavigationMenu from '@/components/NavigationMenu.vue';
 import { useSettingsStore } from '@/stores/settings';
 

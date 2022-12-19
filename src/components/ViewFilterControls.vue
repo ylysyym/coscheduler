@@ -34,11 +34,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { NEllipsis, NSelect, NSlider } from 'naive-ui';
 import { Duration, Interval } from 'luxon';
-import { useScheduleStore } from '@/stores/schedule';
+import { NEllipsis, NSelect, NSlider } from 'naive-ui';
+import { computed, ref } from 'vue';
 import { useFilterStore } from '@/stores/filter';
+import { useScheduleStore } from '@/stores/schedule';
 import { formatInterval } from '@/utilities/formatTime';
 
 const scheduleStore = useScheduleStore();

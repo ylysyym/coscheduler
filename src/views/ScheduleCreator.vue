@@ -42,8 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { DateTime } from 'luxon';
 import {
     NButton,
     NDatePicker,
@@ -55,11 +54,12 @@ import {
     useMessage,
 } from 'naive-ui';
 import type { FormRules } from 'naive-ui';
-import { DateTime } from 'luxon';
-import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
-import { defaultLevelLabels } from '@/models/defaultLevels';
-import { ScheduleParameters } from '@/models/ScheduleParameters';
+import { computed, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { createSchedule } from '@/api/schedules';
+import { ScheduleParameters } from '@/models/ScheduleParameters';
+import { defaultLevelLabels } from '@/models/defaultLevels';
+import { defaultTimeUnits } from '@/models/timeUnits/defaultTimeUnits';
 
 const router = useRouter();
 const message = useMessage();
